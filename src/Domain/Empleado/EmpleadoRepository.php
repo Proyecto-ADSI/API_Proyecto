@@ -5,6 +5,8 @@ namespace App\Domain\Empleado;
 
 interface EmpleadoRepository{
 
-    public function registro(Empleado $empleado);
+    public function ConsultarEmpleado(int $id);
+
+    public function RegistrarEmpleado(Empleado $empleado);
 
 }

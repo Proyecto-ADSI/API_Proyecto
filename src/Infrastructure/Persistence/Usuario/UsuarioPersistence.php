@@ -29,7 +29,7 @@ class UsuarioPersistence implements UsuarioRepository
         WHERE Usuario = ?";
 
         try {
-     
+            
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $usuario);
             $stm->execute();
@@ -40,7 +40,7 @@ class UsuarioPersistence implements UsuarioRepository
         }
     }
 
-    public function registro(Usuario $usuario)
+    public function RegistrarUsuario(Usuario $usuario)
     {
         $sql = "INSERT INTO usuarios(Usuario, Contrasena, Id_Rol) VALUE (?,?,?)";
 
@@ -58,7 +58,7 @@ class UsuarioPersistence implements UsuarioRepository
         }
     }
 
-    public function ultimo()
+    public function ConsultarUltimoUsuario()
     {
         $sql = "SELECT MAX(Id_Usuario) AS Id_Usuario FROM usuarios ";
 
@@ -70,6 +70,92 @@ class UsuarioPersistence implements UsuarioRepository
 
         } catch (\Exception $e) {
             return false;
+        }
+    }
+
+    public function AgregarToken(string $token, int $Id_Usuario)
+    {
+        $sql = "UPDATE usuarios SET Token = ? WHERE Id_Usuario = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$token);
+            $stm->bindValue(2,$Id_Usuario);
+            return $stm->execute();
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function ValidarToken(string $token)
+    {
+        $sql = "SELECT Id_Usuario FROM usuarios WHERE Token = ?";
+
+        try {
+            
+            $stm = $this->db->prepare($sql);
+            $stm->bindParam(1,$token);
+            $stm->execute();
+            
+            return $stm->fetch(PDO::FETCH_ASSOC);
+            
+
+
+        } catch (Exception $e) {
+           return $e->getMessage();
+        }
+    }
+
+    public function EliminarToken(int $Id_Usuario)
+    {
+        $sql = "UPDATE usuarios SET Token = ? WHERE Id_Usuario = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            
+            $stm->bindValue(1,NULL);
+            $stm->bindValue(2,$Id_Usuario);
+
+            return $stm->execute();
+
+        } catch (\Exception $e) {
+            return $e;
+        }   
+    }
+
+    public function RestablecerContrasena(int $Id_Usuario, string $Contrasena)
+    {
+        $sql = "UPDATE usuarios SET Contrasena = ? WHERE Id_Usuario = ?";
+
+        try {
+
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Contrasena);
+            $stm->bindValue(2,$Id_Usuario);
+            
+            return $stm->execute();
+            
+        } catch (\Exception $e) {
+            
+        }
+    }
+
+    public function ValidarUsuario(string $usuario)
+    {
+        $sql = "SELECT e.Email FROM usuarios u INNER JOIN empleados e ON (u.Id_Usuario = e.Id_Usuario) WHERE u.Usuario = ? ";
+
+        try {
+            
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$usuario);
+            $stm->execute();
+
+            return $stm->fetch(PDO::FETCH_ASSOC);
+
+        } catch (\Exception $e) {
+
+          return $e->getMessage();
         }
     }
 }

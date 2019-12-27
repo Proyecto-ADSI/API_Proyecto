@@ -21,7 +21,27 @@ class EmpleadoPersistence implements EmpleadoRepository
         $this->db = $database->getConection();
     }
 
-    public function registro(Empleado $empleado)
+    public function ConsultarEmpleado(int $id)
+    {
+        $sql = "SELECT * FROM empleados WHERE Id_Usuario = ?";
+
+        try {
+
+            $stm = $this->db->prepare($sql);
+            $stm->bindParam(1,$id);
+            $stm->execute();
+
+            return $stm->fetch(PDO::FETCH_ASSOC);
+
+
+        } catch (Exception $e) {
+
+            return $e;
+        }
+    }
+
+
+    public function RegistrarEmpleado(Empleado $empleado)
     {
         $sql = "INSERT INTO empleados(Id_Usuario, Documento, Nombre, Apellido, Email, Sexo, Turno) VALUE (?,?,?,?,?,?,?)";
 

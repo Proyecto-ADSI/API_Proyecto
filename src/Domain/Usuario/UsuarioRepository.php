@@ -5,10 +5,19 @@ namespace App\Domain\Usuario;
 
 interface UsuarioRepository{
 
-    public function login(string $correo);
+    public function login(string $usuario);
 
-    public function registro(Usuario $login);
+    public function RegistrarUsuario(Usuario $login);
 
-    public function ultimo();
+    public function ConsultarUltimoUsuario();
+    
+    public function AgregarToken(string $token, int $Id_Usuario);
 
+    public function ValidarToken(string $token);
+
+    public function EliminarToken(int $Id_Usuario);
+
+    public function RestablecerContrasena(int $Id_Usuario, string $contrasena);
+
+    public function ValidarUsuario(string $usuario);
 }

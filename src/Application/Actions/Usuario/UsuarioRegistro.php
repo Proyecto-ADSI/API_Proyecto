@@ -21,10 +21,10 @@ class UsuarioRegistro extends UsuarioAction
             $campos->Id_Rol
         );
 
-        $this->usuarioRepository->registro($usuario);
+        $this->usuarioRepository->RegistrarUsuario($usuario);
         
 
-        $ultimo = $this->usuarioRepository->ultimo();
+        $ultimo = $this->usuarioRepository->ConsultarUltimoUsuario();
 
         // return $this->respondWithData(["ok"=> $ultimo]);
 
@@ -39,7 +39,7 @@ class UsuarioRegistro extends UsuarioAction
             $campos->Turno
         );
 
-        $datos = $this->EmpleadoRepository->registro($empleado);
+        $datos = $this->EmpleadoRepository->RegistrarEmpleado($empleado);
 
 
 

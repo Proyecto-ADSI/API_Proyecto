@@ -16,7 +16,7 @@ class LoginAction extends UsuarioAction
 
         $respuesta = $this->usuarioRepository->login($usuario);
 
-        $this->logger->info("Producto of qweed ".json_encode($respuesta)." was viewed.");
+        // $this->logger->info("Producto of qweed ".json_encode($respuesta)." was viewed.");
         
         if(!$respuesta)
         {
