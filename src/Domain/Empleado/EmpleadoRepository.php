@@ -5,7 +5,15 @@ namespace App\Domain\Empleado;
 
 interface EmpleadoRepository{
 
+    public function ListarEmpleados();
+
+    public function FiltrarEmpleados(string $texto);
+
+    public function ListarRoles();
+
     public function ConsultarEmpleado(int $id);
+
+    public function ConsultarUltimoEmpleado();
 
     public function RegistrarEmpleado(Empleado $empleado);
 

@@ -8,8 +8,6 @@ interface UsuarioRepository{
     public function login(string $usuario);
 
     public function RegistrarUsuario(Usuario $login);
-
-    public function ConsultarUltimoUsuario();
     
     public function AgregarToken(string $token, int $Id_Usuario);
 

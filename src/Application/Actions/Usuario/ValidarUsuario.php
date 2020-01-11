@@ -11,9 +11,14 @@ class ValidarUsuario extends UsuarioAction
     protected function action(): Response
     {
         $usuario  = $this->resolveArg("usuario");
-
+        
         $respuesta = $this->usuarioRepository->ValidarUsuario($usuario);
 
-        return $this->respondWithData($respuesta);
+        if($respuesta){
+            return $this->respondWithData(["ok"=>true,"Email"=> $respuesta['Email']]);
+        }else{
+            return $this->respondWithData(["ok"=>false]);
+        }
     }
 }
+

@@ -25,7 +25,7 @@ class UsuarioPersistence implements UsuarioRepository
     public function login(string $usuario)
     {
 
-        $sql = "SELECT Id_Usuario, Usuario, Contrasena, Id_Rol FROM usuarios
+        $sql = "SELECT Id_Usuario, Usuario, Contrasena, Id_Rol, Id_Empleado FROM usuarios
         WHERE Usuario = ?";
 
         try {
@@ -42,34 +42,20 @@ class UsuarioPersistence implements UsuarioRepository
 
     public function RegistrarUsuario(Usuario $usuario)
     {
-        $sql = "INSERT INTO usuarios(Usuario, Contrasena, Id_Rol) VALUE (?,?,?)";
+        $sql = "INSERT INTO usuarios(Usuario, Contrasena, Id_Rol,Id_Empleado) VALUE (?,?,?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $usuario->__GET("Usuario"));
             $stm->bindValue(2, $usuario->__GET("Contrasena"));
             $stm->bindValue(3, $usuario->__GET("Id_Rol"));
-
+            $stm->bindValue(4, $usuario->__GET("Id_Empleado"));
+            
             return $stm->execute();
             
         } catch (Exception $e) {
 
-            return false;
-        }
-    }
-
-    public function ConsultarUltimoUsuario()
-    {
-        $sql = "SELECT MAX(Id_Usuario) AS Id_Usuario FROM usuarios ";
-
-        try {
-            $stm = $this->db->prepare($sql);
-            $stm->execute();
-
-            return  $stm->fetch(PDO::FETCH_ASSOC);
-
-        } catch (\Exception $e) {
-            return false;
+            return $e->getMessage();
         }
     }
 
@@ -143,7 +129,7 @@ class UsuarioPersistence implements UsuarioRepository
 
     public function ValidarUsuario(string $usuario)
     {
-        $sql = "SELECT e.Email FROM usuarios u INNER JOIN empleados e ON (u.Id_Usuario = e.Id_Usuario) WHERE u.Usuario = ? ";
+        $sql = "SELECT e.Email FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) WHERE u.Usuario = ? ";
 
         try {
             

@@ -13,8 +13,9 @@ class RestablecerContrasena extends UsuarioAction
         $campos  = $this->getFormData();
 
         $Id_Usuario = $campos->Id_Usuario;
-        $Contrasena = $campos->Contrasena;
-
+        
+        //Encriptar contraseña
+        $Contrasena = password_hash($campos->Contrasena,PASSWORD_BCRYPT);
 
         $this->usuarioRepository->RestablecerContrasena($Id_Usuario,$Contrasena);
 

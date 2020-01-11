@@ -24,9 +24,9 @@ class LoginAction extends UsuarioAction
 
         }else{
 
-            // $datos = json_encode($respuesta);
-
-            if($contrasena == $respuesta['Contrasena'] ){
+            // Validar si el hash y la contraseña coinciden
+            
+            if(password_verify($contrasena,$respuesta['Contrasena'])){
 
                 return $this->respondWithData([
                     "ok"=>true,
@@ -36,7 +36,6 @@ class LoginAction extends UsuarioAction
                 ]);
                     
             }else{
-
                 return  $this->respondWithData(["ok"=> false]);
             }
         }

@@ -14,37 +14,47 @@ class UsuarioRegistro extends UsuarioAction
     {
         $campos = $this->getFormData();
 
+        $Id_Empleado = NULL;
+        
+        if(isset($campos->Id_Empleado)){
+            
+           $Id_Empleado = (int)$campos->Id_Empleado;
+
+        }else{
+
+            $empleado = new Empleado(
+                0,
+                $campos->Tipo_Documento,
+                $campos->Documento,
+                $campos->Nombre,
+                $campos->Apellidos,
+                $campos->Email,
+                $campos->Sexo,
+                $campos->Celular,
+                $campos->Imagen,
+                $campos->Turno
+            );
+    
+            $this->EmpleadoRepository->RegistrarEmpleado($empleado);
+            
+            $respuesta = $this->EmpleadoRepository->ConsultarUltimoEmpleado();
+            $Id_Empleado = (int) $respuesta['Id_Empleado'];
+        }
+        
+        //Encriptar contraseña
+        $Contrasena = password_hash($campos->Contrasena,PASSWORD_BCRYPT);
+
         $usuario = new Usuario(
             0,
+            $Id_Empleado,
             $campos->Usuario,
-            $campos->Contrasena,
-            $campos->Id_Rol
+            $Contrasena,
+            $campos->Rol
         );
 
-        $this->usuarioRepository->RegistrarUsuario($usuario);
+        $respuesta = $this->usuarioRepository->RegistrarUsuario($usuario);
         
-
-        $ultimo = $this->usuarioRepository->ConsultarUltimoUsuario();
-
-        // return $this->respondWithData(["ok"=> $ultimo]);
-
-        $empleado = new Empleado(
-            0,
-            (int)$ultimo['Id_Usuario'],
-            $campos->Documento,
-            $campos->Nombre,
-            $campos->Apellido,
-            $campos->Email,
-            $campos->Sexo,
-            $campos->Turno
-        );
-
-        $datos = $this->EmpleadoRepository->RegistrarEmpleado($empleado);
-
-
-
-        return $this->respondWithData(["ok"=> $datos]);
-
+        return $this->respondWithData(["usuario" => $usuario, "ok"=> $respuesta, ]);
     }
 }
 

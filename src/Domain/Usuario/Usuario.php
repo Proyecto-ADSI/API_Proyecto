@@ -9,6 +9,7 @@ use JsonSerializable;
 class Usuario implements JsonSerializable
 {
     private $Id_Usuario;
+    private $Id_Empleado;
     private $Usuario;
     private $Contrasena;
     private $Id_Rol;
@@ -17,9 +18,10 @@ class Usuario implements JsonSerializable
         return $this->$attr;
     }
 
-    function __construct(?int $Id_Usuario, string $Usuario, string $Contrasena,int $Id_Rol)
+    function __construct(?int $Id_Usuario, int $Id_Empleado, string $Usuario, string $Contrasena,int $Id_Rol)
     {
         $this->Id_Usuario = $Id_Usuario;
+        $this->Id_Empleado = $Id_Empleado;
         $this->Usuario = $Usuario;
         $this->Contrasena = $Contrasena;
         $this->Id_Rol = $Id_Rol;
@@ -31,6 +33,7 @@ class Usuario implements JsonSerializable
     {
         return[
             "Id_Usuario" => $this->Id_Usuario,
+            "Id_Empleado" => $this->Id_Empleado,
             "Usuario" => $this->Usuario,
             "Contrasena" => $this->Contrasena,
             "Id_Rol" => $this->Id_Rol

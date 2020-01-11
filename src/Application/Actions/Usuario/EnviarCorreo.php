@@ -23,26 +23,25 @@ class EnviarCorreo extends UsuarioAction
 
 
         $respuesta = $this->usuarioRepository->login($usuario);
-
+       
         if (!$respuesta) {
 
             return $this->respondWithData(["ok" => false]);
         } else {
 
-            $Id_Usuario = intval($respuesta['Id_Usuario']);
-
-            $info = $this->EmpleadoRepository->ConsultarEmpleado($Id_Usuario);
-
+            $Id_Empleado = (int)$respuesta['Id_Empleado'];
+            $info = $this->EmpleadoRepository->ConsultarEmpleado($Id_Empleado);
+            //   return $this->respondWithData(["ok" => $info]);
             // Datos Empleado
             $Email = $info['Email'];
-            $NombreEmpleado = $info['Nombre'] . " " . $info['Apellido'];
+            $NombreEmpleado = $info['Nombre'] . " " . $info['Apellidos'];
 
             //Crear Token
             $token = bin2hex(random_bytes(30));
-
+            $Id_Usuario = (int)$respuesta['Id_Usuario'];
             $this->usuarioRepository->AgregarToken($token, $Id_Usuario);
 
-            // return $this->respondWithData(["ok" => $token]);
+           
 
             $mail = new PHPMailer(true);
             $mail->CharSet = "UTF-8";

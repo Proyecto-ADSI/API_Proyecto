@@ -10,6 +10,8 @@ use App\Infrastructure\DataBase;
 use Exception;
 use PDO;
 
+use function DI\get;
+
 class EmpleadoPersistence implements EmpleadoRepository
 {
 
@@ -21,19 +23,51 @@ class EmpleadoPersistence implements EmpleadoRepository
         $this->db = $database->getConection();
     }
 
-    public function ConsultarEmpleado(int $id)
+
+    public function ListarEmpleados()
     {
-        $sql = "SELECT * FROM empleados WHERE Id_Usuario = ?";
+        $sql = "SELECT e.Id_Empleado, CONCAT(e.Nombre,' ', e.Apellidos) AS Nombre, e.Documento, r.Nombre AS Rol  FROM empleados e INNER JOIN usuarios u 
+                ON (e.Id_Empleado = u.Id_Empleado) INNER JOIN roles r ON (u.Id_Rol = r.Id_rol)";
 
         try {
 
             $stm = $this->db->prepare($sql);
-            $stm->bindParam(1,$id);
+            $stm->execute();
+
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function FiltrarEmpleados(string $texto)
+    {
+        $sql = "SELECT e.Id_Empleado, CONCAT(e.Nombre,' ', e.Apellidos) AS Nombre, e.Documento, r.Nombre AS Rol  FROM empleados e INNER JOIN usuarios u 
+        ON (e.Id_Empleado = u.Id_Empleado) INNER JOIN roles r ON (u.Id_Rol = r.Id_rol) 
+        WHERE e.Nombre LIKE '%".$texto."%' OR e.Apellidos LIKE '%".$texto."%' OR e.Documento LIKE '%".$texto."%'";
+        
+        try {
+
+            $stm = $this->db->prepare($sql);
+            $stm->execute();
+
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function ConsultarEmpleado(int $id)
+    {
+        $sql = "SELECT * FROM empleados WHERE Id_Empleado = ?";
+
+        try {
+
+            $stm = $this->db->prepare($sql);
+            $stm->bindParam(1, $id);
             $stm->execute();
 
             return $stm->fetch(PDO::FETCH_ASSOC);
-
-
         } catch (Exception $e) {
 
             return $e;
@@ -43,23 +77,54 @@ class EmpleadoPersistence implements EmpleadoRepository
 
     public function RegistrarEmpleado(Empleado $empleado)
     {
-        $sql = "INSERT INTO empleados(Id_Usuario, Documento, Nombre, Apellido, Email, Sexo, Turno) VALUE (?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO empleados(Tipo_Documento,Documento, Nombre, Apellidos, Email, Id_Sexo, Celular, Imagen, Id_Turno) VALUES (?,?,?,?,?,?,?,?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1, $empleado->__GET("Id_Usuario"));
+            $stm->bindValue(1, $empleado->__GET("Tipo_Documento"));
             $stm->bindValue(2, $empleado->__GET("Documento"));
             $stm->bindValue(3, $empleado->__GET("Nombre"));
-            $stm->bindValue(4, $empleado->__GET("Apellido"));
+            $stm->bindValue(4, $empleado->__GET("Apellidos"));
             $stm->bindValue(5, $empleado->__GET("Email"));
             $stm->bindValue(6, $empleado->__GET("Sexo"));
-            $stm->bindValue(7, $empleado->__GET("Turno"));
+            $stm->bindValue(7, $empleado->__GET("Celular"));
+            $stm->bindValue(8, $empleado->__GET("Imagen"));
+            $stm->bindValue(9, $empleado->__GET("Turno"));
 
             return $stm->execute();
-            
         } catch (Exception $e) {
 
-            return false;
+            return $e->getMessage();
+        }
+    }
+
+    public function ConsultarUltimoEmpleado()
+    {
+        $sql = "SELECT MAX(Id_Empleado) AS Id_Empleado FROM empleados ";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->execute();
+
+            return  $stm->fetch(PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function ListarRoles()
+    {
+        $sql = "SELECT Nombre FROM Roles";
+
+        try {
+
+            $stm = $this->db->prepare($sql);
+
+            $stm->execute();
+
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 }
