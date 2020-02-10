@@ -15,7 +15,7 @@ use App\Application\Actions\Usuario\ValidarUsuario;
 use App\Application\Actions\Usuario\UsuarioDisponible;
 // Empleados
 use App\Application\Actions\Empleado\ListarEmpleados;
-
+use App\Application\Actions\Usuario\ListarUsuarios;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -33,7 +33,8 @@ return function (App $app) {
     // });
 
     $app->group('/Usuarios', function (Group $group) {
-        $group->get('/ValidarUsuario/{usuario}',ValidarUsuario::class);
+        $group->get('',ListarUsuarios::class);
+        $group->get('/ValidarUsuario/{usuario}',ValidarUsuario::class) ;
         $group->get('/EnviarCorreo/{usuario}',EnviarCorreo::class);
         $group->get('/Disponible',UsuarioDisponible::class);
         $group->post('/Login', LoginAction::class);

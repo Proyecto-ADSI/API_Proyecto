@@ -22,6 +22,22 @@ class UsuarioPersistence implements UsuarioRepository
     }
 
 
+    public function ListarUsuarios()
+    {
+        $sql = "SELECT u.Id_Usuario, u.Usuario,  FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) ";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->execute();
+
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+
+    }
+
     public function login(string $usuario)
     {
 
