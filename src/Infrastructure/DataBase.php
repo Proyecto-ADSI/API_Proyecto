@@ -7,7 +7,7 @@ use PDO;
 class DataBase {
 
     private $driver = "mysql";
-    private $hostname = "localhost:33065";
+    private $hostname = "localhost:3306";
     private $username = "root";
     private $password = "";
     private $dbname = "callphone_soft_bd";

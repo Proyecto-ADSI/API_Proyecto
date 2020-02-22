@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Documento;
+namespace App\Domain\Pais;
 
 use JsonSerializable;
 
-class Documento implements JsonSerializable
+class Pais implements JsonSerializable
 {
-    private $Id_Documento;
+    private $Id_Pais;
     
     private $Nombre;
 
@@ -18,9 +18,9 @@ class Documento implements JsonSerializable
         return $this->$attr;
     }
 
-    function __construct(?int $Id_Documento, string $Nombre, int $Estado)
+    function __construct(?int $Id_Pais, string $Nombre, int $Estado)
     {   
-        $this->Id_Documento = $Id_Documento;
+        $this->Id_Pais = $Id_Pais;
         $this->Nombre = $Nombre;
         $this->Estado = $Estado;
     }
@@ -28,7 +28,7 @@ class Documento implements JsonSerializable
     public function jsonSerialize()
     {
         return[
-            "Id_Documento" => $this->Id_Documento,
+            "Id_Pais" => $this->Id_Pais,
             "Nombre" => $this->Nombre,
             "Estado" => $this->Estado
         ];    

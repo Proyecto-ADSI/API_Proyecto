@@ -2,15 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Documento;
+namespace App\Domain\Departamento;
 
 use JsonSerializable;
 
-class Documento implements JsonSerializable
+class Departamento implements JsonSerializable
 {
-    private $Id_Documento;
+    private $Id_Departamento;
     
     private $Nombre;
+    
+    private $Id_Pais;
 
     private $Estado;
 
@@ -18,18 +20,20 @@ class Documento implements JsonSerializable
         return $this->$attr;
     }
 
-    function __construct(?int $Id_Documento, string $Nombre, int $Estado)
+    function __construct(?int $Id_Departamento, string $Nombre, int $Id_Pais ,int $Estado)
     {   
-        $this->Id_Documento = $Id_Documento;
+        $this->Id_Departamento = $Id_Departamento;
         $this->Nombre = $Nombre;
+        $this->Id_Pais = $Id_Pais;
         $this->Estado = $Estado;
     }
 
     public function jsonSerialize()
     {
         return[
-            "Id_Documento" => $this->Id_Documento,
+            "Id_Departamento" => $this->Id_Departamento,
             "Nombre" => $this->Nombre,
+            "Id_Pais" => $this->Id_Pais,
             "Estado" => $this->Estado
         ];    
     }
