@@ -9,7 +9,6 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 
-// require 'vendor/autoload.php';
 
 class EnviarCorreo extends UsuarioAction
 {

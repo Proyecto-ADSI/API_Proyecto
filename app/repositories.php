@@ -9,11 +9,16 @@ use App\Infrastructure\Persistence\User\InMemoryUserRepository;
 use App\Infrastructure\Persistence\Usuario\UsuarioPersistence;
 use DI\ContainerBuilder;
 
+
+use App\Domain\Cliente\ClienteRepository;
+use App\Infrastructure\Persistence\Cliente\ClientePersistence;
+
 return function (ContainerBuilder $containerBuilder) {
     // Here we map our UserRepository interface to its in memory implementation
     $containerBuilder->addDefinitions([
         UserRepository::class => \DI\autowire(InMemoryUserRepository::class),
         UsuarioRepository::class => \DI\autowire(UsuarioPersistence::class),
-        EmpleadoRepository::class => \DI\autowire(EmpleadoPersistence::class)
+        EmpleadoRepository::class => \DI\autowire(EmpleadoPersistence::class),
+        ClienteRepository::class => \DI\autowire(ClientePersistence::class)
     ]);
 };

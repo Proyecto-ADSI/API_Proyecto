@@ -10,8 +10,6 @@ use App\Infrastructure\DataBase;
 use Exception;
 use PDO;
 
-use function DI\get;
-
 class EmpleadoPersistence implements EmpleadoRepository
 {
 

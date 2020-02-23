@@ -25,7 +25,7 @@ class DataBase {
             $this->conection = new PDO($strc, $this->username, $this->password);
         
         }catch(\Exception $e){
-            return $e;
+            return "Error al conectar con la base de datos: " . $e->getMessage();
         }
     }
 }
