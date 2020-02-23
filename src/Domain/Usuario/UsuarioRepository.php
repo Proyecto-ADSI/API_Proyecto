@@ -22,4 +22,6 @@ interface UsuarioRepository{
     public function RestablecerContrasena(int $Id_Usuario, string $contrasena);
 
     public function ValidarUsuario(string $usuario);
+
+    public function EditarUsuario(Usuario $usuario);
 }  

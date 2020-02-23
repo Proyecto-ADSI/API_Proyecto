@@ -18,7 +18,7 @@ class Usuario implements JsonSerializable
         return $this->$attr;
     }
 
-    function __construct(?int $Id_Usuario, int $Id_Empleado, string $Usuario, string $Contrasena,int $Id_Rol)
+    function __construct(?int $Id_Usuario, int $Id_Empleado, string $Usuario, ?string $Contrasena,int $Id_Rol)
     {
         $this->Id_Usuario = $Id_Usuario;
         $this->Id_Empleado = $Id_Empleado;

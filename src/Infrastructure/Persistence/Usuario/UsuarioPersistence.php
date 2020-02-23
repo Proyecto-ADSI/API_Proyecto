@@ -47,7 +47,7 @@ class UsuarioPersistence implements UsuarioRepository
     public function ObtenerUsuario(int $Id_Usuario)
     {
         $sql = "SELECT u.Id_Usuario, u.Usuario, u.Conexion, u.Estado, u.Id_Rol, r.Nombre AS Rol, u.Id_Empleado, d.Id_Documento,
-        d.Nombre AS 'Tipo Documento', e.Documento, e.Nombre, e.Apellidos, e.Email AS Correo, s.Id_Sexo, s.Nombre AS Sexo,
+        d.Nombre AS 'Tipo_Documento', e.Documento, e.Nombre, e.Apellidos, e.Email AS Correo, s.Id_Sexo, s.Nombre AS Sexo,
          Celular, Imagen, t.Id_Turno, t.Nombre AS Turno       
         FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) 
         INNER JOIN roles r ON (u.Id_Rol = r.Id_rol) 
@@ -189,4 +189,23 @@ class UsuarioPersistence implements UsuarioRepository
           return $e->getMessage();
         }
     }
+
+    public function EditarUsuario(Usuario $usuario)
+    {
+       $sql = "UPDATE usuarios SET Usuario = ?, Id_Rol = ? WHERE Id_Usuario = ?";
+       
+       try {
+           $stm = $this->db->prepare($sql);
+           $stm->bindValue(1,$usuario->__GET("Usuario"));
+           $stm->bindValue(2,$usuario->__GET("Id_Rol"));
+           $stm->bindValue(3,$usuario->__GET("Id_Usuario"));
+
+           return $stm->execute();
+
+       } catch (\Exception $e) {
+         
+            return $e->getMessage();
+       }
+    }
+
 }
