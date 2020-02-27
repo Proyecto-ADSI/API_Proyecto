@@ -11,6 +11,10 @@ use App\Domain\Departamento\DepartamentoRepository;
 use App\Domain\Municipio\MunicipioRepository;
 use App\Domain\SubTipo\SubTipoRepository;
 use App\Domain\BarriosVeredas\BarriosVeredasRepository;
+use App\Domain\Cliente\ClienteRepository;
+use App\Domain\DBL\DBLRepository;
+use App\Domain\Doc_Soporte\Doc_SoporteRepository;
+use App\Domain\Plan_Corporativo\Plan_CorporativoRepository;
 use App\Domain\Turnos\TurnosRepository;
 use App\Domain\Rol\RolRepository;
 
@@ -25,6 +29,10 @@ use App\Infrastructure\Persistence\Departamento\DepartamentoPersistence;
 use App\Infrastructure\Persistence\Municipio\MunicipioPersistence;
 use App\Infrastructure\Persistence\SubTipo\SubTipoPersistence;
 use App\Infrastructure\Persistence\BarriosVeredas\BarriosVeredasPersistence;
+use App\Infrastructure\Persistence\Cliente\ClientePersistence;
+use App\Infrastructure\Persistence\DBL\DBLPersistence;
+use App\Infrastructure\Persistence\Doc_Soporte\Doc_SoportePersistence;
+use App\Infrastructure\Persistence\Plan_Corporativo\Plan_CorporativoPersistence;
 use App\Infrastructure\Persistence\Turnos\TurnosPersistence;
 use App\Infrastructure\Persistence\Rol\RolPersistence;
 use DI\ContainerBuilder;
@@ -44,5 +52,11 @@ return function (ContainerBuilder $containerBuilder) {
         BarriosVeredasRepository::class => \DI\autowire(BarriosVeredasPersistence::class),
         TurnosRepository::class => \DI\autowire(TurnosPersistence::class),
         RolRepository::class => \DI\autowire(RolPersistence::class),
+        ClienteRepository::class => \DI\autowire(ClientePersistence::class),
+        DBLRepository::class => \DI\autowire(DBLPersistence::class),
+        Plan_CorporativoRepository::class => \DI\autowire(Plan_CorporativoPersistence::class),
+        Doc_SoporteRepository::class => \DI\autowire(Doc_SoportePersistence::class),
     ]);
 };
+ 
+

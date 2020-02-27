@@ -21,10 +21,15 @@ class UsuarioPersistence implements UsuarioRepository
         $this->db = $database->getConection();
     }
 
-
     public function ListarUsuarios()
     {
-        $sql = "SELECT u.Id_Usuario, u.Usuario,  FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) ";
+        $sql = "SELECT u.Id_Usuario, u.Usuario, u.Conexion, u.Estado, u.Id_Rol, r.Nombre AS Rol, u.Id_Empleado, 
+        d.Nombre AS 'Tipo Documento', e.Documento, e.Nombre, e.Apellidos, e.Email AS Correo, s.Nombre AS Sexo, Celular, Imagen, t.Nombre AS Turno       
+        FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) 
+        INNER JOIN roles r ON (u.Id_Rol = r.Id_rol) 
+        INNER JOIN documentos d ON (e.Tipo_Documento = d.Id_Documento) 
+        INNER JOIN sexos s ON (e.Id_Sexo = s.Id_Sexo)
+        INNER JOIN turnos t ON (e.Id_Turno = t.Id_Turno)";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -33,9 +38,33 @@ class UsuarioPersistence implements UsuarioRepository
             return $stm->fetchAll(PDO::FETCH_ASSOC);
 
         } catch (\Exception $e) {
-            return $e->getMessage();
+            return "Error al listar usuarios: " . $e->getMessage();
         }
 
+    }
+
+
+    public function ObtenerUsuario(int $Id_Usuario)
+    {
+        $sql = "SELECT u.Id_Usuario, u.Usuario, u.Conexion, u.Estado, u.Id_Rol, r.Nombre AS Rol, u.Id_Empleado, d.Id_Documento,
+        d.Nombre AS 'Tipo_Documento', e.Documento, e.Nombre, e.Apellidos, e.Email AS Correo, s.Id_Sexo, s.Nombre AS Sexo,
+         Celular, Imagen, t.Id_Turno, t.Nombre AS Turno       
+        FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) 
+        INNER JOIN roles r ON (u.Id_Rol = r.Id_rol) 
+        INNER JOIN documentos d ON (e.Tipo_Documento = d.Id_Documento) 
+        INNER JOIN sexos s ON (e.Id_Sexo = s.Id_Sexo)
+        INNER JOIN turnos t ON (e.Id_Turno = t.Id_Turno) WHERE u.Id_Usuario = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Usuario);
+            $stm->execute();
+
+            return $stm->fetch(PDO::FETCH_ASSOC);
+
+        } catch (\Exception $e) {
+            return "Error al obtener usuario: " . $e->getMessage();
+        }
     }
 
     public function login(string $usuario)
@@ -160,4 +189,23 @@ class UsuarioPersistence implements UsuarioRepository
           return $e->getMessage();
         }
     }
+
+    public function EditarUsuario(Usuario $usuario)
+    {
+       $sql = "UPDATE usuarios SET Usuario = ?, Id_Rol = ? WHERE Id_Usuario = ?";
+       
+       try {
+           $stm = $this->db->prepare($sql);
+           $stm->bindValue(1,$usuario->__GET("Usuario"));
+           $stm->bindValue(2,$usuario->__GET("Id_Rol"));
+           $stm->bindValue(3,$usuario->__GET("Id_Usuario"));
+
+           return $stm->execute();
+
+       } catch (\Exception $e) {
+         
+            return $e->getMessage();
+       }
+    }
+
 }

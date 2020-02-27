@@ -26,9 +26,6 @@ class ListarEmpleados extends EmpleadoAction
 
             return $this->respondWithData(["results" => $empleados]);
         } else {
-
-
-
             $roles  = $this->EmpleadoRepository->ListarRoles();
 
             $lista = [];

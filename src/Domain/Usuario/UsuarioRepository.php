@@ -7,6 +7,8 @@ interface UsuarioRepository{
 
     public  function ListarUsuarios();
 
+    public  function ObtenerUsuario(int $Id_Usuario);
+
     public function login(string $usuario);
 
     public function RegistrarUsuario(Usuario $login);
@@ -20,4 +22,6 @@ interface UsuarioRepository{
     public function RestablecerContrasena(int $Id_Usuario, string $contrasena);
 
     public function ValidarUsuario(string $usuario);
+
+    public function EditarUsuario(Usuario $usuario);
 }  

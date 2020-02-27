@@ -17,4 +17,6 @@ interface EmpleadoRepository{
 
     public function RegistrarEmpleado(Empleado $empleado);
 
+    public function EditarEmpleado(Empleado $empleado);
+
 }

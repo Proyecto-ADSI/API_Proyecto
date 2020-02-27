@@ -7,7 +7,7 @@ use PDO;
 class DataBase {
 
     private $driver = "mysql";
-    private $hostname = "localhost:3306";
+    private $hostname = "localhost:33065";
     private $username = "root";
     private $password = "";
     private $dbname = "callphone_soft_bd";
@@ -25,7 +25,7 @@ class DataBase {
             $this->conection = new PDO($strc, $this->username, $this->password);
         
         }catch(\Exception $e){
-            return $e;
+            return "Error al conectar con la base de datos: " . $e->getMessage();
         }
     }
 }

@@ -10,8 +10,6 @@ use App\Infrastructure\DataBase;
 use Exception;
 use PDO;
 
-use function DI\get;
-
 class EmpleadoPersistence implements EmpleadoRepository
 {
 
@@ -126,5 +124,32 @@ class EmpleadoPersistence implements EmpleadoRepository
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+    }
+
+    public function EditarEmpleado(Empleado $empleado)
+    {
+       $sql = "UPDATE empleados SET Tipo_Documento = ?, Documento = ?, Nombre = ?, Apellidos = ?, 
+        Email = ?, Id_Sexo = ?, Celular = ?, Imagen = ?, Id_Turno = ?
+        WHERE Id_Empleado = ?";
+       
+       try {
+           $stm = $this->db->prepare($sql);
+           $stm->bindValue(1,$empleado->__GET("Tipo_Documento"));
+           $stm->bindValue(2,$empleado->__GET("Documento"));
+           $stm->bindValue(3,$empleado->__GET("Nombre"));
+           $stm->bindValue(4,$empleado->__GET("Apellidos"));
+           $stm->bindValue(5,$empleado->__GET("Email"));
+           $stm->bindValue(6,$empleado->__GET("Sexo"));
+           $stm->bindValue(7,$empleado->__GET("Celular"));
+           $stm->bindValue(8,$empleado->__GET("Imagen"));
+           $stm->bindValue(9,$empleado->__GET("Turno"));
+           $stm->bindValue(10,$empleado->__GET("Id_Empleado"));
+
+           return $stm->execute();
+           
+       } catch (\Exception $e) {
+         
+            return $e->getMessage();
+       }
     }
 }
