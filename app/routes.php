@@ -50,6 +50,31 @@ use App\Application\Actions\Municipio\RegistrarMunicipioAction;
 use App\Application\Actions\Municipio\ObtenerDatosMunicipioAction;
 use App\Application\Actions\Municipio\EditarMunicipioAction;
 use App\Application\Actions\Municipio\CambiarEstadoMunicipioAction;
+//SubTipo
+use App\Application\Actions\SubTipo\ListarSubTipoAction;
+use App\Application\Actions\SubTipo\RegistrarSubTipoAction;
+use App\Application\Actions\SubTipo\ObtenerSubTipoAction;
+use App\Application\Actions\SubTipo\EditarSubTipoAction;
+use App\Application\Actions\SubTipo\CambiarEstadoSubTipoAction;
+//BarriosVeredas
+use App\Application\Actions\BarriosVeredas\ListarBarriosVeredasAction;
+use App\Application\Actions\BarriosVeredas\RegistrarBarriosVeredasAction;
+use App\Application\Actions\BarriosVeredas\ObtenerBarriosVeredasAction;
+use App\Application\Actions\BarriosVeredas\EditarBarriosVeredasAction;
+use App\Application\Actions\BarriosVeredas\CambiarEstadoBarriosVeredasAction;
+//Turnos
+use App\Application\Actions\Turnos\ListarTurnosAction;
+use App\Application\Actions\Turnos\RegistrarTurnosAction;
+use App\Application\Actions\Turnos\ObtenerDatosTurnosAction;
+use App\Application\Actions\Turnos\EditarTurnosAction;
+use App\Application\Actions\Turnos\CambiarEstadoTurnosAction;
+//Rol
+use App\Application\Actions\Rol\CambiarEstadoRolAction;
+use App\Application\Actions\Rol\EditarRolAction;
+use App\Application\Actions\Rol\ListarRolAction;
+use App\Application\Actions\Rol\ObtenerDatosRolAction;
+use App\Application\Actions\Rol\RegistrarRolAction;
+
 
 
 
@@ -83,7 +108,7 @@ return function (App $app) {
     $app->group('/Documento', function(Group $group){
         $group->post('',DocumentoRegistroAction::class);
         $group->get('',ListarDocumento::class);
-        $group->get('/ObtenerDatos/{Id_Documentos}',ObtenerDatosAction::class);
+        $group->get('/ObtenerDatosDocumento/{Id_Documentos}',ObtenerDatosAction::class);
         $group->put('',EditarDocumentoAction::class);
         $group->patch('/{Id_Documentos}/{Estado}',CambiarEstadoAction::class);
     });
@@ -119,6 +144,37 @@ return function (App $app) {
         $group->put('',EditarMunicipioAction::class);
         $group->patch('/{Id_Municipio}/{Estado}',CambiarEstadoMunicipioAction::class);
     });
+
+    $app->group('/SubTipo', function(Group $group){
+        $group->post('',RegistrarSubTipoAction::class);
+        $group->get('',ListarSubTipoAction::class);
+        $group->get('/ObtenerSubTipo/{Id_SubTipo_Barrio_Vereda}',ObtenerSubTipoAction::class);
+        $group->put('',EditarSubTipoAction::class);
+        $group->patch('/{Id_SubTipo_Barrio_Vereda}/{Estado}',CambiarEstadoSubTipoAction::class);
+    });
+    $app->group('/BarriosVeredas', function(Group $group){
+        $group->post('',RegistrarBarriosVeredasAction::class);
+        $group->get('',ListarBarriosVeredasAction::class);
+        $group->get('/ObtenerBarriosVereda/{Id_Barrios_Veredas}',ObtenerBarriosVeredasAction::class);
+        $group->put('',EditarBarriosVeredasAction::class);
+        $group->patch('/{Id_Barrios_Veredas}/{Estado}',CambiarEstadoBarriosVeredasAction::class);
+    });
+    $app->group('/Turnos', function(Group $group){
+        $group->post('',RegistrarTurnosAction::class);
+        $group->get('',ListarTurnosAction::class);
+        $group->get('/ObtenerTurnos/{Id_Turno}',ObtenerDatosTurnosAction::class);
+        $group->put('',EditarTurnosAction::class);
+        $group->patch('/{Id_Turno}/{Estado}',CambiarEstadoTurnosAction::class);
+    });
+    $app->group('/Rol', function(Group $group){
+        $group->post('',RegistrarRolAction::class);
+        $group->get('',ListarRolAction::class);
+        $group->get('/ObtenerRol/{Id_Rol}',ObtenerDatosRolAction::class);
+        $group->put('',EditarRolAction::class);
+        $group->patch('/{Id_Rol}/{Estado}',CambiarEstadoRolAction::class);
+    });
+
+
 
 
     $app->options('/{routes:.+}', function ($request, $response, $args) {

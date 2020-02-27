@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Persistence\Documento;
+namespace App\Infrastructure\Persistence\Rol;
 
-use App\Domain\Documento\Documento;
-use App\Domain\Documento\DocumentoRepository;
+use App\Domain\Rol\Rol;
+use App\Domain\Rol\RolRepository;
 use App\Infrastructure\DataBase;
 use Exception;
 use PDO;
 
-class DocumentoPersistence implements DocumentoRepository
+class RolPersistence implements RolRepository
 {
 
     private $db = null;
@@ -21,14 +21,14 @@ class DocumentoPersistence implements DocumentoRepository
         $this->db = $database->getConection();
     }
 
-    public function RegistrarDocumento(Documento $Documento)
+    public function RegistrarRol(Rol $Rol)
     {
-        $sql = "INSERT INTO documentos(Nombre,Estado) VALUES (?,?)";
+        $sql = "INSERT INTO roles(Nombre,Estado) VALUES (?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1, $Documento->__GET("Nombre"));
-            $stm->bindValue(2, $Documento->__GET("Estado"));
+            $stm->bindValue(1, $Rol->__GET("Nombre"));
+            $stm->bindValue(2, $Rol->__GET("Estado"));
 
             return $stm->execute();
         } catch (Exception $e) {
@@ -38,9 +38,9 @@ class DocumentoPersistence implements DocumentoRepository
     }
 
 
-    public function ListarDocumento()
+    public function ListarRol()
     {
-        $sql = "SELECT Id_Documento, Nombre, Estado FROM documentos";
+        $sql = "SELECT Id_Rol, Nombre,Estado FROM roles";
 
         try {
 
@@ -52,13 +52,13 @@ class DocumentoPersistence implements DocumentoRepository
             return $e->getMessage();
         }
     }
-    public function CambiarEstado(int $Id_Documentos, int $Estado){
-        $sql = "UPDATE documentos SET Estado= ? WHERE Id_Documento = ?";
+    public function CambiarEstado(int $Id_Rol, int $Estado){
+        $sql = "UPDATE roles SET Estado= ? WHERE Id_Rol = ?";
    
         try {
           $stm = $this->db->prepare($sql);
           $stm->bindParam(1, $Estado);
-          $stm->bindParam(2, $Id_Documentos);
+          $stm->bindParam(2, $Id_Rol);
    
           return $stm->execute();
 
@@ -67,12 +67,12 @@ class DocumentoPersistence implements DocumentoRepository
         }
       }
   
-      public function ObtenerDatos($Id_Documentos){
-        $sql = "SELECT * FROM documentos WHERE Id_Documento = ?";
+      public function ObtenerDatosRol($Id_Rol){
+        $sql = "SELECT * FROM roles WHERE Id_Rol = ?";
  
         try {
            $stm = $this->db->prepare($sql);
-           $stm->bindParam(1, $Id_Documentos);
+           $stm->bindParam(1, $Id_Rol);
            
            $stm->execute();
            return $stm->fetch(PDO::FETCH_ASSOC);
@@ -81,13 +81,13 @@ class DocumentoPersistence implements DocumentoRepository
         }
     }
 
-    public function EditarDocumento(Documento $Documento){
-        $sql = "UPDATE documentos SET Nombre = ?  WHERE Id_Documento = ?";
+    public function EditarRol(Rol $Rol){
+        $sql = "UPDATE roles SET Nombre = ?  WHERE Id_Rol = ?";
  
         try {
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1, $Documento->__GET("Nombre"));
-            $stm->bindValue(2, $Documento->__GET("Id_Documento"));
+            $stm->bindValue(1, $Rol->__GET("Nombre"));
+            $stm->bindValue(2, $Rol->__GET("Id_Rol"));
             
             return $stm->execute();
  

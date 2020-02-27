@@ -2,23 +2,25 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Actions\Documento;
+namespace App\Application\Actions\Rol;
 
-use App\Domain\Documento\Documento;
+use App\Domain\Rol\Rol;
 use Psr\Http\Message\ResponseInterface as Response;
 
-class EditarDocumentoAction extends DocumentoAction
+class EditarRolAction extends RolAction
 {
     protected function action(): Response
     {
         $campos = $this->getFormData();
 
-        $datos = new Documento(
-            $campos->Id_Documento,
+       
+        $datos = new Rol(
+            $campos->Id_Rol,
             $campos->Nombre,
             $campos->Estado,
+            
         );
-        $datos = $this->DocumentoRepository->EditarDocumento($datos);
+        $datos = $this->RolRepository->EditarRol($datos);
 
         return $this->respondWithData(["ok" =>$datos]);
         

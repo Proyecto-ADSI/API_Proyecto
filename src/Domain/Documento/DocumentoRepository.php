@@ -11,7 +11,7 @@ interface DocumentoRepository{
 
     public function CambiarEstado(int $Id_Documentos, int $Estado);
 
-    public function ObtenerDatos(int $Id_Documentos) : array;
+    public function ObtenerDatos(int $Id_Documentos);
 
     public function EditarDocumento(Documento $Documento);
 }

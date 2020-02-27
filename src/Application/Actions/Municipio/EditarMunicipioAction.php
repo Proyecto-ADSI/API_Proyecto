@@ -13,8 +13,8 @@ class EditarMunicipioAction extends MunicipioAction
     {
         $campos = $this->getFormData();
 
-        $datos = new Departamento(
-            $campos->Id_Municipios,
+        $datos = new Municipio(
+            $campos->Id_Municipio,
             $campos->Nombre,
             $campos->Id_Departamento,
             1

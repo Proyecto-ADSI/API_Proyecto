@@ -40,7 +40,7 @@ class PaisPersistence implements PaisRepository
 
     public function ListarPais()
     {
-        $sql = "SELECT Id_Pais, Nombre FROM pais";
+        $sql = "SELECT Id_Pais, Nombre,Estado FROM pais";
 
         try {
 
@@ -75,7 +75,7 @@ class PaisPersistence implements PaisRepository
            $stm->bindParam(1, $Id_Pais);
            
            $stm->execute();
-           return $stm->fetch();
+           return $stm->fetch(PDO::FETCH_ASSOC);
         } catch (\Exception $e) {
             return $e->getMessage();
         }

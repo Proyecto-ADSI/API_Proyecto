@@ -23,7 +23,7 @@ class SexoPersistence implements SexoRepository
 
     public function RegistrarSexo(Sexo $Sexo)
     {
-        $sql = "INSERT INTO sexo(Nombre,Estado) VALUES (?,?)";
+        $sql = "INSERT INTO sexos(Nombre,Estado) VALUES (?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -40,7 +40,7 @@ class SexoPersistence implements SexoRepository
 
     public function ListarSexo()
     {
-        $sql = "SELECT Id_Sexo, Nombre FROM sexo";
+        $sql = "SELECT Id_Sexo, Nombre,Estado FROM sexos";
 
         try {
 
@@ -53,7 +53,7 @@ class SexoPersistence implements SexoRepository
         }
     }
     public function CambiarEstado(int $Id_Sexo, int $Estado){
-        $sql = "UPDATE sexo SET Estado= ? WHERE Id_Sexo = ?";
+        $sql = "UPDATE sexos SET Estado= ? WHERE Id_Sexo = ?";
    
         try {
           $stm = $this->db->prepare($sql);
@@ -68,21 +68,21 @@ class SexoPersistence implements SexoRepository
       }
   
       public function ObtenerDatos($Id_Sexo){
-        $sql = "SELECT * FROM sexo WHERE Id_Sexo = ?";
+        $sql = "SELECT * FROM sexos WHERE Id_Sexo = ?";
  
         try {
            $stm = $this->db->prepare($sql);
            $stm->bindParam(1, $Id_Sexo);
            
            $stm->execute();
-           return $stm->fetch();
+           return $stm->fetch(PDO::FETCH_ASSOC);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
 
     public function EditarSexo(Sexo $Sexo){
-        $sql = "UPDATE sexo SET Nombre = ?  WHERE Id_Sexo = ?";
+        $sql = "UPDATE sexos SET Nombre = ?  WHERE Id_Sexo = ?";
  
         try {
             $stm = $this->db->prepare($sql);

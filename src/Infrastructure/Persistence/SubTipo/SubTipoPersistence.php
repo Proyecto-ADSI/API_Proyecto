@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Persistence\Documento;
+namespace App\Infrastructure\Persistence\SubTipo;
 
-use App\Domain\Documento\Documento;
-use App\Domain\Documento\DocumentoRepository;
+use App\Domain\SubTipo\SubTipo;
+use App\Domain\SubTipo\SubTipoRepository;
 use App\Infrastructure\DataBase;
 use Exception;
 use PDO;
 
-class DocumentoPersistence implements DocumentoRepository
+class SubTipoPersistence implements SubTipoRepository
 {
 
     private $db = null;
@@ -21,16 +21,17 @@ class DocumentoPersistence implements DocumentoRepository
         $this->db = $database->getConection();
     }
 
-    public function RegistrarDocumento(Documento $Documento)
+    public function RegistrarSubTipo(SubTipo $SubTipo)
     {
-        $sql = "INSERT INTO documentos(Nombre,Estado) VALUES (?,?)";
+        $sql = "INSERT INTO subtipo_barrio_vereda (SubTipo, Estado) VALUES (?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1, $Documento->__GET("Nombre"));
-            $stm->bindValue(2, $Documento->__GET("Estado"));
+            $stm->bindValue(1, $SubTipo->__GET("SubTipo"));
+            $stm->bindValue(2, $SubTipo->__GET("Estado"));
 
             return $stm->execute();
+
         } catch (Exception $e) {
 
             return $e->getMessage();
@@ -38,9 +39,9 @@ class DocumentoPersistence implements DocumentoRepository
     }
 
 
-    public function ListarDocumento()
+    public function ListarSubTipo()
     {
-        $sql = "SELECT Id_Documento, Nombre, Estado FROM documentos";
+        $sql = "SELECT Id_SubTipo_Barrio_Vereda, SubTipo, Estado FROM subtipo_barrio_vereda";
 
         try {
 
@@ -48,17 +49,18 @@ class DocumentoPersistence implements DocumentoRepository
             $stm->execute();
 
             return $stm->fetchAll(PDO::FETCH_ASSOC);
+
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
-    public function CambiarEstado(int $Id_Documentos, int $Estado){
-        $sql = "UPDATE documentos SET Estado= ? WHERE Id_Documento = ?";
+    public function CambiarEstado(int $Id_SubTipo_Barrio_Vereda, int $Estado){
+        $sql = "UPDATE subtipo_barrio_vereda SET Estado= ? WHERE Id_SubTipo_Barrio_Vereda = ?";
    
         try {
           $stm = $this->db->prepare($sql);
           $stm->bindParam(1, $Estado);
-          $stm->bindParam(2, $Id_Documentos);
+          $stm->bindParam(2, $Id_SubTipo_Barrio_Vereda);
    
           return $stm->execute();
 
@@ -67,27 +69,28 @@ class DocumentoPersistence implements DocumentoRepository
         }
       }
   
-      public function ObtenerDatos($Id_Documentos){
-        $sql = "SELECT * FROM documentos WHERE Id_Documento = ?";
+      public function ObtenerDatosSubTipo(int $Id_SubTipo_Barrio_Vereda){
+        $sql = "SELECT Id_SubTipo_Barrio_Vereda, SubTipo  FROM subtipo_barrio_vereda WHERE Id_SubTipo_Barrio_Vereda = ?";
  
         try {
            $stm = $this->db->prepare($sql);
-           $stm->bindParam(1, $Id_Documentos);
+           $stm->bindParam(1, $Id_SubTipo_Barrio_Vereda);
            
            $stm->execute();
            return $stm->fetch(PDO::FETCH_ASSOC);
+
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
 
-    public function EditarDocumento(Documento $Documento){
-        $sql = "UPDATE documentos SET Nombre = ?  WHERE Id_Documento = ?";
- 
+    public function EditarSubTipo(SubTipo $SubTipo){
+        $sql = "UPDATE subtipo_barrio_vereda SET SubTipo = ?  WHERE Id_SubTipo_Barrio_Vereda = ?";
+        
         try {
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1, $Documento->__GET("Nombre"));
-            $stm->bindValue(2, $Documento->__GET("Id_Documento"));
+            $stm->bindValue(1, $SubTipo->__GET("SubTipo"));
+            $stm->bindValue(2, $SubTipo->__GET("Id_SubTipo_Barrio_Vereda"));
             
             return $stm->execute();
  

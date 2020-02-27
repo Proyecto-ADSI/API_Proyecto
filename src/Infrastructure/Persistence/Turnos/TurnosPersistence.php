@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Persistence\Documento;
+namespace App\Infrastructure\Persistence\Turnos;
 
-use App\Domain\Documento\Documento;
-use App\Domain\Documento\DocumentoRepository;
+use App\Domain\Turnos\Turnos;
+use App\Domain\Turnos\TurnosRepository;
 use App\Infrastructure\DataBase;
 use Exception;
 use PDO;
 
-class DocumentoPersistence implements DocumentoRepository
+class TurnosPersistence implements TurnosRepository
 {
 
     private $db = null;
@@ -21,14 +21,16 @@ class DocumentoPersistence implements DocumentoRepository
         $this->db = $database->getConection();
     }
 
-    public function RegistrarDocumento(Documento $Documento)
+    public function RegistrarTurnos(Turnos $Turnos)
     {
-        $sql = "INSERT INTO documentos(Nombre,Estado) VALUES (?,?)";
+        $sql = "INSERT INTO turnos (Nombre,Inicio,Fin,Estado) VALUES (?,?,?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1, $Documento->__GET("Nombre"));
-            $stm->bindValue(2, $Documento->__GET("Estado"));
+            $stm->bindValue(1, $Turnos->__GET("Nombre"));
+            $stm->bindValue(2, $Turnos->__GET("Inicio"));
+            $stm->bindValue(3, $Turnos->__GET("Fin"));
+            $stm->bindValue(4, $Turnos->__GET("Estado"));
 
             return $stm->execute();
         } catch (Exception $e) {
@@ -38,9 +40,9 @@ class DocumentoPersistence implements DocumentoRepository
     }
 
 
-    public function ListarDocumento()
+    public function ListarTurno()
     {
-        $sql = "SELECT Id_Documento, Nombre, Estado FROM documentos";
+        $sql = "SELECT Id_Turno, Nombre, Inicio, Fin, Estado FROM turnos";
 
         try {
 
@@ -52,13 +54,16 @@ class DocumentoPersistence implements DocumentoRepository
             return $e->getMessage();
         }
     }
-    public function CambiarEstado(int $Id_Documentos, int $Estado){
-        $sql = "UPDATE documentos SET Estado= ? WHERE Id_Documento = ?";
+
+
+
+    public function CambiarEstado(int $Id_Turno, int $Estado){
+        $sql = "UPDATE turnos SET Estado= ? WHERE Id_Turno = ?";
    
         try {
           $stm = $this->db->prepare($sql);
           $stm->bindParam(1, $Estado);
-          $stm->bindParam(2, $Id_Documentos);
+          $stm->bindParam(2, $Id_Turno);
    
           return $stm->execute();
 
@@ -67,12 +72,12 @@ class DocumentoPersistence implements DocumentoRepository
         }
       }
   
-      public function ObtenerDatos($Id_Documentos){
-        $sql = "SELECT * FROM documentos WHERE Id_Documento = ?";
+      public function ObtenerDatosTurno($Id_Turno){
+        $sql = "SELECT * FROM turnos WHERE Id_Turno = ?";
  
         try {
            $stm = $this->db->prepare($sql);
-           $stm->bindParam(1, $Id_Documentos);
+           $stm->bindParam(1, $Id_Turno);
            
            $stm->execute();
            return $stm->fetch(PDO::FETCH_ASSOC);
@@ -81,13 +86,15 @@ class DocumentoPersistence implements DocumentoRepository
         }
     }
 
-    public function EditarDocumento(Documento $Documento){
-        $sql = "UPDATE documentos SET Nombre = ?  WHERE Id_Documento = ?";
+    public function EditarTurno(Turnos $Turnos){
+        $sql = "UPDATE turnos SET Nombre = ?, Inicio = ?, Fin = ?  WHERE Id_Turno = ?";
  
         try {
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1, $Documento->__GET("Nombre"));
-            $stm->bindValue(2, $Documento->__GET("Id_Documento"));
+            $stm->bindValue(1, $Turnos->__GET("Nombre"));
+            $stm->bindValue(2, $Turnos->__GET("Inicio"));
+            $stm->bindValue(3, $Turnos->__GET("Fin"));
+            $stm->bindValue(4, $Turnos->__GET("Id_Turno"));
             
             return $stm->execute();
  
