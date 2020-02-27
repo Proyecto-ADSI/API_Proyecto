@@ -10,8 +10,6 @@ use App\Infrastructure\DataBase;
 use Exception;
 use PDO;
 
-use function DI\get;
-
 class ClientePersistence implements ClienteRepository
 {
 
@@ -39,7 +37,7 @@ class ClientePersistence implements ClienteRepository
         }
     }
 
-    public function ConsultarCliente(int $id)
+    public function ObtenerCliente(int $id)
     {
         $sql = "SELECT * FROM Directorio WHERE Id_Cliente = ?";
 
@@ -59,60 +57,105 @@ class ClientePersistence implements ClienteRepository
 
     public function RegistrarCliente(Cliente $Cliente)
     {
-        $sql = "INSERT INTO cliente(NIT_CDV,Razon_Social, Telefono, Direccion, Id_Estado_Cliente, Departamento,Municipio, Barrio_Vereda, Nombre_Lugar, Id_Turno) VALUES (?,?,?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO Directorio(NIT_CDV,Razon_Social, Telefono, Direccion, Departamento,
+        Municipio, Barrio_Vereda, Nombre_Lugar, Estado_Cliente) 
+        VALUES (?,?,?,?,?,?,?,?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(2, $Cliente->__GET("NIT_CDV"));
-            $stm->bindValue(3, $Cliente->__GET("Razon_Social"));
-            $stm->bindValue(4, $Cliente->__GET("Telefono"));
-            $stm->bindValue(5, $Cliente->__GET("Direccion"));
-            $stm->bindValue(6, $Cliente->__GET("Id_Estado_Cliente"));
-            $stm->bindValue(7, $Cliente->__GET("Departamento"));
-            $stm->bindValue(8, $Cliente->__GET("Municipio"));
-            $stm->bindValue(9, $Cliente->__GET("Barrio_Vereda"));
-            $stm->bindValue(1, $Cliente->__GET("Nombre_Lugar"));
+            $stm->bindValue(1, $Cliente->__GET("NIT_CDV"));
+            $stm->bindValue(2, $Cliente->__GET("Razon_Social"));
+            $stm->bindValue(3, $Cliente->__GET("Telefono"));
+            $stm->bindValue(4, $Cliente->__GET("Direccion"));
+            $stm->bindValue(5, $Cliente->__GET("Departamento"));
+            $stm->bindValue(6, $Cliente->__GET("Municipio"));
+            $stm->bindValue(7, $Cliente->__GET("Barrio_Vereda"));
+            $stm->bindValue(8, $Cliente->__GET("Nombre_Lugar"));
+            $stm->bindValue(9,$Cliente->__GET("Estado_Cliente"));
 
             return $stm->execute();
+            
         } catch (Exception $e) {
 
-            return $e->getMessage();
+            return "Error al registrar " . $e->getMessage();
         }
     }
 
-    public function CambiarEstado(int $Id_Cliente,int $Estado)
-    {
+    public function EditarCliente(Cliente $Cliente){
 
-        $sql ="UPDATE directorio SET Id_Estado_Cliente = ? WHERE Id_Cliente = $Id_Cliente";
+        $sql ="UPDATE Directorio SET NIT_CDV = ?, Razon_Social = ?, Telefono = ?, Direccion = ?,
+            Departamento = ?, Municipio = ?, Barrio_Vereda = ?, Nombre_Lugar = ?, Estado_Cliente = ?
+            WHERE Id_Cliente = ?";
             
-           
+        try{
+
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1, $Cliente->__GET("NIT_CDV"));
+            $stm->bindValue(2, $Cliente->__GET("Razon_Social"));
+            $stm->bindValue(3, $Cliente->__GET("Telefono"));
+            $stm->bindValue(4, $Cliente->__GET("Direccion"));
+            $stm->bindValue(5, $Cliente->__GET("Departamento"));
+            $stm->bindValue(6, $Cliente->__GET("Barrio_Vereda"));
+            $stm->bindValue(7, $Cliente->__GET("Nombre_Lugar"));
+            $stm->bindValue(8, $Cliente->__GET("Estado_Cliente"));
+            $stm->bindValue(9, $Cliente->__GET("Id_Cliente"));
+      
+            return $stm->execute();             
+        }
+        catch(Exception $e){
+
+            return $e->getMessage();
+
+        }
+    }
+
+
+    public function CambiarEstadoCliente(int $Id_Cliente,int $Estado)
+    {
+        $sql ="UPDATE directorio SET Estado_Cliente = ? WHERE Id_Cliente = ?";
             try{
+                $stm = $this->db->prepare($sql);
+                $stm->bindValue(1, $Estado);
+                $stm->bindValue(2, $Id_Cliente);
 
-                if ($Estado == 1) {
-
-                    $stm = $this->db->prepare($sql);
-    
-                    $stm->bindValue(1 , 2);
-    
-                    return $stm->execute();
-                }
-                else if($Estado == 2){
-                    
-                    $stm = $this->db->prepare($sql);
-    
-                    $stm->bindValue(1 , 1);
-    
-                    return $stm->execute();
-                }
-             
-
+                return $stm->execute();             
             }
             catch(Exception $e){
 
                 return "Error al cambiar estado "+$e;
 
             }
-        
     }
 
+    
+    public function EliminarCliente(int $Id_Cliente){
+
+        $sql = "DELETE FROM Directorio WHERE Id_Cliente = ?";
+
+        try{
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Cliente);
+
+            return $stm->execute();
+
+        }catch(Exception $e){
+
+            return $e->getMessage();
+        }
+    }
+
+    public function ConsultarUltimoRegistrado(){
+
+        $sql = "SELECT Id_Cliente FROM Directorio ORDER BY 1 DESC LIMIT 1";
+
+        try{
+
+            $stm = $this->db->prepare($sql);
+            $stm->execute();
+            return $stm->fetch(PDO::FETCH_ASSOC);
+            
+        }catch(Exception $e){
+            return $e->getMessage();
+        }
+    }
 }

@@ -7,16 +7,16 @@ interface ClienteRepository{
 
     public function ListarCliente();
 
-    public function ConsultarCliente(int $id);
+    public function ObtenerCliente(int $Id_Cliente);
 
-    public function RegistrarCliente();
+    public function RegistrarCliente(Cliente $Cliente);
 
     public function EditarCliente(Cliente $Cliente);
 
-    public function EliminarCliente();
+    public function EliminarCliente(int $Id_Cliente);
 
-    public function VerDetalleCliente();
+    public function CambiarEstadoCliente(int $Id_Cliente, int $Estado);
 
-    public function CambiarEstado(int $Estado);
+    public function ConsultarUltimoRegistrado();
     
 }

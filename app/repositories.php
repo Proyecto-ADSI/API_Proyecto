@@ -9,8 +9,13 @@ use App\Domain\Sexo\SexoRepository;
 use App\Domain\Pais\PaisRepository;
 use App\Domain\Departamento\DepartamentoRepository;
 use App\Domain\Municipio\MunicipioRepository;
-
-
+use App\Domain\Cliente\ClienteRepository;
+use App\Domain\DBL\DBLRepository;
+use App\Domain\Doc_Soporte\Doc_SoporteRepository;
+use App\Domain\Plan_Corporativo\Plan_CorporativoRepository;
+use App\Infrastructure\Persistence\Cliente\ClientePersistence;
+use App\Infrastructure\Persistence\DBL\DBLPersistence;
+use App\Infrastructure\Persistence\Doc_Soporte\Doc_SoportePersistence;
 use App\Infrastructure\Persistence\Empleado\EmpleadoPersistence;
 use App\Infrastructure\Persistence\User\InMemoryUserRepository;
 use App\Infrastructure\Persistence\Usuario\UsuarioPersistence;
@@ -19,11 +24,8 @@ use App\Infrastructure\Persistence\Sexo\SexoPersistence;
 use App\Infrastructure\Persistence\Pais\PaisPersistence;
 use App\Infrastructure\Persistence\Departamento\DepartamentoPersistence;
 use App\Infrastructure\Persistence\Municipio\MunicipioPersistence;
+use App\Infrastructure\Persistence\Plan_Corporativo\Plan_CorporativoPersistence;
 use DI\ContainerBuilder;
-
-
-use App\Domain\Cliente\ClienteRepository;
-use App\Infrastructure\Persistence\Cliente\ClientePersistence;
 
 return function (ContainerBuilder $containerBuilder) {
     // Here we map our UserRepository interface to its in memory implementation
@@ -37,5 +39,11 @@ return function (ContainerBuilder $containerBuilder) {
         PaisRepository::class => \DI\autowire(PaisPersistence::class),
         DepartamentoRepository::class => \DI\autowire(DepartamentoPersistence::class),
         MunicipioRepository::class => \DI\autowire(MunicipioPersistence::class),
+        ClienteRepository::class => \DI\autowire(ClientePersistence::class),
+        DBLRepository::class => \DI\autowire(DBLPersistence::class),
+        Plan_CorporativoRepository::class => \DI\autowire(Plan_CorporativoPersistence::class),
+        Doc_SoporteRepository::class => \DI\autowire(Doc_SoportePersistence::class),
     ]);
 };
+ 
+

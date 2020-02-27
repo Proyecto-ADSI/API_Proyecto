@@ -55,10 +55,16 @@ use App\Application\Actions\Municipio\ObtenerDatosMunicipioAction;
 use App\Application\Actions\Municipio\EditarMunicipioAction;
 use App\Application\Actions\Municipio\CambiarEstadoMunicipioAction;
 
+// Cliente
+use App\Application\Actions\Cliente\RegistrarCliente;
+use App\Application\Actions\Cliente\ListarCliente;
+
+
+
 
 return function (App $app) {
     $app->get('/', function (Request $request, Response $response) {
-        $response->getBody()->write('Hello world!');
+        $response->getBody()->write('Binevenido a CallPhone Soft');
         return $response;
     });
 
@@ -123,8 +129,13 @@ return function (App $app) {
         $group->put('',EditarMunicipioAction::class);
         $group->patch('/{Id_Municipio}/{Estado}',CambiarEstadoMunicipioAction::class);
     });
+    
+    $app->group('/Cliente', function(Group $group){
+        $group->post('',RegistrarCliente::class);
+        $group->get('',ListarCliente::class);
 
-
+    });
+    
     $app->options('/{routes:.+}', function ($request, $response, $args) {
         return $response;
     });
