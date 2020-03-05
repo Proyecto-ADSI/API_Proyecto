@@ -22,25 +22,20 @@ class EnviarCorreo extends UsuarioAction
 
 
         $respuesta = $this->usuarioRepository->login($usuario);
-       
+
         if (!$respuesta) {
 
             return $this->respondWithData(["ok" => false]);
         } else {
 
-            $Id_Empleado = (int)$respuesta['Id_Empleado'];
+            $Id_Empleado = (int) $respuesta['Id_Empleado'];
             $info = $this->EmpleadoRepository->ConsultarEmpleado($Id_Empleado);
-            //   return $this->respondWithData(["ok" => $info]);
+      
+
             // Datos Empleado
             $Email = $info['Email'];
             $NombreEmpleado = $info['Nombre'] . " " . $info['Apellidos'];
 
-            //Crear Token
-            $token = bin2hex(random_bytes(30));
-            $Id_Usuario = (int)$respuesta['Id_Usuario'];
-            $this->usuarioRepository->AgregarToken($token, $Id_Usuario);
-
-           
 
             $mail = new PHPMailer(true);
             $mail->CharSet = "UTF-8";
@@ -61,6 +56,11 @@ class EnviarCorreo extends UsuarioAction
                 $mail->setFrom('proyecto.adsi2019@gmail.com', 'Proyecto SENA');     //Correo que envía el mensaje
                 $mail->addAddress($Email, $NombreEmpleado);                                           // Correo que recibe el mensaje
 
+                //Crear Token
+                $token = bin2hex(random_bytes(30));
+                $Id_Usuario = (int) $respuesta['Id_Usuario'];
+                $this->usuarioRepository->AgregarToken($token, $Id_Usuario);
+
                 // Contenido
                 $mail->isHTML(true);                                  // Set email format to HTML
                 $mail->Subject = 'Restablecer contraseña';
@@ -70,14 +70,13 @@ class EnviarCorreo extends UsuarioAction
                 if ($mail->send()) {
 
                     return $this->respondWithData(["ok" => true]);
-                    
                 } else {
 
                     return $this->respondWithData(["ok" => false]);
                 }
             } catch (Exception $e) {
-                
-                return $this->respondWithData(["ok" => "No se pudo enviar el correo. Mailer Error: {$mail->ErrorInfo}"]);
+
+                return $this->respondWithData(["ok" => false, "Error" => "No se pudo enviar el correo. Mailer Error: {$mail->ErrorInfo}"]);
             }
         }
     }

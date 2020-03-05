@@ -11,7 +11,7 @@ class ObtenerCliente extends ClienteAction
     protected function action(): Response
     {
 
-        $Id_Cliente = $this->resolveArg("Id_Cliente");
+        $Id_Cliente = (int) $this->resolveArg("Id_Cliente");
 
         $Cliente = $this->ClienteRepository->ObtenerCliente($Id_Cliente);
 

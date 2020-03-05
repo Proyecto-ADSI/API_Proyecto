@@ -13,5 +13,7 @@ interface DepartamentoRepository {
 
     public function ObtenerDatosDepartamento(int $Id_Departamento);
 
+    public function ConsultarDepartamentosPais(int $Id_Pais);
+
     public function EditarDepartamento(Departamento $Departamento);
 }

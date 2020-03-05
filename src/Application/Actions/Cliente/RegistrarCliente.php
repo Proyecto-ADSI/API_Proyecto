@@ -24,10 +24,7 @@ class RegistrarCliente extends ClienteAction
             $campos->Razon_Social,
             $campos->Telefono,
             $campos->Direccion,
-            $campos->Departamento,
-            $campos->Municipio,
             $campos->Barrio_Vereda,
-            $campos->Nombre_Lugar,
             $campos->Estado_Cliente
         );
         
@@ -128,9 +125,10 @@ class RegistrarCliente extends ClienteAction
                 $campos->Estado_DBL
             );
 
-            $r = $this->DBLRepository->RegistrarDBL($DBL);
-
-            return $this->respondWithData(["ok"=>$r]);
+            
+            $respuesta = $this->DBLRepository->RegistrarDBL($DBL);
+            // Respuesta es TRUE || FALSE
+            return $this->respondWithData(["ok"=>$respuesta]);
         }  
     }
 }

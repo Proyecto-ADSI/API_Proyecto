@@ -13,5 +13,7 @@ interface BarriosVeredasRepository {
 
     public function ObtenerDatosBarriosVeredas(int $Id_Barrios_Veredas);
 
+    public function ConsultarBarriosVeredasMunicipio(int $Id_Municipio, int $Id_SubTipo);
+
     public function EditarBarriosVeredas(BarriosVeredas $BarriosVeredas);
 }

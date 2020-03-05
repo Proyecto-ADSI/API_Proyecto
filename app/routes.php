@@ -46,6 +46,7 @@ use App\Application\Actions\Pais\CambiarEstadoPaisAction;
 use App\Application\Actions\Departamento\ListarDepartamentoAction;
 use App\Application\Actions\Departamento\RegistrarDepartamentoAction;
 use App\Application\Actions\Departamento\ObtenerDatosDepartamentoAction;
+use App\Application\Actions\Departamento\ConsultarDepartamentosPaisAction;
 use App\Application\Actions\Departamento\EditarDepartamentoAction;
 use App\Application\Actions\Departamento\CambiarEstadoDepartamentoAction;
 //Municipio
@@ -53,6 +54,7 @@ use App\Application\Actions\Municipio\ListarMunicipioAction;
 use App\Application\Actions\Municipio\RegistrarMunicipioAction;
 use App\Application\Actions\Municipio\ObtenerDatosMunicipioAction;
 use App\Application\Actions\Municipio\EditarMunicipioAction;
+use App\Application\Actions\Municipio\ConsultarMunicipiosDepartamentoAction;
 use App\Application\Actions\Municipio\CambiarEstadoMunicipioAction;
 //SubTipo
 use App\Application\Actions\SubTipo\ListarSubTipoAction;
@@ -66,6 +68,7 @@ use App\Application\Actions\BarriosVeredas\RegistrarBarriosVeredasAction;
 use App\Application\Actions\BarriosVeredas\ObtenerBarriosVeredasAction;
 use App\Application\Actions\BarriosVeredas\EditarBarriosVeredasAction;
 use App\Application\Actions\BarriosVeredas\CambiarEstadoBarriosVeredasAction;
+use App\Application\Actions\BarriosVeredas\ConsultarBarriosVeredasMunicipioAction;
 //Turnos
 use App\Application\Actions\Turnos\ListarTurnosAction;
 use App\Application\Actions\Turnos\RegistrarTurnosAction;
@@ -83,8 +86,7 @@ use App\Application\Actions\Rol\RegistrarRolAction;
 // Cliente
 use App\Application\Actions\Cliente\RegistrarCliente;
 use App\Application\Actions\Cliente\ListarCliente;
-
-
+use App\Application\Actions\Cliente\ObtenerCliente;
 
 
 return function (App $app) {
@@ -143,6 +145,7 @@ return function (App $app) {
         $group->post('',RegistrarDepartamentoAction::class);
         $group->get('',ListarDepartamentoAction::class);
         $group->get('/ObtenerDepartamento/{Id_Departamento}',ObtenerDatosDepartamentoAction::class);
+        $group->get('/ConsultarDepartamento/{Id_Pais}',ConsultarDepartamentosPaisAction::class);
         $group->put('',EditarDepartamentoAction::class);
         $group->patch('/{Id_Departamento}/{Estado}',CambiarEstadoDepartamentoAction::class);
     });
@@ -151,6 +154,7 @@ return function (App $app) {
         $group->post('',RegistrarMunicipioAction::class);
         $group->get('',ListarMunicipioAction::class);
         $group->get('/ObtenerMunicipio/{Id_Municipio}',ObtenerDatosMunicipioAction::class);
+        $group->get('/ConsultarMunicipio/{Id_Departamento}',ConsultarMunicipiosDepartamentoAction::class);
         $group->put('',EditarMunicipioAction::class);
         $group->patch('/{Id_Municipio}/{Estado}',CambiarEstadoMunicipioAction::class);
     });
@@ -158,6 +162,7 @@ return function (App $app) {
     $app->group('/Cliente', function(Group $group){
         $group->post('',RegistrarCliente::class);
         $group->get('',ListarCliente::class);
+        $group->get('/{Id_Cliente}',ObtenerCliente::class);
     });
 
     $app->group('/SubTipo', function(Group $group){
@@ -171,6 +176,7 @@ return function (App $app) {
         $group->post('',RegistrarBarriosVeredasAction::class);
         $group->get('',ListarBarriosVeredasAction::class);
         $group->get('/ObtenerBarriosVereda/{Id_Barrios_Veredas}',ObtenerBarriosVeredasAction::class);
+        $group->get('/ConsultarBarriosVeredas/{Id_Municipio}/{Id_SubTipo}',ConsultarBarriosVeredasMunicipioAction::class);
         $group->put('',EditarBarriosVeredasAction::class);
         $group->patch('/{Id_Barrios_Veredas}/{Estado}',CambiarEstadoBarriosVeredasAction::class);
     });

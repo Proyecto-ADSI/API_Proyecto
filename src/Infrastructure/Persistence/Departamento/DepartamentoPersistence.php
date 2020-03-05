@@ -99,6 +99,23 @@ class DepartamentoPersistence implements DepartamentoRepository
         }
     }
 
+    public function ConsultarDepartamentosPais(int $Id_Pais){
+
+        $sql = "SELECT Id_Departamento, Nombre FROM departamento WHERE Id_Pais = ?";
+
+        try {
+
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Pais);
+            $stm->execute();    
+            
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+
+    }
+
 
     
 }
