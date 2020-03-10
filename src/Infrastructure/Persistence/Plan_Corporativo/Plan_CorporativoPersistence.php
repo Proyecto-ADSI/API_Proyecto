@@ -41,8 +41,8 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
 
     public function ListarPlan_Corporativo(int $Id_Plan_Corporativo)
     {
-        $sql = "SELECT Id_Documentos,Fecha_Inicio,Fecha_Fin,Descripción,Estado FROM Plan_Corporativo WHERE Id_Plan_Corporativo = ? ";
-
+        $sql = "SELECT Id_Documentos,Fecha_Inicio,Fecha_Fin,Descripcion,Estado_Plan_Corporativo
+                FROM Plan_Corporativo WHERE Id_Plan_Corporativo = ? ";
         try {
 
             $stm = $this->db->prepare($sql);

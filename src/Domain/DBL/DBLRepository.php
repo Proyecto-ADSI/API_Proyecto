@@ -16,6 +16,8 @@ interface DBLRepository {
 
     public function ELiminarDBL(int $Id_DBL);
 
+    public function ConsultarUltimoRegistrado();
+
 }
 
 

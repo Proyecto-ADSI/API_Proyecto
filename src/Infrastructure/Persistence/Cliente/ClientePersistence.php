@@ -28,7 +28,7 @@ class ClientePersistence implements ClienteRepository
         CASE WHEN  ISNULL(dbl.Id_Plan_Corporativo) = 0 THEN 'Si' 
         ELSE 'No' END AS Corporativo 
         FROM Directorio d 
-        INNER JOIN Datos_Basicos_Lineas dbl ON(d.Id_Cliente = dbl.Id_Cliente) 
+        INNER JOIN Datos_Basicos_Lineas dbl ON(d.Id_DBL= dbl.Id_DBL) 
         INNER JOIN Operadores o ON(dbl.Id_Operador = o.Id_Operador)";
 
         try {
@@ -62,17 +62,21 @@ class ClientePersistence implements ClienteRepository
 
     public function RegistrarCliente(Cliente $Cliente)
     {
-        $sql = "INSERT INTO Directorio(NIT_CDV,Razon_Social, Telefono, Direccion, Id_Barrios_Veredas, Estado_Cliente) 
-        VALUES (?,?,?,?,?,?)";
+        $sql = "INSERT INTO Directorio(Id_DBL,NIT_CDV,Razon_Social, Telefono, Encargado,Extension,Telefono_Contacto, Direccion, Id_Barrios_Veredas, Estado_Cliente) 
+        VALUES (?,?,?,?,?,?,?,?,?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1, $Cliente->__GET("NIT_CDV"));
-            $stm->bindValue(2, $Cliente->__GET("Razon_Social"));
-            $stm->bindValue(3, $Cliente->__GET("Telefono"));
-            $stm->bindValue(4, $Cliente->__GET("Direccion"));
-            $stm->bindValue(5, $Cliente->__GET("Id_Barrios_Veredas"));
-            $stm->bindValue(6,$Cliente->__GET("Estado_Cliente"));
+            $stm->bindValue(1, $Cliente->__GET("Id_DBL"));
+            $stm->bindValue(2, $Cliente->__GET("NIT_CDV"));
+            $stm->bindValue(3, $Cliente->__GET("Razon_Social"));
+            $stm->bindValue(4, $Cliente->__GET("Telefono"));
+            $stm->bindValue(5,$Cliente->__GET("Encargado"));
+            $stm->bindValue(6,$Cliente->__GET("Extension"));
+            $stm->bindValue(7,$Cliente->__GET("Telefono_Contacto"));
+            $stm->bindValue(8, $Cliente->__GET("Direccion"));
+            $stm->bindValue(9, $Cliente->__GET("Id_Barrios_Veredas"));
+            $stm->bindValue(10,$Cliente->__GET("Estado_Cliente"));
 
             return $stm->execute();
             

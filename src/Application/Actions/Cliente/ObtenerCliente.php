@@ -14,7 +14,18 @@ class ObtenerCliente extends ClienteAction
         $Id_Cliente = (int) $this->resolveArg("Id_Cliente");
 
         $Cliente = $this->ClienteRepository->ObtenerCliente($Id_Cliente);
+        $DBL = $this->DBLRepository->ListarDBL($Id_Cliente);
 
-        return  $this->respondWithData($Cliente);
+        $Id_Plan_Corporativo = (int) $DBL["Id_Plan_Corporativo"];
+        $Plan_Corporativo = $this->Plan_CorporativoRepository->ListarPlan_Corporativo($Id_Plan_Corporativo);
+
+        $Id_Documentos = (int) $Plan_Corporativo["Id_Documentos"];
+        $Documentos_Soporte = $this->Doc_SoporteRepository->ListarDocSoporte($Id_Documentos);
+
+
+        
+        
+
+        return  $this->respondWithData($Plan_Corporativo);
     }
 }
