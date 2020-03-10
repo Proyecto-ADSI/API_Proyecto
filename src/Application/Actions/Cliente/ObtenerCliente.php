@@ -37,11 +37,12 @@ class ObtenerCliente extends ClienteAction
         $Id_Pais = (int)$Departamento['Id_Pais'];
         $Pais = $this->PaisRepository->ObtenerDatos($Id_Pais);
 
+        $this->Ubicacion =  array_merge($BarrioVereda,$SubTipo,$Municipio,$Departamento,$Pais);
+        
+
         // Obtener datos básicos de lineas del cliente
         $Id_DBL = (int)$this->Cliente['Id_DBL'];
         $this->DBL = $this->DBLRepository->ListarDBL($Id_DBL);
-
-        
 
 
         // Validar si tiene plan corporativo
@@ -73,6 +74,6 @@ class ObtenerCliente extends ClienteAction
             $this->Info_Cliente = array_merge($this->Cliente,$this->DBL);
         }        
             
-        return  $this->respondWithData($this->Info_Cliente);
+        return  $this->respondWithData($this->Ubicacion);
     }
 }

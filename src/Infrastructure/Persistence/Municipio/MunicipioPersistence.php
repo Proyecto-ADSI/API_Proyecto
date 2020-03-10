@@ -42,7 +42,8 @@ class MunicipioPersistence implements MunicipioRepository
 
     public function ListarMunicipio()
     {
-        $sql = "SELECT m.Id_Municipio, m.Nombre AS Municipio , d.Id_Departamento ,  d.Nombre AS Departamento FROM municipios m INNER JOIN departamento d ON (m.Id_Departamento = d.Id_Departamento)";
+        $sql = "SELECT m.Id_Municipio, m.Nombre_Municipio, d.Id_Departamento,d.Nombre_Departamento 
+        FROM municipios m INNER JOIN departamento d ON (m.Id_Departamento = d.Id_Departamento)";
 
         try {
 
@@ -71,7 +72,8 @@ class MunicipioPersistence implements MunicipioRepository
       }
   
       public function ObtenerDatosMunicipio($Id_Municipio){
-        $sql = "SELECT m.Id_Municipio, m.Nombre AS Municipio , d.Id_Departamento ,  d.Nombre AS Departamento FROM municipios m INNER JOIN departamento d ON (m.Id_Departamento = d.Id_Departamento) WHERE Id_Municipio = ?";
+        $sql = "SELECT m.Id_Municipio, m.Nombre_Municipio, d.Id_Departamento, d.Nombre_Departamento FROM municipios m 
+        INNER JOIN departamento d ON (m.Id_Departamento = d.Id_Departamento) WHERE Id_Municipio = ?";
  
         try {
            $stm = $this->db->prepare($sql);

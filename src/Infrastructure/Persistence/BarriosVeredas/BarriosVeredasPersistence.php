@@ -23,7 +23,7 @@ class BarriosVeredasPersistence implements BarriosVeredasRepository
 
     public function RegistrarBarriosVeredas(BarriosVeredas $BarriosVeredas)
     {
-        $sql = "INSERT INTO barrios_veredas (Codigo, Nombre_Barrio_Vereda, Id_Municipios, Id_SubTipo_Barrio_Vereda,Estado)
+        $sql = "INSERT INTO barrios_veredas (Codigo, Nombre_Barrio_Vereda, Id_Municipio, Id_SubTipo_Barrio_Vereda,Estado)
         VALUES (?,?,?,?,?)";
 
         try {
@@ -45,9 +45,9 @@ class BarriosVeredasPersistence implements BarriosVeredasRepository
 
     public function ListarBarriosVeredas()
     {
-        $sql = "SELECT b.Id_Barrios_Veredas, b.Codigo , b.Nombre_Barrio_Vereda, m.Id_Municipios, m.Nombre_Municipio
+        $sql = "SELECT b.Id_Barrios_Veredas, b.Codigo , b.Nombre_Barrio_Vereda, m.Id_Municipio, m.Nombre_Municipio
          AS Municipio, s.Id_SubTipo_Barrio_Vereda, s.SubTipo FROM barrios_veredas b
-        INNER JOIN municipios m ON (b.Id_Municipios = m.Id_Municipios)                                         
+        INNER JOIN municipios m ON (b.Id_Municipio = m.Id_Municipio)                                         
         INNER JOIN subtipo_barrio_vereda s ON (b.Id_SubTipo_Barrio_Vereda = s.Id_SubTipo_Barrio_Vereda)";
 
         try {
@@ -77,9 +77,9 @@ class BarriosVeredasPersistence implements BarriosVeredasRepository
       }
   
       public function ObtenerDatosBarriosVeredas(int $Id_Barrios_Veredas){
-        $sql = "SELECT b.Id_Barrios_Veredas, b.Codigo , b.Nombre_Barrio_Vereda, m.Id_Municipios, m.Nombre_Municipio AS Municipio,
+        $sql = "SELECT b.Id_Barrios_Veredas, b.Codigo , b.Nombre_Barrio_Vereda, m.Id_Municipio, m.Nombre_Municipio AS Municipio,
         s.Id_SubTipo_Barrio_Vereda, s.SubTipo FROM barrios_veredas b                                           
-        INNER JOIN municipios m ON (b.Id_Municipios = m.Id_Municipios)                                         
+        INNER JOIN municipios m ON (b.Id_Municipio = m.Id_Municipio)                                         
         INNER JOIN subtipo_barrio_vereda s ON (b.Id_SubTipo_Barrio_Vereda = s.Id_SubTipo_Barrio_Vereda)
         WHERE Id_Barrios_Veredas = ?";
  
@@ -97,7 +97,7 @@ class BarriosVeredasPersistence implements BarriosVeredasRepository
 
     public function EditarBarriosVeredas(BarriosVeredas $BarriosVeredas){
         $sql = "UPDATE barrios_veredas SET Codigo = ?, Nombre_Barrio_Vereda = ?, 
-        Id_Municipios = ?, Id_SubTipo_Barrio_Vereda = ? WHERE Id_Barrios_Veredas = ?";
+        Id_Municipio = ?, Id_SubTipo_Barrio_Vereda = ? WHERE Id_Barrios_Veredas = ?";
         
         try {
             $stm = $this->db->prepare($sql);
