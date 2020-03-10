@@ -77,7 +77,7 @@ class BarriosVeredasPersistence implements BarriosVeredasRepository
       }
   
       public function ObtenerDatosBarriosVeredas(int $Id_Barrios_Veredas){
-        $sql = "SELECT b.Id_Barrios_Veredas, b.Codigo , b.Nombre_Barrio_Vereda, m.Id_Municipio, m.Nombre_Municipio AS Municipio,
+        $sql = "SELECT b.Id_Barrios_Veredas, b.Codigo , b.Nombre_Barrio_Vereda, m.Id_Municipio, m.Nombre_Municipio,
         s.Id_SubTipo_Barrio_Vereda, s.SubTipo FROM barrios_veredas b                                           
         INNER JOIN municipios m ON (b.Id_Municipio = m.Id_Municipio)                                         
         INNER JOIN subtipo_barrio_vereda s ON (b.Id_SubTipo_Barrio_Vereda = s.Id_SubTipo_Barrio_Vereda)
