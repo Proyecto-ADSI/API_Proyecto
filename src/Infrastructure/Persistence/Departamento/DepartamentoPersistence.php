@@ -23,7 +23,7 @@ class DepartamentoPersistence implements DepartamentoRepository
 
     public function RegistrarDepartamento(Departamento $Departamento)
     {
-        $sql = "INSERT INTO departamento(Nombre, Id_Pais, Estado) VALUES (?,?,?)";
+        $sql = "INSERT INTO departamento(Nombre_Departamento, Id_Pais, Estado) VALUES (?,?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -41,7 +41,7 @@ class DepartamentoPersistence implements DepartamentoRepository
 
     public function ListarDepartamento()
     {
-        $sql = "SELECT d.Id_Departamento, d.Nombre AS Departamento , p.Id_Pais ,  p.Nombre AS Pais FROM departamento d INNER JOIN pais p ON (d.Id_Pais = p.Id_Pais)";
+        $sql = "SELECT d.Id_Departamento, d.Nombre_Departamento AS Departamento , p.Id_Pais ,  p.Nombre AS Pais FROM departamento d INNER JOIN pais p ON (d.Id_Pais = p.Id_Pais)";
 
         try {
 
@@ -69,7 +69,7 @@ class DepartamentoPersistence implements DepartamentoRepository
       }
   
       public function ObtenerDatosDepartamento($Id_Departamento){
-        $sql = "SELECT d.Id_Departamento, d.Nombre AS Departamento , p.Id_Pais , p.Nombre AS Pais FROM departamento d INNER JOIN pais p ON (d.Id_Pais = p.Id_Pais) WHERE Id_Departamento = ?";
+        $sql = "SELECT d.Id_Departamento, d.Nombre_Departamento AS Departamento , p.Id_Pais , p.Nombre AS Pais FROM departamento d INNER JOIN pais p ON (d.Id_Pais = p.Id_Pais) WHERE Id_Departamento = ?";
  
         try {
            $stm = $this->db->prepare($sql);
@@ -84,7 +84,7 @@ class DepartamentoPersistence implements DepartamentoRepository
     }
 
     public function EditarDepartamento(Departamento $Departamento){
-        $sql = "UPDATE departamento SET Nombre = ?, Id_Pais = ?  WHERE Id_Departamento = ?";
+        $sql = "UPDATE departamento SET Nombre_Departamento = ?, Id_Pais = ?  WHERE Id_Departamento = ?";
  
         try {
             $stm = $this->db->prepare($sql);
