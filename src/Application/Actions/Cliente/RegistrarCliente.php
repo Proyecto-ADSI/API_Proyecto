@@ -16,6 +16,9 @@ class RegistrarCliente extends ClienteAction
     {
         $campos = $this->getFormData();
 
+        // return $this->respondWithData(["ok" => $campos]);
+
+
         // Validar si se registra el plan corporativo
 
         if ($campos->Validacion_PLan_C) {
@@ -91,9 +94,6 @@ class RegistrarCliente extends ClienteAction
                 NULL,
                 $campos->Id_Operador,
                 NULL,
-                $campos->Encargado,
-                $campos->Extension,
-                $campos->Telefono_Contacto,
                 $campos->Cantidad_Lineas,
                 $campos->Valor_Mensual,
                 $campos->Cantidad_Minutos,

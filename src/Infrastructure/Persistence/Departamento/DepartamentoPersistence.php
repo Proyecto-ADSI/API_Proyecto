@@ -41,7 +41,8 @@ class DepartamentoPersistence implements DepartamentoRepository
 
     public function ListarDepartamento()
     {
-        $sql = "SELECT d.Id_Departamento, d.Nombre_Departamento AS Departamento , p.Id_Pais ,  p.Nombre AS Pais FROM departamento d INNER JOIN pais p ON (d.Id_Pais = p.Id_Pais)";
+        $sql = "SELECT d.Id_Departamento, d.Nombre_Departamento, p.Id_Pais, p.Nombre_Pais
+        FROM departamento d INNER JOIN pais p ON (d.Id_Pais = p.Id_Pais)";
 
         try {
 
@@ -69,8 +70,9 @@ class DepartamentoPersistence implements DepartamentoRepository
       }
   
       public function ObtenerDatosDepartamento($Id_Departamento){
-        $sql = "SELECT d.Id_Departamento, d.Nombre_Departamento AS Departamento , p.Id_Pais , p.Nombre AS Pais FROM departamento d INNER JOIN pais p ON (d.Id_Pais = p.Id_Pais) WHERE Id_Departamento = ?";
- 
+        $sql = "SELECT d.Id_Departamento, d.Nombre_Departamento, p.Id_Pais , p.Nombre_Pais
+        FROM departamento d INNER JOIN pais p ON (d.Id_Pais = p.Id_Pais) WHERE Id_Departamento = ?";
+
         try {
            $stm = $this->db->prepare($sql);
            $stm->bindParam(1, $Id_Departamento);
@@ -104,7 +106,6 @@ class DepartamentoPersistence implements DepartamentoRepository
         $sql = "SELECT Id_Departamento, Nombre FROM departamento WHERE Id_Pais = ?";
 
         try {
-
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1,$Id_Pais);
             $stm->execute();    
@@ -113,9 +114,5 @@ class DepartamentoPersistence implements DepartamentoRepository
         } catch (Exception $e) {
             return $e->getMessage();
         }
-
-    }
-
-
-    
+    }    
 }
