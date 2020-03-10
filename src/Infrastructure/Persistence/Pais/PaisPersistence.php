@@ -95,7 +95,4 @@ class PaisPersistence implements PaisRepository
             return $e->getMessage();
         }
     }
-
-
-    
 }

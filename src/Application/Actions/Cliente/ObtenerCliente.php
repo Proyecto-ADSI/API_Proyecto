@@ -8,24 +8,71 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 class ObtenerCliente extends ClienteAction
 {
+    private $Cliente;
+    private $DBL;
+    private $Plan_Corporativo;
+    private $Documentos_Soporte;
+    private $Info_Cliente;
+    private $Ubicacion;
+    
     protected function action(): Response
     {
-
+        // Obtener información del cliente
         $Id_Cliente = (int) $this->resolveArg("Id_Cliente");
+        $this->Cliente = $this->ClienteRepository->ObtenerCliente($Id_Cliente);
+        
+        // Información de ubicación
+        $Id_BarrioVereda = (int) $this->Cliente['Id_Barrios_Veredas'];
+        $BarrioVereda = $this->BarriosVeredasRepository->ObtenerDatosBarriosVeredas($Id_BarrioVereda);
 
-        $Cliente = $this->ClienteRepository->ObtenerCliente($Id_Cliente);
-        $DBL = $this->DBLRepository->ListarDBL($Id_Cliente);
+        $Id_SubTipo = (int)$BarrioVereda['Id_SubTipo_Barrio_Vereda'];
+        $SubTipo = $this->SubTipoRepository->ObtenerDatosSubTipo($Id_SubTipo);
 
-        $Id_Plan_Corporativo = (int) $DBL["Id_Plan_Corporativo"];
-        $Plan_Corporativo = $this->Plan_CorporativoRepository->ListarPlan_Corporativo($Id_Plan_Corporativo);
+        $Id_Municipio = (int)$BarrioVereda['Id_Municipio'];
+        $Municipio = $this->MunicipioRepository->ObtenerDatosMunicipio($Id_Municipio);
 
-        $Id_Documentos = (int) $Plan_Corporativo["Id_Documentos"];
-        $Documentos_Soporte = $this->Doc_SoporteRepository->ListarDocSoporte($Id_Documentos);
+        $Id_Departamento = (int)$Municipio['Id_Departamento'];
+        $Departamento = $this->DepartamentoRepository->ObtenerDatosDepartamento($Id_Departamento);
 
+        $Id_Pais = (int)$Departamento['Id_Pais'];
+        $Pais = $this->PaisRepository->ObtenerDatos($Id_Pais);
+
+        // Obtener datos básicos de lineas del cliente
+        $Id_DBL = (int)$this->Cliente['Id_DBL'];
+        $this->DBL = $this->DBLRepository->ListarDBL($Id_DBL);
 
         
-        
 
-        return  $this->respondWithData($Plan_Corporativo);
+
+        // Validar si tiene plan corporativo
+        $Id_Plan_Corporativo = (int)$this->DBL["Id_Plan_Corporativo"];
+
+        if($Id_Plan_Corporativo > 0){
+
+            // Obtener información de plan corporativo
+            $this->Plan_Corporativo = $this->Plan_CorporativoRepository->ListarPlan_Corporativo($Id_Plan_Corporativo);
+
+            // Validar si tiene documentos soporte
+            $Id_Documentos = (int)$this->Plan_Corporativo["Id_Documentos"];
+
+            if($Id_Documentos > 0){
+                // Obtener información de documentos
+                $this->Documentos_Soporte = $this->Doc_SoporteRepository->ListarDocSoporte($Id_Documentos);
+
+                // Array con toda la información.
+                $this->Info_Cliente = array_merge($this->Cliente,$this->DBL,$this->Plan_Corporativo,$this->Documentos_Soporte);
+
+            }else{
+                // Array sin documentos
+                $this->Info_Cliente = array_merge($this->Cliente,$this->DBL,$this->Plan_Corporativo);
+
+            }
+        }else{
+
+            // Array sin plan corporativo y documentos.
+            $this->Info_Cliente = array_merge($this->Cliente,$this->DBL);
+        }        
+            
+        return  $this->respondWithData($this->Info_Cliente);
     }
 }

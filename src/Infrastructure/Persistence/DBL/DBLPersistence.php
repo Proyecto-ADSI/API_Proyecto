@@ -56,7 +56,7 @@ class DBLPersistence implements DBLRepository
 
     public function ListarDBL(int $Id_DBL){
 
-        $sql = "SELECT Id_DBL,Id_Operador,Id_Plan_Corporativo, Cantidad_Lineas, Valor_Mensual,
+        $sql = "SELECT Id_DBL,Id_Operador, IFNULL(Id_Plan_Corporativo, 0) Id_Plan_Corporativo, Cantidad_Lineas, Valor_Mensual,
         Cantidad_Minutos, Cantidad_Navegacion, Llamadas_Internacionales, Mensajes_Texto,Aplicaciones,Roaming_Internacional, Estado_DBL
         FROM Datos_Basicos_Lineas WHERE Id_DBL = ?";
 
