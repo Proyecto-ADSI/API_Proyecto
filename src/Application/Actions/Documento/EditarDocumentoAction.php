@@ -16,7 +16,7 @@ class EditarDocumentoAction extends DocumentoAction
         $datos = new Documento(
             $campos->Id_Documento,
             $campos->Nombre,
-            $campos->Estado,
+            null,
         );
         $datos = $this->DocumentoRepository->EditarDocumento($datos);
 

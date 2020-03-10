@@ -18,7 +18,7 @@ class Documento implements JsonSerializable
         return $this->$attr;
     }
 
-    function __construct(?int $Id_Documento, string $Nombre, int $Estado)
+    function __construct(?int $Id_Documento, string $Nombre, ?int $Estado)
     {   
         $this->Id_Documento = $Id_Documento;
         $this->Nombre = $Nombre;

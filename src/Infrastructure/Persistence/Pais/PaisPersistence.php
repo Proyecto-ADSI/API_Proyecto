@@ -23,7 +23,7 @@ class PaisPersistence implements PaisRepository
 
     public function RegistrarPais(Pais $Pais)
     {
-        $sql = "INSERT INTO pais(Nombre,Estado) VALUES (?,?)";
+        $sql = "INSERT INTO pais(Nombre_Pais,Estado) VALUES (?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -40,7 +40,7 @@ class PaisPersistence implements PaisRepository
 
     public function ListarPais()
     {
-        $sql = "SELECT Id_Pais, Nombre,Estado FROM pais";
+        $sql = "SELECT Id_Pais, Nombre_Pais,Estado FROM pais";
 
         try {
 
@@ -82,7 +82,7 @@ class PaisPersistence implements PaisRepository
     }
 
     public function EditarPais(Pais $Pais){
-        $sql = "UPDATE pais SET Nombre = ?  WHERE Id_Pais = ?";
+        $sql = "UPDATE pais SET Nombre_Pais = ?  WHERE Id_Pais = ?";
  
         try {
             $stm = $this->db->prepare($sql);
