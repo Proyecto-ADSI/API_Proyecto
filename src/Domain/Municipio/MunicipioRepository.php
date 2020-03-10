@@ -13,5 +13,7 @@ interface MunicipioRepository{
 
     public function ObtenerDatosMunicipio(int $Id_Municipios);
 
+    public function ConsultarMunicipiosDepartamento(int $Id_Departamento);
+
     public function EditarMunicipio(Municipio $Municipio);
 }

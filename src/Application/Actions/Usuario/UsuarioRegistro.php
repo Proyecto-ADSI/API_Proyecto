@@ -54,7 +54,7 @@ class UsuarioRegistro extends UsuarioAction
 
         $respuesta = $this->usuarioRepository->RegistrarUsuario($usuario);
         
-        return $this->respondWithData(["usuario" => $usuario, "ok"=> $respuesta, ]);
+        return $this->respondWithData(["usuario" => $usuario, "ok"=> $respuesta]);
     }
 }
 

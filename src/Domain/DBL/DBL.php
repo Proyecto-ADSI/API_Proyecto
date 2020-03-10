@@ -9,13 +9,9 @@ use JsonSerializable;
 class DBL implements JsonSerializable
 {
 
-    private $Id_DBL;    
-    private $Id_Cliente;    
+    private $Id_DBL;     
     private $Id_Operador;    
     private $Id_Plan_Corporativo;    
-    private $Encargado;    
-    private $Extension;    
-    private $Telefono_Contacto;    
     private $Cantidad_Lineas;    
     private $Valor_Mensual;    
     private $Cantidad_Minutos;    
@@ -32,12 +28,8 @@ class DBL implements JsonSerializable
 
     function __construct(
         ?int $Id_DBL,
-        int $Id_Cliente,
         int $Id_Operador,
         ?int $Id_Plan_Corporativo,
-        string $Encargado,
-        string $Extension,
-        string $Telefono_Contacto,
         int $Cantidad_Lineas,
         string $Valor_Mensual,
         string $Cantidad_Minutos,
@@ -50,12 +42,8 @@ class DBL implements JsonSerializable
         ) 
     {
         $this->Id_DBL = $Id_DBL;
-        $this->Id_Cliente = $Id_Cliente;
         $this->Id_Operador = $Id_Operador;
         $this->Id_Plan_Corporativo = $Id_Plan_Corporativo;
-        $this->Encargado = $Encargado;
-        $this->Extension = $Extension;
-        $this->Telefono_Contacto = $Telefono_Contacto;
         $this->Cantidad_Lineas = $Cantidad_Lineas;
         $this->Valor_Mensual = $Valor_Mensual;
         $this->Cantidad_Minutos = $Cantidad_Minutos;
@@ -72,12 +60,8 @@ class DBL implements JsonSerializable
     {
         return [
             "Id_DBL"=>$this->Id_DBL,
-            "Id_Cliente"=>$this->Id_Cliente,
             "Id_Operador"=>$this->Id_Operador,
             "Id_Plan_Corporativo"=>$this->Id_Plan_Corporativo,
-            "Encargado"=>$this->Encargado,
-            "Extension"=>$this->Extension,
-            "Telefono_Contacto"=>$this->Telefono_Contacto,
             "Cantidad_Lineas"=>$this->Cantidad_Lineas,
             "Valor_Mensual"=>$this->Valor_Mensual,
             "Cantidad_Minutos"=>$this->Cantidad_Minutos,

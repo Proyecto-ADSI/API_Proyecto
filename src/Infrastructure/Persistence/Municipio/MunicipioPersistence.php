@@ -42,7 +42,7 @@ class MunicipioPersistence implements MunicipioRepository
 
     public function ListarMunicipio()
     {
-        $sql = "SELECT m.Id_Municipios, m.Nombre AS Municipio , d.Id_Departamento ,  d.Nombre AS Departamento FROM municipios m INNER JOIN departamento d ON (m.Id_Departamento = d.Id_Departamento)";
+        $sql = "SELECT m.Id_Municipio, m.Nombre AS Municipio , d.Id_Departamento ,  d.Nombre AS Departamento FROM municipios m INNER JOIN departamento d ON (m.Id_Departamento = d.Id_Departamento)";
 
         try {
 
@@ -55,13 +55,13 @@ class MunicipioPersistence implements MunicipioRepository
             return $e->getMessage();
         }
     }
-    public function CambiarEstado(int $Id_Municipios, int $Estado){
-        $sql = "UPDATE municipios SET Estado= ? WHERE Id_Municipios = ?";
+    public function CambiarEstado(int $Id_Municipio, int $Estado){
+        $sql = "UPDATE municipios SET Estado= ? WHERE Id_Municipio = ?";
    
         try {
           $stm = $this->db->prepare($sql);
           $stm->bindParam(1, $Estado);
-          $stm->bindParam(2, $Id_Municipios);
+          $stm->bindParam(2, $Id_Municipio);
    
           return $stm->execute();
 
@@ -70,12 +70,12 @@ class MunicipioPersistence implements MunicipioRepository
         }
       }
   
-      public function ObtenerDatosMunicipio($Id_Municipios){
-        $sql = "SELECT m.Id_Municipios, m.Nombre AS Municipio , d.Id_Departamento ,  d.Nombre AS Departamento FROM municipios m INNER JOIN departamento d ON (m.Id_Departamento = d.Id_Departamento) WHERE Id_Municipios = ?";
+      public function ObtenerDatosMunicipio($Id_Municipio){
+        $sql = "SELECT m.Id_Municipio, m.Nombre AS Municipio , d.Id_Departamento ,  d.Nombre AS Departamento FROM municipios m INNER JOIN departamento d ON (m.Id_Departamento = d.Id_Departamento) WHERE Id_Municipio = ?";
  
         try {
            $stm = $this->db->prepare($sql);
-           $stm->bindParam(1, $Id_Municipios);
+           $stm->bindParam(1, $Id_Municipio);
            
            $stm->execute();
            return $stm->fetch(PDO::FETCH_ASSOC);
@@ -86,13 +86,13 @@ class MunicipioPersistence implements MunicipioRepository
     }
 
     public function EditarMunicipio(Municipio $Municipio){
-        $sql = "UPDATE municipios SET Nombre = ?, Id_Departamento = ?  WHERE Id_Municipios = ?";
+        $sql = "UPDATE municipios SET Nombre = ?, Id_Departamento = ?  WHERE Id_Municipio = ?";
         
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Municipio->__GET("Nombre"));
             $stm->bindValue(2, $Municipio->__GET("Id_Departamento"));
-            $stm->bindValue(3, $Municipio->__GET("Id_Municipios"));
+            $stm->bindValue(3, $Municipio->__GET("Id_Municipio"));
             
             return $stm->execute();
  
@@ -100,6 +100,27 @@ class MunicipioPersistence implements MunicipioRepository
             return $e->getMessage();
         }
     }
+
+    public function ConsultarMunicipiosDepartamento(int $Id_Departamento){
+
+        $sql = "SELECT Id_Municipio, Nombre FROM municipios WHERE Id_Departamento = ?";
+
+        try {
+
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Departamento);
+            $stm->execute();    
+            
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+
+    
+
 
 
     
