@@ -16,7 +16,7 @@ class EditarPaisAction extends PaisAction
         $datos = new Pais(
             $campos->Id_Pais,
             $campos->Nombre,
-            1
+            null
         );
         $datos = $this->PaisRepository->EditarPais($datos);
 

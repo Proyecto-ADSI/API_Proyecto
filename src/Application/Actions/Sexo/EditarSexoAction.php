@@ -16,7 +16,7 @@ class EditarSexoAction extends SexoAction
         $datos = new Sexo(
             $campos->Id_Sexo,
             $campos->Nombre,
-            1
+            null       
         );
         $datos = $this->SexoRepository->EditarSexo($datos);
 
