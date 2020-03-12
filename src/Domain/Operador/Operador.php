@@ -2,38 +2,34 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Municipio;
+namespace App\Domain\Operador;
 
 use JsonSerializable;
 
-class Municipio implements JsonSerializable
+class Operador implements JsonSerializable
 {
-    private $Id_Municipio;
+    private $Id_Operador;
     
     private $Nombre;
     
-    private $Id_Departamento;
-
     private $Estado;
 
     public function __GET($attr){
         return $this->$attr;
     }
 
-    function __construct(?int $Id_Municipio, string $Nombre, int $Id_Departamento ,?int $Estado)
+    function __construct(?int $Id_Operador, string $Nombre ,?int $Estado)
     {   
-        $this->Id_Municipio = $Id_Municipio;
+        $this->Id_Operador = $Id_Operador;
         $this->Nombre = $Nombre;
-        $this->Id_Departamento = $Id_Departamento;
         $this->Estado = $Estado;
     }
 
     public function jsonSerialize()
     {
         return[
-            "Id_Municipios" => $this->Id_Municipio,
+            "Id_Operador" => $this->Id_Operador,
             "Nombre" => $this->Nombre,
-            "Id_Departamentos" => $this->Id_Departamento,
             "Estado" => $this->Estado
         ];    
     }

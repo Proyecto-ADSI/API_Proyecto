@@ -14,10 +14,10 @@ class EditarMunicipioAction extends MunicipioAction
         $campos = $this->getFormData();
 
         $datos = new Municipio(
-            $campos->Id_Municipio,
+            $campos->Id_Municipios,
             $campos->Nombre,
             $campos->Id_Departamento,
-            1
+            null,
         );
         $datos = $this->MunicipioRepository->EditarMunicipio($datos);
 

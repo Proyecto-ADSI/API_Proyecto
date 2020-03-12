@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Actions\Sexo;
+namespace App\Application\Actions\Operador;
 
-use App\Domain\Sexo\Sexo;
+use App\Domain\Operador\Operador;
 use Psr\Http\Message\ResponseInterface as Response;
 
-class EditarSexoAction extends SexoAction
+class EditarOperadorAction extends OperadorAction
 {
     protected function action(): Response
     {
         $campos = $this->getFormData();
 
-        $datos = new Sexo(
-            $campos->Id_Sexo,
+        $datos = new Operador(
+            $campos->Id_Operador,
             $campos->Nombre,
-            null       
+            null,
         );
-        $datos = $this->SexoRepository->EditarSexo($datos);
+        $datos = $this->OperadorRepository->EditarOperador($datos);
 
         return $this->respondWithData(["ok" =>$datos]);
         

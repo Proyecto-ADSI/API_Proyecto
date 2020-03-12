@@ -18,7 +18,7 @@ class Sexo implements JsonSerializable
         return $this->$attr;
     }
 
-    function __construct(?int $Id_Sexo, string $Nombre, int $Estado)
+    function __construct(?int $Id_Sexo, string $Nombre,?int $Estado)
     {   
         $this->Id_Sexo = $Id_Sexo;
         $this->Nombre = $Nombre;

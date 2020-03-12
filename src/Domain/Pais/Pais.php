@@ -18,7 +18,7 @@ class Pais implements JsonSerializable
         return $this->$attr;
     }
 
-    function __construct(?int $Id_Pais, string $Nombre, int $Estado)
+    function __construct(?int $Id_Pais, string $Nombre,?int $Estado)
     {   
         $this->Id_Pais = $Id_Pais;
         $this->Nombre = $Nombre;

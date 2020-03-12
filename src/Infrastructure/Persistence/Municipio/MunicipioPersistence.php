@@ -23,7 +23,7 @@ class MunicipioPersistence implements MunicipioRepository
 
     public function RegistrarMunicipio(Municipio $Municipio)
     {
-        $sql = "INSERT INTO municipios (Nombre, Id_Departamento, Estado) VALUES (?,?,?)";
+        $sql = "INSERT INTO municipios (Nombre_Municipio, Id_Departamento, Estado) VALUES (?,?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -88,7 +88,7 @@ class MunicipioPersistence implements MunicipioRepository
     }
 
     public function EditarMunicipio(Municipio $Municipio){
-        $sql = "UPDATE municipios SET Nombre = ?, Id_Departamento = ?  WHERE Id_Municipio = ?";
+        $sql = "UPDATE municipios SET Nombre_Municipio = ?, Id_Departamento = ?  WHERE Id_Municipio = ?";
         
         try {
             $stm = $this->db->prepare($sql);

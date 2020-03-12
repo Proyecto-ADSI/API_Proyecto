@@ -17,8 +17,8 @@ class RegistrarBarriosVeredasAction extends BarriosVeredasAction
             0,
             $campos->Codigo,
             $campos->Nombre,
-            $campos->Id_Municipio,
             $campos->Id_SubTipo_Barrio_Vereda,
+            $campos->Id_Municipio,
             $campos->Estado,
         );
         

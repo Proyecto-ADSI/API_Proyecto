@@ -17,7 +17,7 @@ class EditarSubTipoAction extends SubTipoAction
 
             $campos->Id_SubTipo_Barrio_Vereda,
             $campos->SubTipo,
-            $campos->Estado,
+            null,
             
         );
         
