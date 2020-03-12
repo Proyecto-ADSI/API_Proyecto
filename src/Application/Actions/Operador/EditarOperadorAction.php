@@ -2,24 +2,23 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Actions\Municipio;
+namespace App\Application\Actions\Operador;
 
-use App\Domain\Municipio\Municipio;
+use App\Domain\Operador\Operador;
 use Psr\Http\Message\ResponseInterface as Response;
 
-class EditarMunicipioAction extends MunicipioAction
+class EditarOperadorAction extends OperadorAction
 {
     protected function action(): Response
     {
         $campos = $this->getFormData();
 
-        $datos = new Municipio(
-            $campos->Id_Municipios,
+        $datos = new Operador(
+            $campos->Id_Operador,
             $campos->Nombre,
-            $campos->Id_Departamento,
             null,
         );
-        $datos = $this->MunicipioRepository->EditarMunicipio($datos);
+        $datos = $this->OperadorRepository->EditarOperador($datos);
 
         return $this->respondWithData(["ok" =>$datos]);
         

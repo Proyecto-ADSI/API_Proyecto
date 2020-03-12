@@ -81,6 +81,12 @@ use App\Application\Actions\Rol\EditarRolAction;
 use App\Application\Actions\Rol\ListarRolAction;
 use App\Application\Actions\Rol\ObtenerDatosRolAction;
 use App\Application\Actions\Rol\RegistrarRolAction;
+//Operador
+use App\Application\Actions\Operador\CambiarEstadoOperadorAction;
+use App\Application\Actions\Operador\EditarOperadorAction;
+use App\Application\Actions\Operador\ListarOperadorAction;
+use App\Application\Actions\Operador\ObtenerOperadorAction;
+use App\Application\Actions\Operador\RegistrarOperadorAction;
 
 
 // Cliente
@@ -187,12 +193,21 @@ return function (App $app) {
         $group->put('',EditarTurnosAction::class);
         $group->patch('/{Id_Turno}/{Estado}',CambiarEstadoTurnosAction::class);
     });
+
     $app->group('/Rol', function(Group $group){
         $group->post('',RegistrarRolAction::class);
         $group->get('',ListarRolAction::class);
         $group->get('/ObtenerRol/{Id_Rol}',ObtenerDatosRolAction::class);
         $group->put('',EditarRolAction::class);
         $group->patch('/{Id_Rol}/{Estado}',CambiarEstadoRolAction::class);
+    });
+
+    $app->group('/Operador', function(Group $group){
+        $group->post('',RegistrarOperadorAction::class);
+        $group->get('',ListarOperadorAction::class);
+        $group->get('/ObtenerOperador/{Id_Operador}',ObtenerOperadorAction::class);
+        $group->put('',EditarOperadorAction::class);
+        $group->patch('/{Id_Operador}/{Estado}',CambiarEstadoOperadorAction::class);
     });
 
 

@@ -18,7 +18,7 @@ class SubTipo implements JsonSerializable
         return $this->$attr;
     }
 
-    function __construct(int $Id_SubTipo_Barrio_Vereda, string $SubTipo, int $Estado)
+    function __construct(int $Id_SubTipo_Barrio_Vereda, string $SubTipo, ?int $Estado)
     {   
         $this->Id_SubTipo_Barrio_Vereda = $Id_SubTipo_Barrio_Vereda;
         $this->SubTipo = $SubTipo;
