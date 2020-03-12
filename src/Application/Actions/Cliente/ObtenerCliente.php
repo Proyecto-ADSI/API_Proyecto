@@ -66,14 +66,15 @@ class ObtenerCliente extends ClienteAction
             }else{
                 // Array sin documentos
                 $this->Info_Cliente = array_merge($this->Cliente,$this->DBL,$this->Plan_Corporativo);
-
             }
         }else{
 
             // Array sin plan corporativo y documentos.
             $this->Info_Cliente = array_merge($this->Cliente,$this->DBL);
         }        
-            
-        return  $this->respondWithData($this->Ubicacion);
+        
+        $this->Info_Cliente = array_merge($this->Info_Cliente,$this->Ubicacion);
+        
+        return  $this->respondWithData($this->Info_Cliente);
     }
 }
