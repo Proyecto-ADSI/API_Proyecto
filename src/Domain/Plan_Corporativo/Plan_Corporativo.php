@@ -18,7 +18,7 @@ class Plan_Corporativo{
     }
 
     function __construct(?int $Id_Plan_Corporativo, ?int $Id_Documentos, string $Fecha_Inicio,
-     string $Fecha_Fin, string $Descripcion, int $Estado_Plan_Corporativo)
+     string $Fecha_Fin, string $Descripcion, ?int $Estado_Plan_Corporativo)
     {
         $this->Id_Plan_Corporativo = $Id_Plan_Corporativo;
         $this->Id_Documentos = $Id_Documentos;

@@ -56,6 +56,28 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
         }
     }
 
+    public function EditarPlan_Corporativo(Plan_Corporativo $Plan_Corporativo){
+
+        $sql = "UPDATE Plan_Corporativo SET Id_Documentos = ?, Fecha_Inicio = ?, 
+        Fecha_Fin = ?, Descripcion = ? WHERE Id_Plan_Corporativo = ?";
+
+        try{
+
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Plan_Corporativo->__GET("Id_Documentos"));
+            $stm->bindValue(2,$Plan_Corporativo->__GET("Fecha_Inicio"));
+            $stm->bindValue(3,$Plan_Corporativo->__GET("Fecha_Fin"));
+            $stm->bindValue(4,$Plan_Corporativo->__GET("Descripcion"));
+            $stm->bindValue(5,$Plan_Corporativo->__GET("Id_Plan_Corporativo"));
+     
+
+            return $stm->execute();
+
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
+    }
+
     public function CambiarEstado(int $Id_Plan_Corporativo, int $Estado)
     {
         $sql = "UPDATE Plan_Corporativo SET Estado = ? WHERE Id_Plan_Corporativo = ? ";

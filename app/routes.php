@@ -69,6 +69,7 @@ use App\Application\Actions\BarriosVeredas\ObtenerBarriosVeredasAction;
 use App\Application\Actions\BarriosVeredas\EditarBarriosVeredasAction;
 use App\Application\Actions\BarriosVeredas\CambiarEstadoBarriosVeredasAction;
 use App\Application\Actions\BarriosVeredas\ConsultarBarriosVeredasMunicipioAction;
+
 //Turnos
 use App\Application\Actions\Turnos\ListarTurnosAction;
 use App\Application\Actions\Turnos\RegistrarTurnosAction;
@@ -93,6 +94,7 @@ use App\Application\Actions\Operador\RegistrarOperadorAction;
 use App\Application\Actions\Cliente\RegistrarCliente;
 use App\Application\Actions\Cliente\ListarCliente;
 use App\Application\Actions\Cliente\ObtenerCliente;
+use App\Application\Actions\Cliente\EditarCliente;
 
 
 return function (App $app) {
@@ -169,6 +171,7 @@ return function (App $app) {
         $group->post('',RegistrarCliente::class);
         $group->get('',ListarCliente::class);
         $group->get('/{Id_Cliente}',ObtenerCliente::class);
+        $group->put('',EditarCliente::class);
     });
 
     $app->group('/SubTipo', function(Group $group){

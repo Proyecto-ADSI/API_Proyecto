@@ -34,8 +34,8 @@ class Cliente implements JsonSerializable
         string $Extension,
         string $Telefono_Contacto, 
         string $Direccion, 
-        int $Id_Barrios_Veredas, 
-        int $Estado_Cliente
+        ?int $Id_Barrios_Veredas, 
+        ?int $Estado_Cliente
     )
     {   
         $this->Id_Cliente = $Id_Cliente;

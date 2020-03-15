@@ -76,30 +76,26 @@ class DBLPersistence implements DBLRepository
 
     public function EditarDBL(DBL $DBL){
 
-        $sql = "UPDATE Datos_Basicos_lineas SET Id_Cliente = ?,Id_Operador = ?, Id_Plan_Corporativo = ?, Encargado = ?,
-        Extension = ?,Telefono = ?, Cantidad_Lineas = ?, Valor_Mensual = ?, Cantidad_Minutos = ?, Cantidad_Navegacion = ?,
-        Llamadas_Internacionales = ?, Mensajes_Texto = ?,Aplicaciones = ?,Roaming_Internacional = ?, Estado_DBL = ? 
+        $sql = "UPDATE Datos_Basicos_lineas SET  Id_Operador = ?, Id_Plan_Corporativo = ?,
+        Cantidad_Lineas = ?, Valor_Mensual = ?, Cantidad_Minutos = ?, Cantidad_Navegacion = ?,
+        Llamadas_Internacionales = ?, Mensajes_Texto = ?,Aplicaciones = ?, Roaming_Internacional = ?, Estado_DBL = ? 
         WHERE Id_DBL = ?";
 
         try{
 
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1,$DBL->__GET("Id_Cliente"));
-            $stm->bindValue(2,$DBL->__GET("Id_Operador"));
-            $stm->bindValue(3,$DBL->__GET("Id_Plan_Corporativo"));
-            $stm->bindValue(4,$DBL->__GET("Encargado"));
-            $stm->bindValue(5,$DBL->__GET("Extension"));
-            $stm->bindValue(6,$DBL->__GET("Telefono"));
-            $stm->bindValue(7,$DBL->__GET("Cantidad_Lineas"));
-            $stm->bindValue(8,$DBL->__GET("Valor_Mensual"));
-            $stm->bindValue(9,$DBL->__GET("Cantidad_Minutos"));
-            $stm->bindValue(10,$DBL->__GET("Cantidad_Navegacion"));
-            $stm->bindValue(11,$DBL->__GET("Llamadas_Internacionales"));
-            $stm->bindValue(12,$DBL->__GET("Mensajes_Texto"));
-            $stm->bindValue(13,$DBL->__GET("Aplicaciones"));
-            $stm->bindValue(14,$DBL->__GET("Roaming_Internacional"));
-            $stm->bindValue(15,$DBL->__GET("Estado_DBL"));
-            $stm->bindValue(16,$DBL->__GET("Id_DBL"));
+            $stm->bindValue(1,$DBL->__GET("Id_Operador"));
+            $stm->bindValue(2,$DBL->__GET("Id_Plan_Corporativo"));
+            $stm->bindValue(3,$DBL->__GET("Cantidad_Lineas"));
+            $stm->bindValue(4,$DBL->__GET("Valor_Mensual"));
+            $stm->bindValue(5,$DBL->__GET("Cantidad_Minutos"));
+            $stm->bindValue(6,$DBL->__GET("Cantidad_Navegacion"));
+            $stm->bindValue(7,$DBL->__GET("Llamadas_Internacionales"));
+            $stm->bindValue(8,$DBL->__GET("Mensajes_Texto"));
+            $stm->bindValue(9,$DBL->__GET("Aplicaciones"));
+            $stm->bindValue(10,$DBL->__GET("Roaming_Internacional"));
+            $stm->bindValue(11,$DBL->__GET("Estado_DBL"));
+            $stm->bindValue(12,$DBL->__GET("Id_DBL"));
 
             return $stm->execute();
 

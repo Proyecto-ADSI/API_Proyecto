@@ -38,7 +38,7 @@ class DBL implements JsonSerializable
         string $Mensajes_Texto,
         string $Aplicaciones,
         string $Roaming_Internacional,
-        int $Estado_DBL
+        ?int $Estado_DBL
         ) 
     {
         $this->Id_DBL = $Id_DBL;
