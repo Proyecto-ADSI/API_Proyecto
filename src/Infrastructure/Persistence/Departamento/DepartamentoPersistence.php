@@ -103,7 +103,7 @@ class DepartamentoPersistence implements DepartamentoRepository
 
     public function ConsultarDepartamentosPais(int $Id_Pais){
 
-        $sql = "SELECT Id_Departamento, Nombre FROM departamento WHERE Id_Pais = ?";
+        $sql = "SELECT Id_Departamento, Nombre_Departamento FROM departamento WHERE Id_Pais = ?";
 
         try {
             $stm = $this->db->prepare($sql);

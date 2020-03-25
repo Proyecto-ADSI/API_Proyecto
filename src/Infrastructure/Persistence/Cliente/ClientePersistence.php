@@ -26,7 +26,7 @@ class ClientePersistence implements ClienteRepository
     {
         $sql = "SELECT d.Id_Cliente, d.NIT_CDV, d.Razon_Social, d.Telefono, o.Nombre_Operador AS Operador,
         CASE WHEN  ISNULL(dbl.Id_Plan_Corporativo) = 0 THEN 'Si' 
-        ELSE 'No' END AS Corporativo 
+        ELSE 'No' END AS Corporativo, Estado_Cliente 
         FROM Directorio d 
         INNER JOIN Datos_Basicos_Lineas dbl ON(d.Id_DBL= dbl.Id_DBL) 
         INNER JOIN Operadores o ON(dbl.Id_Operador = o.Id_Operador)";
@@ -115,6 +115,22 @@ class ClientePersistence implements ClienteRepository
         }
     }
 
+    public function ValidarEstadoCliente(int $Id_Cliente)
+    {
+        $sql ="SELECT Estado_Cliente FROM directorio WHERE Id_Cliente = ?";
+            try{
+                $stm = $this->db->prepare($sql);
+                $stm->bindValue(1, $Id_Cliente);
+                $stm->execute();
+                return $stm->fetch(PDO::FETCH_ASSOC);            
+            }   
+            catch(Exception $e){
+
+                return "Error al ValidarEstadoCliente() "+$e->getMessage();
+
+            }
+    }
+
 
     public function CambiarEstadoCliente(int $Id_Cliente,int $Estado)
     {
@@ -128,7 +144,7 @@ class ClientePersistence implements ClienteRepository
             }
             catch(Exception $e){
 
-                return "Error al cambiar estado "+$e;
+                return "Error al cambiar estado "+$e->getMessage();
 
             }
     }
@@ -143,6 +159,22 @@ class ClientePersistence implements ClienteRepository
             $stm->bindValue(1,$Id_Cliente);
 
             return $stm->execute();
+
+        }catch(Exception $e){
+
+            return $e->getMessage();
+        }
+    }
+
+    public function ValidarEliminarCliente(int $Id_Cliente){
+
+        $sql = "SELECT Id_Llamada FROM Llamadas WHERE Id_Cliente = ?";
+
+        try{
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Cliente);
+            $stm->execute();
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
 
         }catch(Exception $e){
 

@@ -105,7 +105,7 @@ class MunicipioPersistence implements MunicipioRepository
 
     public function ConsultarMunicipiosDepartamento(int $Id_Departamento){
 
-        $sql = "SELECT Id_Municipio, Nombre FROM municipios WHERE Id_Departamento = ?";
+        $sql = "SELECT Id_Municipio, Nombre_Municipio FROM municipios WHERE Id_Departamento = ?";
 
         try {
 

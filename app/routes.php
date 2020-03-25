@@ -95,7 +95,9 @@ use App\Application\Actions\Cliente\RegistrarCliente;
 use App\Application\Actions\Cliente\ListarCliente;
 use App\Application\Actions\Cliente\ObtenerCliente;
 use App\Application\Actions\Cliente\EditarCliente;
-
+use App\Application\Actions\Cliente\ValidarEstadoCliente;
+use App\Application\Actions\Cliente\CambiarEstadoCliente;
+use App\Application\Actions\Cliente\EliminarCliente;
 
 return function (App $app) {
     $app->get('/', function (Request $request, Response $response) {
@@ -123,6 +125,16 @@ return function (App $app) {
 
     $app->group('/Empleados', function(Group $group){
         $group->get('',ListarEmpleados::class);
+    });
+
+    $app->group('/Cliente', function(Group $group){
+        $group->post('',RegistrarCliente::class);
+        $group->get('',ListarCliente::class);
+        $group->get('/{Id_Cliente}',ObtenerCliente::class);
+        $group->get('/ValidarEstado/{Id_Cliente_VE}',ValidarEstadoCliente::class);
+        $group->get('/CambiarEstado/{Id_Cliente_CE}/{Estado}',CambiarEstadoCliente::class);
+        $group->put('',EditarCliente::class);
+        $group->delete('/{Id_Cliente_Eliminar}',EliminarCliente::class);
     });
 
     $app->group('/Documento', function(Group $group){
@@ -167,12 +179,7 @@ return function (App $app) {
         $group->patch('/{Id_Municipio}/{Estado}',CambiarEstadoMunicipioAction::class);
     });
     
-    $app->group('/Cliente', function(Group $group){
-        $group->post('',RegistrarCliente::class);
-        $group->get('',ListarCliente::class);
-        $group->get('/{Id_Cliente}',ObtenerCliente::class);
-        $group->put('',EditarCliente::class);
-    });
+    
 
     $app->group('/SubTipo', function(Group $group){
         $group->post('',RegistrarSubTipoAction::class);
