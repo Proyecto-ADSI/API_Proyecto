@@ -16,6 +16,7 @@ class EliminarCliente extends ClienteAction
         //  $this->logger->info("Datos".json_encode($r));
 
         // Validar si variable tiene algún registro
+        // Devuelve true si $r tiene algún registro
         if(!empty($r)){
 
             return $this->respondWithData(["Eliminar" => false]);

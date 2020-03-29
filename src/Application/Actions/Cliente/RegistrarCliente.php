@@ -52,7 +52,7 @@ class RegistrarCliente extends ClienteAction
 
                 $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($Plan_Corporativo);
             } else {
-
+                
                 // Plan Corporativo sin documentos
                 $Plan_Corporativo = new Plan_Corporativo(
                     NULL,
