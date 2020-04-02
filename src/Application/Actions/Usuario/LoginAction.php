@@ -32,7 +32,10 @@ class LoginAction extends UsuarioAction
                     "ok"=>true,
                     "Id_Usuario"=>$respuesta['Id_Usuario'],
                     "Usuario"=>$respuesta['Usuario'],
-                    "Rol"=>$respuesta['Id_Rol']
+                    "Id_Rol"=>$respuesta['Id_Rol'],
+                    "Rol"=>$respuesta['Rol'],
+                    "Email"=>$respuesta['Email'],
+                    "Imagen"=>$respuesta['Imagen']
                 ]);
                     
             }else{

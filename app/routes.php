@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 
@@ -16,6 +17,8 @@ use App\Application\Actions\Usuario\ValidarToken;
 use App\Application\Actions\Usuario\ValidarUsuario;
 use App\Application\Actions\Usuario\UsuarioDisponible;
 use App\Application\Actions\Usuario\EditarUsuario;
+use App\Application\Actions\Usuario\CambiarEstadoUsuario;
+use App\Application\Actions\Usuario\EliminarUsuario;
 
 // Empleados
 use App\Application\Actions\Empleado\ListarEmpleados;
@@ -98,8 +101,27 @@ use App\Application\Actions\Cliente\EditarCliente;
 use App\Application\Actions\Cliente\ValidarEstadoCliente;
 use App\Application\Actions\Cliente\CambiarEstadoCliente;
 use App\Application\Actions\Cliente\EliminarCliente;
+use DI\Container;
+use Psr\Http\Message\UploadedFileInterface;
+
+
+
 
 return function (App $app) {
+
+
+    $app->options('/{routes:.+}', function ($request, $response, $args) {
+        return $response;
+    });
+
+    $app->add(function ($request, $handler) {
+        $response = $handler->handle($request);
+        return $response
+            ->withHeader('Access-Control-Allow-Origin', '*')
+            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    });
+
     $app->get('/', function (Request $request, Response $response) {
         $response->getBody()->write('Binevenido a CallPhone Soft');
         return $response;
@@ -111,125 +133,157 @@ return function (App $app) {
     // });
 
     $app->group('/Usuarios', function (Group $group) {
-        $group->get('',ListarUsuarios::class); 
-        $group->get('/{usuario}',ObtenerUsuario::class);
-        $group->get('/ValidarUsuario/{usuario}',ValidarUsuario::class) ;
-        $group->get('/EnviarCorreo/{usuario}',EnviarCorreo::class);
-        $group->get('/Validacion/Disponible',UsuarioDisponible::class);
+        $group->get('', ListarUsuarios::class);
+        $group->get('/{usuario}', ObtenerUsuario::class);
+        $group->get('/ValidarUsuario/{usuario}', ValidarUsuario::class);
+        $group->get('/EnviarCorreo/{usuario}', EnviarCorreo::class);
+        $group->get('/Validacion/Disponible', UsuarioDisponible::class);
+        $group->get('/CambiarEstado/{Id_Usuario_CE}/{Estado}', CambiarEstadoUsuario::class);
         $group->post('/Login', LoginAction::class);
         $group->post('', UsuarioRegistro::class);
         $group->get('/ValidarToken/{token}', ValidarToken::class);
         $group->patch('', RestablecerContrasena::class);
-        $group->put('',EditarUsuario::class);
-    });
-
-    $app->group('/Empleados', function(Group $group){
-        $group->get('',ListarEmpleados::class);
-    });
-
-    $app->group('/Cliente', function(Group $group){
-        $group->post('',RegistrarCliente::class);
-        $group->get('',ListarCliente::class);
-        $group->get('/{Id_Cliente}',ObtenerCliente::class);
-        $group->get('/ValidarEstado/{Id_Cliente_VE}',ValidarEstadoCliente::class);
-        $group->get('/CambiarEstado/{Id_Cliente_CE}/{Estado}',CambiarEstadoCliente::class);
-        $group->put('',EditarCliente::class);
-        $group->delete('/{Id_Cliente_Eliminar}',EliminarCliente::class);
-    });
-
-    $app->group('/Documento', function(Group $group){
-        $group->post('',DocumentoRegistroAction::class);
-        $group->get('',ListarDocumento::class);
-        $group->get('/ObtenerDatosDocumento/{Id_Documentos}',ObtenerDatosAction::class);
-        $group->put('',EditarDocumentoAction::class);
-        $group->patch('/{Id_Documentos}/{Estado}',CambiarEstadoAction::class);
-    });
-
-    $app->group('/Sexo', function(Group $group){
-        $group->post('',RegistrarSexoAction::class);
-        $group->get('',ListarSexoAction::class);
-        $group->get('/ObtenerSexo/{Id_Sexo}',ObtenerSexoAction::class);
-        $group->put('',EditarSexoAction::class);
-        $group->patch('/{Id_Sexo}/{Estado}',CambiarEstadoSexo::class);
-    });
-
-    $app->group('/Pais', function(Group $group){
-        $group->post('',RegistrarPaisAction::class);
-        $group->get('',ListarPaisAction::class);
-        $group->get('/ObtenerPais/{Id_Pais}',ObtenerDatosPaisAction::class);
-        $group->put('',EditarPaisAction::class);
-        $group->patch('/{Id_Pais}/{Estado}',CambiarEstadoPaisAction::class);
-    });
-
-    $app->group('/Departamento', function(Group $group){
-        $group->post('',RegistrarDepartamentoAction::class);
-        $group->get('',ListarDepartamentoAction::class);
-        $group->get('/ObtenerDepartamento/{Id_Departamento}',ObtenerDatosDepartamentoAction::class);
-        $group->get('/ConsultarDepartamento/{Id_Pais}',ConsultarDepartamentosPaisAction::class);
-        $group->put('',EditarDepartamentoAction::class);
-        $group->patch('/{Id_Departamento}/{Estado}',CambiarEstadoDepartamentoAction::class);
-    });
-
-    $app->group('/Municipio', function(Group $group){
-        $group->post('',RegistrarMunicipioAction::class);
-        $group->get('',ListarMunicipioAction::class);
-        $group->get('/ObtenerMunicipio/{Id_Municipio}',ObtenerDatosMunicipioAction::class);
-        $group->get('/ConsultarMunicipio/{Id_Departamento}',ConsultarMunicipiosDepartamentoAction::class);
-        $group->put('',EditarMunicipioAction::class);
-        $group->patch('/{Id_Municipio}/{Estado}',CambiarEstadoMunicipioAction::class);
-    });
-    
-    
-
-    $app->group('/SubTipo', function(Group $group){
-        $group->post('',RegistrarSubTipoAction::class);
-        $group->get('',ListarSubTipoAction::class);
-        $group->get('/ObtenerSubTipo/{Id_SubTipo_Barrio_Vereda}',ObtenerSubTipoAction::class);
-        $group->put('',EditarSubTipoAction::class);
-        $group->patch('/{Id_SubTipo_Barrio_Vereda}/{Estado}',CambiarEstadoSubTipoAction::class);
-    });
-    $app->group('/BarriosVeredas', function(Group $group){
-        $group->post('',RegistrarBarriosVeredasAction::class);
-        $group->get('',ListarBarriosVeredasAction::class);
-        $group->get('/ObtenerBarriosVereda/{Id_Barrios_Veredas}',ObtenerBarriosVeredasAction::class);
-        $group->get('/ConsultarBarriosVeredas/{Id_Municipio}/{Id_SubTipo}',ConsultarBarriosVeredasMunicipioAction::class);
-        $group->put('',EditarBarriosVeredasAction::class);
-        $group->patch('/{Id_Barrios_Veredas}/{Estado}',CambiarEstadoBarriosVeredasAction::class);
-    });
-    $app->group('/Turnos', function(Group $group){
-        $group->post('',RegistrarTurnosAction::class);
-        $group->get('',ListarTurnosAction::class);
-        $group->get('/ObtenerTurnos/{Id_Turno}',ObtenerDatosTurnosAction::class);
-        $group->put('',EditarTurnosAction::class);
-        $group->patch('/{Id_Turno}/{Estado}',CambiarEstadoTurnosAction::class);
-    });
-
-    $app->group('/Rol', function(Group $group){
-        $group->post('',RegistrarRolAction::class);
-        $group->get('',ListarRolAction::class);
-        $group->get('/ObtenerRol/{Id_Rol}',ObtenerDatosRolAction::class);
-        $group->put('',EditarRolAction::class);
-        $group->patch('/{Id_Rol}/{Estado}',CambiarEstadoRolAction::class);
-    });
-
-    $app->group('/Operador', function(Group $group){
-        $group->post('',RegistrarOperadorAction::class);
-        $group->get('',ListarOperadorAction::class);
-        $group->get('/ObtenerOperador/{Id_Operador}',ObtenerOperadorAction::class);
-        $group->put('',EditarOperadorAction::class);
-        $group->patch('/{Id_Operador}/{Estado}',CambiarEstadoOperadorAction::class);
+        $group->put('', EditarUsuario::class);
+        $group->delete('/{Id_Usuario_Eliminar}', EliminarUsuario::class);
     });
 
 
-    $app->options('/{routes:.+}', function ($request, $response, $args) {
+    $app->post('/CargarImagenUsuario', function (Request $request, Response $response) {
+
+        $this->set('upload_directory', 'C:\Users\alexx\Desktop\Proyecto\Cliente_Proyecto\assets\images\usuarios');
+
+        $directory = $this->get('upload_directory');
+
+        $uploadedFiles = $request->getUploadedFiles();
+
+        if (empty($uploadedFiles)) {
+
+            $mensaje = ["ok" => false];
+            $json = json_encode($mensaje, JSON_PRETTY_PRINT);
+            $response->getBody()->write($json);
+            $response->withHeader('Content-Type', 'application/json');
+
+        } else {
+
+            $uploadedFile = $uploadedFiles['Img_Usuario'];
+
+            if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+                $filename = moveUploadedFile($directory, $uploadedFile);
+
+                $mensaje = ["ok" => true,"pathArchivo"=>  $filename];
+                $json = json_encode($mensaje, JSON_PRETTY_PRINT);
+                $response->getBody()->write($json);
+                $response->withHeader('Content-Type', 'application/json');
+            }
+        }
         return $response;
     });
-    
-    $app->add(function ($request, $handler) {
-        $response = $handler->handle($request);
-        return $response
-                ->withHeader('Access-Control-Allow-Origin', '*')
-                ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-                ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+
+    function moveUploadedFile($directory, UploadedFileInterface $uploadedFile)
+    {
+        $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
+        $basename = bin2hex(random_bytes(8));
+        $filename = sprintf('%s.%0.8s', $basename, $extension);
+
+        $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
+
+        return $filename;
+    }
+
+    $app->group('/Empleados', function (Group $group) {
+        $group->get('', ListarEmpleados::class);
+    });
+
+    $app->group('/Cliente', function (Group $group) {
+        $group->post('', RegistrarCliente::class);
+        $group->get('', ListarCliente::class);
+        $group->get('/{Id_Cliente}', ObtenerCliente::class);
+        $group->get('/ValidarEstado/{Id_Cliente_VE}', ValidarEstadoCliente::class);
+        $group->get('/CambiarEstado/{Id_Cliente_CE}/{Estado}', CambiarEstadoCliente::class);
+        $group->put('', EditarCliente::class);
+        $group->delete('/{Id_Cliente_Eliminar}', EliminarCliente::class);
+    });
+
+    $app->group('/Documento', function (Group $group) {
+        $group->post('', DocumentoRegistroAction::class);
+        $group->get('', ListarDocumento::class);
+        $group->get('/ObtenerDatosDocumento/{Id_Documentos}', ObtenerDatosAction::class);
+        $group->put('', EditarDocumentoAction::class);
+        $group->patch('/{Id_Documentos}/{Estado}', CambiarEstadoAction::class);
+    });
+
+    $app->group('/Sexo', function (Group $group) {
+        $group->post('', RegistrarSexoAction::class);
+        $group->get('', ListarSexoAction::class);
+        $group->get('/ObtenerSexo/{Id_Sexo}', ObtenerSexoAction::class);
+        $group->put('', EditarSexoAction::class);
+        $group->patch('/{Id_Sexo}/{Estado}', CambiarEstadoSexo::class);
+    });
+
+    $app->group('/Pais', function (Group $group) {
+        $group->post('', RegistrarPaisAction::class);
+        $group->get('', ListarPaisAction::class);
+        $group->get('/ObtenerPais/{Id_Pais}', ObtenerDatosPaisAction::class);
+        $group->put('', EditarPaisAction::class);
+        $group->patch('/{Id_Pais}/{Estado}', CambiarEstadoPaisAction::class);
+    });
+
+    $app->group('/Departamento', function (Group $group) {
+        $group->post('', RegistrarDepartamentoAction::class);
+        $group->get('', ListarDepartamentoAction::class);
+        $group->get('/ObtenerDepartamento/{Id_Departamento}', ObtenerDatosDepartamentoAction::class);
+        $group->get('/ConsultarDepartamento/{Id_Pais}', ConsultarDepartamentosPaisAction::class);
+        $group->put('', EditarDepartamentoAction::class);
+        $group->patch('/{Id_Departamento}/{Estado}', CambiarEstadoDepartamentoAction::class);
+    });
+
+    $app->group('/Municipio', function (Group $group) {
+        $group->post('', RegistrarMunicipioAction::class);
+        $group->get('', ListarMunicipioAction::class);
+        $group->get('/ObtenerMunicipio/{Id_Municipio}', ObtenerDatosMunicipioAction::class);
+        $group->get('/ConsultarMunicipio/{Id_Departamento}', ConsultarMunicipiosDepartamentoAction::class);
+        $group->put('', EditarMunicipioAction::class);
+        $group->patch('/{Id_Municipio}/{Estado}', CambiarEstadoMunicipioAction::class);
+    });
+
+
+
+    $app->group('/SubTipo', function (Group $group) {
+        $group->post('', RegistrarSubTipoAction::class);
+        $group->get('', ListarSubTipoAction::class);
+        $group->get('/ObtenerSubTipo/{Id_SubTipo_Barrio_Vereda}', ObtenerSubTipoAction::class);
+        $group->put('', EditarSubTipoAction::class);
+        $group->patch('/{Id_SubTipo_Barrio_Vereda}/{Estado}', CambiarEstadoSubTipoAction::class);
+    });
+    $app->group('/BarriosVeredas', function (Group $group) {
+        $group->post('', RegistrarBarriosVeredasAction::class);
+        $group->get('', ListarBarriosVeredasAction::class);
+        $group->get('/ObtenerBarriosVereda/{Id_Barrios_Veredas}', ObtenerBarriosVeredasAction::class);
+        $group->get('/ConsultarBarriosVeredas/{Id_Municipio}/{Id_SubTipo}', ConsultarBarriosVeredasMunicipioAction::class);
+        $group->put('', EditarBarriosVeredasAction::class);
+        $group->patch('/{Id_Barrios_Veredas}/{Estado}', CambiarEstadoBarriosVeredasAction::class);
+    });
+    $app->group('/Turnos', function (Group $group) {
+        $group->post('', RegistrarTurnosAction::class);
+        $group->get('', ListarTurnosAction::class);
+        $group->get('/ObtenerTurnos/{Id_Turno}', ObtenerDatosTurnosAction::class);
+        $group->put('', EditarTurnosAction::class);
+        $group->patch('/{Id_Turno}/{Estado}', CambiarEstadoTurnosAction::class);
+    });
+
+    $app->group('/Rol', function (Group $group) {
+        $group->post('', RegistrarRolAction::class);
+        $group->get('', ListarRolAction::class);
+        $group->get('/ObtenerRol/{Id_Rol}', ObtenerDatosRolAction::class);
+        $group->put('', EditarRolAction::class);
+        $group->patch('/{Id_Rol}/{Estado}', CambiarEstadoRolAction::class);
+    });
+
+    $app->group('/Operador', function (Group $group) {
+        $group->post('', RegistrarOperadorAction::class);
+        $group->get('', ListarOperadorAction::class);
+        $group->get('/ObtenerOperador/{Id_Operador}', ObtenerOperadorAction::class);
+        $group->put('', EditarOperadorAction::class);
+        $group->patch('/{Id_Operador}/{Estado}', CambiarEstadoOperadorAction::class);
     });
 };
