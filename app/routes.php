@@ -19,14 +19,12 @@ use App\Application\Actions\Usuario\UsuarioDisponible;
 use App\Application\Actions\Usuario\EditarUsuario;
 use App\Application\Actions\Usuario\CambiarEstadoUsuario;
 use App\Application\Actions\Usuario\EliminarUsuario;
+use App\Application\Actions\Usuario\CargarImagenUsuario;
 
 // Empleados
 use App\Application\Actions\Empleado\ListarEmpleados;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\App;
-use Slim\Interfaces\RouteCollectorProxyInterface as Group;
+
 //Documento
 use App\Application\Actions\Documento\ListarDocumento;
 use App\Application\Actions\Documento\DocumentoRegistroAction;
@@ -101,10 +99,13 @@ use App\Application\Actions\Cliente\EditarCliente;
 use App\Application\Actions\Cliente\ValidarEstadoCliente;
 use App\Application\Actions\Cliente\CambiarEstadoCliente;
 use App\Application\Actions\Cliente\EliminarCliente;
-use DI\Container;
+
 use Psr\Http\Message\UploadedFileInterface;
 
-
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\App;
+use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 
 return function (App $app) {
@@ -145,50 +146,51 @@ return function (App $app) {
         $group->patch('', RestablecerContrasena::class);
         $group->put('', EditarUsuario::class);
         $group->delete('/{Id_Usuario_Eliminar}', EliminarUsuario::class);
+        $group->post('/CargarImagenUsuario', CargarImagenUsuario::class);
     });
 
 
-    $app->post('/CargarImagenUsuario', function (Request $request, Response $response) {
+    // $app->post('/CargarImagenUsuario', function (Request $request, Response $response) {
 
-        $this->set('upload_directory', 'C:\Users\alexx\Desktop\Proyecto\Cliente_Proyecto\assets\images\usuarios');
+    //     $this->set('upload_directory', 'C:\Users\alexx\Desktop\Proyecto\Cliente_Proyecto\assets\images\usuarios');
 
-        $directory = $this->get('upload_directory');
+    //     $directory = $this->get('upload_directory');
 
-        $uploadedFiles = $request->getUploadedFiles();
+    //     $uploadedFiles = $request->getUploadedFiles();
 
-        if (empty($uploadedFiles)) {
+    //     if (empty($uploadedFiles)) {
 
-            $mensaje = ["ok" => false];
-            $json = json_encode($mensaje, JSON_PRETTY_PRINT);
-            $response->getBody()->write($json);
-            $response->withHeader('Content-Type', 'application/json');
+    //         $mensaje = ["ok" => false];
+    //         $json = json_encode($mensaje, JSON_PRETTY_PRINT);
+    //         $response->getBody()->write($json);
+    //         $response->withHeader('Content-Type', 'application/json');
 
-        } else {
+    //     } else {
 
-            $uploadedFile = $uploadedFiles['Img_Usuario'];
+    //         $uploadedFile = $uploadedFiles['Img_Usuario'];
 
-            if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
-                $filename = moveUploadedFile($directory, $uploadedFile);
+    //         if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+    //             $filename = moveUploadedFile($directory, $uploadedFile);
 
-                $mensaje = ["ok" => true,"pathArchivo"=>  $filename];
-                $json = json_encode($mensaje, JSON_PRETTY_PRINT);
-                $response->getBody()->write($json);
-                $response->withHeader('Content-Type', 'application/json');
-            }
-        }
-        return $response;
-    });
+    //             $mensaje = ["ok" => true,"pathArchivo"=>  $filename];
+    //             $json = json_encode($mensaje, JSON_PRETTY_PRINT);
+    //             $response->getBody()->write($json);
+    //             $response->withHeader('Content-Type', 'application/json');
+    //         }
+    //     }
+    //     return $response;
+    // });
 
-    function moveUploadedFile($directory, UploadedFileInterface $uploadedFile)
-    {
-        $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
-        $basename = bin2hex(random_bytes(8));
-        $filename = sprintf('%s.%0.8s', $basename, $extension);
+    // function moveUploadedFile($directory, UploadedFileInterface $uploadedFile)
+    // {
+    //     $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
+    //     $basename = bin2hex(random_bytes(8));
+    //     $filename = sprintf('%s.%0.8s', $basename, $extension);
 
-        $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
+    //     $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
 
-        return $filename;
-    }
+    //     return $filename;
+    // }
 
     $app->group('/Empleados', function (Group $group) {
         $group->get('', ListarEmpleados::class);
