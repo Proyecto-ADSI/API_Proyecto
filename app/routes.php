@@ -128,11 +128,6 @@ return function (App $app) {
         return $response;
     });
 
-    // $app->group('/users', function (Group $group) {
-    //     $group->get('', ListUsersAction::class);
-    //     $group->get('/{id}', ViewUserAction::class);
-    // });
-
     $app->group('/Usuarios', function (Group $group) {
         $group->get('', ListarUsuarios::class);
         $group->get('/{usuario}', ObtenerUsuario::class);
@@ -148,49 +143,6 @@ return function (App $app) {
         $group->delete('/{Id_Usuario_Eliminar}', EliminarUsuario::class);
         $group->post('/CargarImagenUsuario', CargarImagenUsuario::class);
     });
-
-
-    // $app->post('/CargarImagenUsuario', function (Request $request, Response $response) {
-
-    //     $this->set('upload_directory', 'C:\Users\alexx\Desktop\Proyecto\Cliente_Proyecto\assets\images\usuarios');
-
-    //     $directory = $this->get('upload_directory');
-
-    //     $uploadedFiles = $request->getUploadedFiles();
-
-    //     if (empty($uploadedFiles)) {
-
-    //         $mensaje = ["ok" => false];
-    //         $json = json_encode($mensaje, JSON_PRETTY_PRINT);
-    //         $response->getBody()->write($json);
-    //         $response->withHeader('Content-Type', 'application/json');
-
-    //     } else {
-
-    //         $uploadedFile = $uploadedFiles['Img_Usuario'];
-
-    //         if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
-    //             $filename = moveUploadedFile($directory, $uploadedFile);
-
-    //             $mensaje = ["ok" => true,"pathArchivo"=>  $filename];
-    //             $json = json_encode($mensaje, JSON_PRETTY_PRINT);
-    //             $response->getBody()->write($json);
-    //             $response->withHeader('Content-Type', 'application/json');
-    //         }
-    //     }
-    //     return $response;
-    // });
-
-    // function moveUploadedFile($directory, UploadedFileInterface $uploadedFile)
-    // {
-    //     $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
-    //     $basename = bin2hex(random_bytes(8));
-    //     $filename = sprintf('%s.%0.8s', $basename, $extension);
-
-    //     $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
-
-    //     return $filename;
-    // }
 
     $app->group('/Empleados', function (Group $group) {
         $group->get('', ListarEmpleados::class);
