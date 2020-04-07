@@ -23,7 +23,7 @@ class Empleado implements JsonSerializable
         return $this->$attr;
     }
 
-    function __construct(?int $Id_Empleado, int $Tipo_Documento, string $Documento,string $Nombre, string $Apellidos, string $Email, int $Sexo, string $Celular, string $Imagen, int $Turno)
+    function __construct(?int $Id_Empleado, int $Tipo_Documento, string $Documento,string $Nombre, string $Apellidos, string $Email, int $Sexo, string $Celular, ?string $Imagen, int $Turno)
     {   
         $this->Id_Empleado = $Id_Empleado;
         $this->Tipo_Documento = $Tipo_Documento;

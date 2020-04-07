@@ -15,6 +15,10 @@ interface ClienteRepository{
 
     public function EliminarCliente(int $Id_Cliente);
 
+    public function ValidarEstadoCliente(int $Id_Cliente);
+
+    public function ValidarEliminarCliente(int $Id_Cliente);
+
     public function CambiarEstadoCliente(int $Id_Cliente, int $Estado);
 
     public function ConsultarUltimoRegistrado();

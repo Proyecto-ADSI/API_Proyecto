@@ -23,7 +23,7 @@ class UsuarioPersistence implements UsuarioRepository
 
     public function ListarUsuarios()
     {
-        $sql = "SELECT u.Id_Usuario, u.Usuario, u.Conexion, u.Estado, u.Id_Rol, r.Nombre AS Rol, u.Id_Empleado, 
+        $sql = "SELECT u.Id_Usuario, u.Usuario, u.Conexion, u.Estado_Usuario, u.Id_Rol, r.Nombre AS Rol, u.Id_Empleado, 
         d.Nombre AS 'Tipo Documento', e.Documento, e.Nombre, e.Apellidos, e.Email AS Correo, s.Nombre AS Sexo, Celular, Imagen, t.Nombre AS Turno       
         FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) 
         INNER JOIN roles r ON (u.Id_Rol = r.Id_rol) 
@@ -35,10 +35,19 @@ class UsuarioPersistence implements UsuarioRepository
             $stm = $this->db->prepare($sql);
             $stm->execute();
 
-            return $stm->fetchAll(PDO::FETCH_ASSOC);
+            $error = $stm->errorCode();
+            if($error === '00000'){
+                return $stm->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+                $error = $stm->errorInfo();
+                return $error;
+                
+            }
+
+         
 
         } catch (\Exception $e) {
-            return "Error al listar usuarios: " . $e->getMessage();
+            return "Error al listar usuarios: " . $e;
         }
 
     }
@@ -46,7 +55,7 @@ class UsuarioPersistence implements UsuarioRepository
 
     public function ObtenerUsuario(int $Id_Usuario)
     {
-        $sql = "SELECT u.Id_Usuario, u.Usuario, u.Conexion, u.Estado, u.Id_Rol, r.Nombre AS Rol, u.Id_Empleado, d.Id_Documento,
+        $sql = "SELECT u.Id_Usuario, u.Usuario, u.Conexion, u.Estado_Usuario, u.Id_Rol, r.Nombre AS Rol, u.Id_Empleado, d.Id_Documento,
         d.Nombre AS 'Tipo_Documento', e.Documento, e.Nombre, e.Apellidos, e.Email AS Correo, s.Id_Sexo, s.Nombre AS Sexo,
          Celular, Imagen, t.Id_Turno, t.Nombre AS Turno       
         FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) 
@@ -60,7 +69,14 @@ class UsuarioPersistence implements UsuarioRepository
             $stm->bindValue(1,$Id_Usuario);
             $stm->execute();
 
-            return $stm->fetch(PDO::FETCH_ASSOC);
+            $error = $stm->errorCode();
+            if($error === '00000'){
+                return $stm->fetch(PDO::FETCH_ASSOC);
+            }else{
+                $error = $stm->errorInfo();
+                return $error;
+                
+            }
 
         } catch (\Exception $e) {
             return "Error al obtener usuario: " . $e->getMessage();
@@ -70,8 +86,10 @@ class UsuarioPersistence implements UsuarioRepository
     public function login(string $usuario)
     {
 
-        $sql = "SELECT Id_Usuario, Usuario, Contrasena, Id_Rol, Id_Empleado FROM usuarios
-        WHERE Usuario = ?";
+        $sql = "SELECT u.Id_Usuario, u.Usuario, u.Contrasena, r.Id_Rol, r.Nombre Rol, e.Id_Empleado, e.Email, e.Imagen FROM usuarios u 
+        JOIN roles r ON(u.Id_Rol = r.Id_Rol)
+        JOIN empleados e ON(u.Id_Empleado = e.Id_Empleado) 
+        WHERE u.Usuario = ?";
 
         try {
             
@@ -79,7 +97,17 @@ class UsuarioPersistence implements UsuarioRepository
             $stm->bindValue(1, $usuario);
             $stm->execute();
 
-            return $stm->fetch(PDO::FETCH_ASSOC);
+            $error = $stm->errorCode();
+            if($error === '00000'){
+                return $stm->fetch(PDO::FETCH_ASSOC);
+            }else{
+                $error = $stm->errorInfo();
+                return $error;
+                
+            }
+
+            
+
         } catch (\Exception $e) {
             return null;
         }
@@ -206,6 +234,62 @@ class UsuarioPersistence implements UsuarioRepository
          
             return $e->getMessage();
        }
+    }
+
+    public function CambiarEstadoUsuario(int $Id_Usuario, int $Estado){
+
+        $sql ="UPDATE usuarios SET Estado_Usuario = ? WHERE Id_Usuario= ?";
+        try{
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1, $Estado);
+            $stm->bindValue(2, $Id_Usuario);
+            $stm->execute(); 
+            
+            $error = $stm->errorCode();
+            if($error === '00000'){
+                return true;
+            }else{
+                $error = $stm->errorInfo();
+                return $error;
+                
+            }
+        }
+        catch(Exception $e){
+
+            return "Error al cambiar estado "+$e->getMessage();
+
+        }
+    }
+
+    public function EliminarUsuario(int $Id_Usuario){
+        $sql = "DELETE FROM usuarios WHERE Id_Usuario = ?";
+
+        try{
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Usuario);
+
+            return $stm->execute();
+
+        }catch(Exception $e){
+
+            return $e->getMessage();
+        }
+    }
+
+    public function ValidarEliminarUsuario(int $Id_Usuario){
+
+        $sql = "SELECT Id_Llamada FROM Llamadas WHERE Id_Usuario = ?";
+
+        try{
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Usuario);
+            $stm->execute();
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+
+        }catch(Exception $e){
+
+            return $e->getMessage();
+        }
     }
 
 }

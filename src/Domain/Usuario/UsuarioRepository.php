@@ -24,4 +24,10 @@ interface UsuarioRepository{
     public function ValidarUsuario(string $usuario);
 
     public function EditarUsuario(Usuario $usuario);
+
+    public function CambiarEstadoUsuario(int $Id_Usuario, int $estado);
+
+    public function EliminarUsuario(int $Id_Usuario);
+
+    public function ValidarEliminarUsuario(int $Id_Usuario);
 }  

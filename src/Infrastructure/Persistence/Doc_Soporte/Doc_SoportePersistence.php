@@ -40,7 +40,8 @@ class Doc_SoportePersistence implements Doc_SoporteRepository
 
     public function ListarDocSoporte(int $Id_Documentos)
     {
-        $sql = "SELECT Camara_Comercio,Cedula_RL,Soporte_Ingresos FROM Documentos_Soporte WHERE Id_Documentos = ? ";
+        $sql = "SELECT Camara_Comercio,Cedula_RL,Soporte_Ingresos,Detalles_Plan_Corporativo 
+        FROM Documentos_Soporte WHERE Id_Documentos = ? ";
 
         try {
 
@@ -51,6 +52,27 @@ class Doc_SoportePersistence implements Doc_SoporteRepository
             return $stm->fetch(PDO::FETCH_ASSOC);
 
         } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function EditarDocSoporte(Doc_Soporte $Doc_Soporte){
+
+        $sql = "UPDATE Documentos_Soporte SET Camara_Comercio = ?,Cedula_RL = ?, 
+        Soporte_Ingresos = ?, Detalles_Plan_Corporativo = ? WHERE Id_Documentos = ?";
+
+        try{
+
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Doc_Soporte->__GET("Camara_Comercio"));
+            $stm->bindValue(2,$Doc_Soporte->__GET("Cedula_RL"));
+            $stm->bindValue(3,$Doc_Soporte->__GET("Soporte_Ingresos"));
+            $stm->bindValue(4,$Doc_Soporte->__GET("Detalles_Plan_Corporativo"));
+            $stm->bindValue(5,$Doc_Soporte->__GET("Id_Documentos"));
+
+            return $stm->execute();
+
+        }catch(\Exception $e){
             return $e->getMessage();
         }
     }

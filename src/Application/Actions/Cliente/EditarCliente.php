@@ -9,71 +9,64 @@ use App\Domain\DBL\DBL;
 use App\Domain\Doc_Soporte\Doc_Soporte;
 use App\Domain\Plan_Corporativo\Plan_Corporativo;
 use Psr\Http\Message\ResponseInterface as Response;
+class EditarCliente extends ClienteAction {
 
-class RegistrarCliente extends ClienteAction
-{
     protected function action(): Response
     {
         $campos = $this->getFormData();
 
-        // return $this->respondWithData(["ok" => $campos]);
-
-
-        // Validar si se registra el plan corporativo
+        // Validar si se edita el plan corporativo
 
         if ($campos->Validacion_PLan_C) {
 
+            // Validar si se editan los documentos soporte
             if ($campos->Validacion_Doc_S) {
 
-                // Registrar documentos
+                // Editar documentos
 
                 $Doc_Soporte = new Doc_Soporte(
-                    Null,
+                    $campos->Id_Documentos,
                     $campos->Camara_Comercio,
                     $campos->Cedula_RL,
                     $campos->Soporte_Ingresos,
                     $campos->Detalles_Plan_Corporativo
                 );
 
-                $this->Doc_SoporteRepository->RegistrarDocSoporte($Doc_Soporte);
+                $this->Doc_SoporteRepository->EditarDocSoporte($Doc_Soporte);
 
-                $InfoIdDoc = $this->Doc_SoporteRepository->ConsultarUltimoRegistrado();
-
-                // Registrar plan corporativo
+                // Editar plan corporativo
 
                 $Plan_Corporativo = new Plan_Corporativo(
-                    NULL,
-                    (int) $InfoIdDoc['Id_Documentos'],
+                    $campos->Id_Plan_Corporativo,
+                    $campos->Id_Documentos,
                     $campos->Fecha_Inicio,
                     $campos->Fecha_Fin,
                     $campos->Descripcion,
-                    $campos->Estado_Plan_Corporativo,
+                    NULL
                 );
 
-                $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($Plan_Corporativo);
+                $this->Plan_CorporativoRepository->EditarPlan_Corporativo($Plan_Corporativo);
             } else {
-                
-                // Plan Corporativo sin documentos
+
+                // Editar Plan Corporativo sin editar documentos
                 $Plan_Corporativo = new Plan_Corporativo(
-                    NULL,
-                    NULL,
+                    $campos->Id_Plan_Corporativo,
+                    null,
                     $campos->Fecha_Inicio,
                     $campos->Fecha_Fin,
                     $campos->Descripcion,
-                    $campos->Estado_Plan_Corporativo
+                    NULL
                 );
 
-                $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($Plan_Corporativo);
+                $this->Plan_CorporativoRepository->EditarPlan_Corporativo($Plan_Corporativo);
             }
 
-            // Datos básicos líneas con plan corporativo
-
-            $InfoIdPlan = $this->Plan_CorporativoRepository->ConsultarUltimoRegistrado();
+            // Editar Datos básicos líneas con plan corporativo
 
             $DBL = new DBL(
-                NULL,
+                $campos->Id_DBL,
                 $campos->Id_Operador,
-                (int) $InfoIdPlan['Id_Plan_Corporativo'],
+                $campos->Id_Plan_Corporativo,
                 $campos->Cantidad_Lineas,
                 $campos->Valor_Mensual,
                 $campos->Cantidad_Minutos,
@@ -82,16 +75,16 @@ class RegistrarCliente extends ClienteAction
                 $campos->Mensajes_Texto,
                 $campos->Aplicaciones,
                 $campos->Roaming_Internacional,
-                $campos->Estado_DBL
+                NULL
             );
 
-            $this->DBLRepository->RegistrarDBL($DBL);
+            $this->DBLRepository->EditarDBL($DBL);
 
         } else {
 
-            // Datos básicos líneas sin plan corporativo
+            // Editar Datos básicos líneas sin plan corporativo
             $DBL = new DBL(
-                NULL,
+                $campos->Id_DBL,
                 $campos->Id_Operador,
                 NULL,
                 $campos->Cantidad_Lineas,
@@ -102,20 +95,16 @@ class RegistrarCliente extends ClienteAction
                 $campos->Mensajes_Texto,
                 $campos->Aplicaciones,
                 $campos->Roaming_Internacional,
-                $campos->Estado_DBL
+                NULL
             );
 
-            $this->DBLRepository->RegistrarDBL($DBL);
+            $this->DBLRepository->EditarDBL($DBL);
         }
 
-
-        //Id_Datos_Basicos_Lineas
-        $InfoIdDBL = $this->DBLRepository->ConsultarUltimoRegistrado();
-
-        // Registrar Cliente
+        // Editar Cliente
         $Cliente = new Cliente(
-            NULL,
-            (int)$InfoIdDBL['Id_DBL'],
+            $campos->Id_Cliente,
+            $campos->Id_DBL,
             $campos->NIT_CDV,
             $campos->Razon_Social,
             $campos->Telefono,
@@ -123,13 +112,14 @@ class RegistrarCliente extends ClienteAction
             $campos->Extension,
             $campos->Telefono_Contacto,
             $campos->Direccion,
-            $campos->Barrio_Vereda,
-            $campos->Estado_Cliente
+            $campos->Id_Barrios_Veredas,
+            NULL
         );
 
-        $respuesta = $this->ClienteRepository->RegistrarCliente($Cliente);
+        $respuesta = $this->ClienteRepository->EditarCliente($Cliente);
 
         // Respuesta es TRUE || FALSE
         return $this->respondWithData(["ok" => $respuesta]);
-    }
+    }   
+
 }

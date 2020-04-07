@@ -8,6 +8,8 @@ interface Doc_SoporteRepository
 
     public function ListarDocSoporte(int $Id_Documentos);
 
+    public function EditarDocSoporte(Doc_Soporte $Doc_Soporte);
+
     public function EliminarDocSoporte(int $Id_Documentos);
 
     public function ConsultarUltimoRegistrado();
