@@ -18,10 +18,9 @@ class EditarBarriosVeredasAction extends BarriosVeredasAction
             $campos->Id_Barrios_Veredas,
             $campos->Codigo,
             $campos->Nombre,
-            $campos->Id_Municipio,
             $campos->Id_SubTipo_Barrio_Vereda,
-            $campos->Estado,
-            
+            $campos->Id_Municipio,
+            null
         );
         $datos = $this->BarriosVeredasRepository->EditarBarriosVeredas($datos);
 
