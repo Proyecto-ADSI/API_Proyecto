@@ -99,8 +99,8 @@ use App\Application\Actions\Cliente\EditarCliente;
 use App\Application\Actions\Cliente\ValidarEstadoCliente;
 use App\Application\Actions\Cliente\CambiarEstadoCliente;
 use App\Application\Actions\Cliente\EliminarCliente;
+use App\Application\Actions\Cliente\ImportarClientes;
 
-use Psr\Http\Message\UploadedFileInterface;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -156,6 +156,7 @@ return function (App $app) {
         $group->get('/CambiarEstado/{Id_Cliente_CE}/{Estado}', CambiarEstadoCliente::class);
         $group->put('', EditarCliente::class);
         $group->delete('/{Id_Cliente_Eliminar}', EliminarCliente::class);
+        $group->post('/ImportarClientes', ImportarClientes::class);
     });
 
     $app->group('/Documento', function (Group $group) {

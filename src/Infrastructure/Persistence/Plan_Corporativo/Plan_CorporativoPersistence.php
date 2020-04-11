@@ -20,9 +20,9 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
     }
 
     public function RegistrarPlan_Corporativo(Plan_Corporativo $Plan_Corporativo)
-    {   
+    {
 
-        $sql = "INSERT INTO Plan_Corporativo(Id_Documentos,Fecha_Inicio,Fecha_Fin, Descripcion, Estado_Plan_Corporativo)
+        $sql = "INSERT INTO Plan_Corporativo(Id_Documentos,Fecha_Inicio,Fecha_Fin, Clausula_Permanencia, Descripcion)
         VALUES(?,?,?,?,?)";
 
         try {
@@ -30,10 +30,17 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
             $stm->bindValue(1, $Plan_Corporativo->__GET("Id_Documentos"));
             $stm->bindValue(2, $Plan_Corporativo->__GET("Fecha_Inicio"));
             $stm->bindValue(3, $Plan_Corporativo->__GET("Fecha_Fin"));
-            $stm->bindValue(4, $Plan_Corporativo->__GET("Descripcion"));
-            $stm->bindValue(5, $Plan_Corporativo->__GET("Estado_Plan_Corporativo"));
+            $stm->bindValue(4, $Plan_Corporativo->__GET("Clausula_Permanencia"));
+            $stm->bindValue(5, $Plan_Corporativo->__GET("Descripcion"));
 
-            return $stm->execute();
+            $stm->execute();
+
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                return true;
+            } else {
+                return $stm->errorInfo();
+            }
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -41,8 +48,8 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
 
     public function ListarPlan_Corporativo(int $Id_Plan_Corporativo)
     {
-        $sql = "SELECT IFNULL(Id_Documentos,0) Id_Documentos,Fecha_Inicio,Fecha_Fin,Descripcion,Estado_Plan_Corporativo
-                FROM Plan_Corporativo WHERE Id_Plan_Corporativo = ? ";
+        $sql = "SELECT IFNULL(Id_Documentos,0) Id_Documentos,Fecha_Inicio,Fecha_Fin,Clausula_Permanencia,Descripcion,
+        Estado_Plan_Corporativo FROM Plan_Corporativo WHERE Id_Plan_Corporativo = ? ";
         try {
 
             $stm = $this->db->prepare($sql);
@@ -50,30 +57,29 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
             $stm->execute();
 
             return $stm->fetch(PDO::FETCH_ASSOC);
-
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
 
-    public function EditarPlan_Corporativo(Plan_Corporativo $Plan_Corporativo){
+    public function EditarPlan_Corporativo(Plan_Corporativo $Plan_Corporativo)
+    {
 
         $sql = "UPDATE Plan_Corporativo SET Id_Documentos = ?, Fecha_Inicio = ?, 
         Fecha_Fin = ?, Descripcion = ? WHERE Id_Plan_Corporativo = ?";
 
-        try{
+        try {
 
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1,$Plan_Corporativo->__GET("Id_Documentos"));
-            $stm->bindValue(2,$Plan_Corporativo->__GET("Fecha_Inicio"));
-            $stm->bindValue(3,$Plan_Corporativo->__GET("Fecha_Fin"));
-            $stm->bindValue(4,$Plan_Corporativo->__GET("Descripcion"));
-            $stm->bindValue(5,$Plan_Corporativo->__GET("Id_Plan_Corporativo"));
-     
+            $stm->bindValue(1, $Plan_Corporativo->__GET("Id_Documentos"));
+            $stm->bindValue(2, $Plan_Corporativo->__GET("Fecha_Inicio"));
+            $stm->bindValue(3, $Plan_Corporativo->__GET("Fecha_Fin"));
+            $stm->bindValue(4, $Plan_Corporativo->__GET("Descripcion"));
+            $stm->bindValue(5, $Plan_Corporativo->__GET("Id_Plan_Corporativo"));
+
 
             return $stm->execute();
-
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
@@ -88,11 +94,9 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
             $stm->bindValue(2, $Id_Plan_Corporativo);
 
             return  $stm->execute();
-
         } catch (\Exception $e) {
 
             return $e->getMessage();
-
         }
     }
 
@@ -109,17 +113,17 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
         }
     }
 
-    public function ConsultarUltimoRegistrado(){
+    public function ConsultarUltimoRegistrado()
+    {
 
         $sql = "SELECT Id_Plan_Corporativo FROM Plan_Corporativo ORDER BY 1 DESC LIMIT 1";
 
-        try{
+        try {
 
             $stm = $this->db->prepare($sql);
             $stm->execute();
             return $stm->fetch(PDO::FETCH_ASSOC);
-            
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }

@@ -125,7 +125,7 @@ class RegistrarCliente extends ClienteAction
             $campos->Direccion,
             $campos->Barrio_Vereda,
             $campos->Estado_Cliente
-        );
+        );  
 
         $respuesta = $this->ClienteRepository->RegistrarCliente($Cliente);
 

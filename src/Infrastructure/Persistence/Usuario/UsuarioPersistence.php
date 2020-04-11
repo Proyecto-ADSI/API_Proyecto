@@ -39,9 +39,7 @@ class UsuarioPersistence implements UsuarioRepository
             if($error === '00000'){
                 return $stm->fetchAll(PDO::FETCH_ASSOC);
             }else{
-                $error = $stm->errorInfo();
-                return $error;
-                
+               return $stm->errorInfo();
             }
 
          
