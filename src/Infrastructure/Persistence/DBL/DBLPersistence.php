@@ -168,7 +168,7 @@ class DBLPersistence implements DBLRepository
     public function ConsultarDetalleLineas(int $DBL)
     {
 
-        $sql = " SELECT d.Id_DBL, l.Id_Linea, l.Linea, l.Minutos, l.Navegacion, l.Mensajes, l.Redes_Sociales, l.Llamadas_Inter,
+        $sql = " SELECT d.Id_DBL, l.Id_Linea, IFNULL(l.Linea, '-') Linea, l.Minutos, l.Navegacion, l.Mensajes, l.Redes_Sociales, l.Llamadas_Inter,
         l.Roaming, l.Cargo_Basico FROM Detalle_Lineas d JOIN Lineas l ON(d.Id_Linea = l.Id_Linea) WHERE d.Id_DBL = ?";
 
         try {
