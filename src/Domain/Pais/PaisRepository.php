@@ -14,4 +14,8 @@ interface PaisRepository {
     public function ObtenerDatos(int $Id_Pais);
 
     public function EditarPais(Pais $Pais);
+
+    public function ValidarPaisEliminar(int $Id_Pais);
+
+    public function EliminarPais(int $Id_Pais);
 }

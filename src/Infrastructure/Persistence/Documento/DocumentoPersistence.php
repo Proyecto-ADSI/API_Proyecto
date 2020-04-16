@@ -23,7 +23,7 @@ class DocumentoPersistence implements DocumentoRepository
 
     public function RegistrarDocumento(Documento $Documento)
     {
-        $sql = "INSERT INTO documentos(Nombre,Estado) VALUES (?,?)";
+        $sql = "INSERT INTO documentos(Nombre,Estado_Documento) VALUES (?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -40,7 +40,7 @@ class DocumentoPersistence implements DocumentoRepository
 
     public function ListarDocumento()
     {
-        $sql = "SELECT Id_Documento, Nombre, Estado FROM documentos";
+        $sql = "SELECT Id_Documento, Nombre, Estado_Documento FROM documentos";
 
         try {
 
@@ -53,7 +53,7 @@ class DocumentoPersistence implements DocumentoRepository
         }
     }
     public function CambiarEstado(int $Id_Documentos, int $Estado){
-        $sql = "UPDATE documentos SET Estado= ? WHERE Id_Documento = ?";
+        $sql = "UPDATE documentos SET Estado_Documento= ? WHERE Id_Documento = ?";
    
         try {
           $stm = $this->db->prepare($sql);
@@ -96,6 +96,37 @@ class DocumentoPersistence implements DocumentoRepository
         }
     }
 
+    public function EliminarDocumento(int $Id_Documentos){
+
+        $sql = "DELETE FROM documentos WHERE Id_Documento = ?";
+
+        try{
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Documentos);
+
+            return $stm->execute();
+
+        }catch(Exception $e){
+
+            return $e->getMessage();
+        }
+    }
+
+    public function ValidarEliminarDocumento(int $Id_Documentos){
+
+        $sql = "SELECT Tipo_Documento FROM empleados WHERE Tipo_Documento = ?";
+
+        try{
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Documentos);
+            $stm->execute();
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+
+        }catch(Exception $e){
+
+            return $e->getMessage();
+        }
+    }
 
     
 }

@@ -18,7 +18,7 @@ class EditarTurnosAction extends TurnosAction
             $campos->Nombre,
             $campos->Inicio,
             $campos->Fin,
-            $campos->Estado,
+            null
         );
         $datos = $this->TurnosRepository->EditarTurno($datos);
 

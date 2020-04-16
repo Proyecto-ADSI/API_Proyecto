@@ -14,4 +14,8 @@ interface SexoRepository{
     public function ObtenerDatos(int $Id_Sexo);
 
     public function EditarSexo(Sexo $Sexo);
+
+    public function ValidarEliminarSexo(int $Id_Sexo);
+
+    public function EliminarSexo(int $Id_Sexo);
 }

@@ -14,4 +14,8 @@ interface DocumentoRepository{
     public function ObtenerDatos(int $Id_Documentos);
 
     public function EditarDocumento(Documento $Documento);
+
+    public function ValidarEliminarDocumento(int $Id_Documentos);
+
+    public function EliminarDocumento(int $Id_Documentos);
 }

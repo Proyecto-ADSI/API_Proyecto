@@ -42,7 +42,7 @@ class MunicipioPersistence implements MunicipioRepository
 
     public function ListarMunicipio()
     {
-        $sql = "SELECT m.Id_Municipio, m.Nombre_Municipio, d.Id_Departamento,d.Nombre_Departamento 
+        $sql = "SELECT m.Id_Municipio, m.Nombre_Municipio,m.Estado ,d.Id_Departamento,d.Nombre_Departamento 
         FROM municipios m INNER JOIN departamento d ON (m.Id_Departamento = d.Id_Departamento)";
 
         try {

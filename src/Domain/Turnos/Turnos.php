@@ -22,7 +22,7 @@ class Turnos implements JsonSerializable
         return $this->$attr;
     }
 
-    function __construct(int $Id_Turno, string $Nombre,string $Inicio, string $Fin, int $Estado)
+    function __construct(int $Id_Turno, string $Nombre,string $Inicio, string $Fin,?int $Estado)
     {   
         $this->Id_Turno = $Id_Turno;
         $this->Nombre = $Nombre;

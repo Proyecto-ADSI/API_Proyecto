@@ -103,6 +103,36 @@ class TurnosPersistence implements TurnosRepository
         }
     }
 
+    public function ValidarEliminarTurno(int $Id_Turno){
+        $sql = "SELECT Id_Turno FROM empleados WHERE Id_Turno = ?";
+ 
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1, $Id_Turno);
+            
+            $stm->execute();
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+
+ 
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function EliminarTurno(int $Id_Turno){
+        $sql = "DELETE FROM turnos WHERE Id_Turno = ?";
+ 
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1, $Id_Turno);
+            
+            return $stm->execute();
+ 
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
 
     
 }

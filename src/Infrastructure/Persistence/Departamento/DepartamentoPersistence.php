@@ -23,7 +23,7 @@ class DepartamentoPersistence implements DepartamentoRepository
 
     public function RegistrarDepartamento(Departamento $Departamento)
     {
-        $sql = "INSERT INTO departamento(Nombre_Departamento, Id_Pais, Estado) VALUES (?,?,?)";
+        $sql = "INSERT INTO departamento(Nombre_Departamento, Id_Pais, Estado_Departamento) VALUES (?,?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -41,7 +41,7 @@ class DepartamentoPersistence implements DepartamentoRepository
 
     public function ListarDepartamento()
     {
-        $sql = "SELECT d.Id_Departamento, d.Nombre_Departamento, p.Id_Pais, p.Nombre_Pais
+        $sql = "SELECT d.Id_Departamento, d.Nombre_Departamento,d.Estado_Departamento, p.Id_Pais, p.Nombre_Pais
         FROM departamento d INNER JOIN pais p ON (d.Id_Pais = p.Id_Pais)";
 
         try {
@@ -55,7 +55,7 @@ class DepartamentoPersistence implements DepartamentoRepository
         }
     }
     public function CambiarEstado(int $Id_Departamento, int $Estado){
-        $sql = "UPDATE departamento SET Estado= ? WHERE Id_Departamento = ?";
+        $sql = "UPDATE departamento SET Estado_Departamento= ? WHERE Id_Departamento = ?";
    
         try {
           $stm = $this->db->prepare($sql);

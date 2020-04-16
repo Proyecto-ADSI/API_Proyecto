@@ -31,18 +31,21 @@ use App\Application\Actions\Documento\DocumentoRegistroAction;
 use App\Application\Actions\Documento\ObtenerDatosAction;
 use App\Application\Actions\Documento\EditarDocumentoAction;
 use App\Application\Actions\Documento\CambiarEstadoAction;
+use App\Application\Actions\Documento\EliminarDocumentoAction;
 //Sexo
 use App\Application\Actions\Sexo\ListarSexoAction;
 use App\Application\Actions\Sexo\RegistrarSexoAction;
 use App\Application\Actions\Sexo\ObtenerSexoAction;
 use App\Application\Actions\Sexo\EditarSexoAction;
 use App\Application\Actions\Sexo\CambiarEstadoSexo;
+use App\Application\Actions\Sexo\EliminarSexoAction;
 //País
 use App\Application\Actions\Pais\ListarPaisAction;
 use App\Application\Actions\Pais\RegistrarPaisAction;
 use App\Application\Actions\Pais\ObtenerDatosPaisAction;
 use App\Application\Actions\Pais\EditarPaisAction;
 use App\Application\Actions\Pais\CambiarEstadoPaisAction;
+use App\Application\Actions\Pais\EliminarPaisAction;
 //Departamento
 use App\Application\Actions\Departamento\ListarDepartamentoAction;
 use App\Application\Actions\Departamento\RegistrarDepartamentoAction;
@@ -77,6 +80,7 @@ use App\Application\Actions\Turnos\RegistrarTurnosAction;
 use App\Application\Actions\Turnos\ObtenerDatosTurnosAction;
 use App\Application\Actions\Turnos\EditarTurnosAction;
 use App\Application\Actions\Turnos\CambiarEstadoTurnosAction;
+use App\Application\Actions\Turnos\EliminarTurnosAction;
 //Rol
 use App\Application\Actions\Rol\CambiarEstadoRolAction;
 use App\Application\Actions\Rol\EditarRolAction;
@@ -164,6 +168,7 @@ return function (App $app) {
         $group->get('/ObtenerDatosDocumento/{Id_Documentos}', ObtenerDatosAction::class);
         $group->put('', EditarDocumentoAction::class);
         $group->patch('/{Id_Documentos}/{Estado}', CambiarEstadoAction::class);
+        $group->delete('/{Id_Documentos}', EliminarDocumentoAction::class);
     });
 
     $app->group('/Sexo', function (Group $group) {
@@ -172,6 +177,7 @@ return function (App $app) {
         $group->get('/ObtenerSexo/{Id_Sexo}', ObtenerSexoAction::class);
         $group->put('', EditarSexoAction::class);
         $group->patch('/{Id_Sexo}/{Estado}', CambiarEstadoSexo::class);
+        $group->delete('/{Id_Sexo}', EliminarSexoAction::class);
     });
 
     $app->group('/Pais', function (Group $group) {
@@ -180,6 +186,7 @@ return function (App $app) {
         $group->get('/ObtenerPais/{Id_Pais}', ObtenerDatosPaisAction::class);
         $group->put('', EditarPaisAction::class);
         $group->patch('/{Id_Pais}/{Estado}', CambiarEstadoPaisAction::class);
+        $group->delete('/{Id_Pais}', EliminarPaisAction::class);
     });
 
     $app->group('/Departamento', function (Group $group) {
@@ -223,6 +230,7 @@ return function (App $app) {
         $group->get('/ObtenerTurnos/{Id_Turno}', ObtenerDatosTurnosAction::class);
         $group->put('', EditarTurnosAction::class);
         $group->patch('/{Id_Turno}/{Estado}', CambiarEstadoTurnosAction::class);
+        $group->delete('/{Id_Turno}', EliminarTurnosAction::class);
     });
 
     $app->group('/Rol', function (Group $group) {
