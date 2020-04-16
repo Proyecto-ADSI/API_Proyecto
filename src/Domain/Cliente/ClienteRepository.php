@@ -22,5 +22,13 @@ interface ClienteRepository{
     public function CambiarEstadoCliente(int $Id_Cliente, int $Estado);
 
     public function ConsultarUltimoRegistrado();
+
+    public function ImportarClientes(ClienteImportado $Cliente);
+
+    public function ListarClienteImportados();
+
+    public function ValidarUbicacionCliente(?string $Municipio, ?string $Lugar);
+
+    public function ValidarOperadorCliente(string $operador);
     
 }

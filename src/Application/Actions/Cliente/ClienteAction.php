@@ -10,6 +10,7 @@ use App\Domain\DBL\DBLRepository;
 use App\Domain\Departamento\DepartamentoRepository;
 use App\Domain\Plan_Corporativo\Plan_CorporativoRepository;
 use App\Domain\Doc_Soporte\Doc_SoporteRepository;
+use App\Domain\Linea\LineaRepository;
 use App\Domain\Municipio\MunicipioRepository;
 use App\Domain\Pais\PaisRepository;
 use App\Domain\SubTipo\SubTipoRepository;
@@ -27,6 +28,7 @@ abstract class ClienteAction extends Action
     protected $MunicipioRepository;
     protected $DepartamentoRepository;
     protected $PaisRepository;
+    protected $LineaRepository;
 
 
     public function __construct(
@@ -40,8 +42,8 @@ abstract class ClienteAction extends Action
     SubTipoRepository $SubTipoRepository,
     MunicipioRepository $MunicipioRepository,
     DepartamentoRepository $DepartamentoRepository,
-    PaisRepository $PaisRepository
-    
+    PaisRepository $PaisRepository,
+    LineaRepository $LineaRepository
     )
     {
         parent::__construct($logger);
@@ -54,5 +56,6 @@ abstract class ClienteAction extends Action
         $this->MunicipioRepository = $MunicipioRepository;
         $this->DepartamentoRepository = $DepartamentoRepository;
         $this->PaisRepository = $PaisRepository;
+        $this->LineaRepository = $LineaRepository;
     }
 }

@@ -14,12 +14,15 @@ class ObtenerCliente extends ClienteAction
     private $Documentos_Soporte;
     private $Info_Cliente;
     private $Ubicacion;
+    private $DetalleLineas;
 
     protected function action(): Response
     {
         // Obtener información del cliente
         $Id_Cliente = (int) $this->resolveArg("Id_Cliente");
         $this->Cliente = $this->ClienteRepository->ObtenerCliente($Id_Cliente);
+
+        
 
         // Información de ubicación
         $Id_BarrioVereda = (int) $this->Cliente['Id_Barrios_Veredas'];
@@ -41,13 +44,14 @@ class ObtenerCliente extends ClienteAction
             $Pais = $this->PaisRepository->ObtenerDatos($Id_Pais);
 
             $this->Ubicacion =  array_merge($BarrioVereda, $SubTipo, $Municipio, $Departamento, $Pais);
+
+            
         }
 
         // Obtener datos básicos de lineas del cliente
-        $Id_DBL = (int) $this->Cliente['Id_DBL'];
-        $this->DBL = $this->DBLRepository->ListarDBL($Id_DBL);
 
-
+        $this->DBL = $this->DBLRepository->ListarDBL($Id_Cliente);
+   
         // Validar si tiene plan corporativo
         $Id_Plan_Corporativo = (int) $this->DBL["Id_Plan_Corporativo"];
 
@@ -75,14 +79,27 @@ class ObtenerCliente extends ClienteAction
             $this->Info_Cliente = array_merge($this->Cliente, $this->DBL);
         }
 
-        if(empty($this->Ubicacion)){
+        // Agregar información de ubicación
+        if(!empty($this->Ubicacion)){
 
-            return  $this->respondWithData($this->Info_Cliente);
-        
-        }else{
-           
             $this->Info_Cliente = array_merge($this->Info_Cliente, $this->Ubicacion);
-            return  $this->respondWithData($this->Info_Cliente);
-        }        
+        }
+
+        // Agregar detalle líneas.
+        $this->DetalleLineas = $this->DBLRepository->ConsultarDetalleLineas( (int) $this->DBL["Id_DBL"]);;
+
+
+        if(!empty($this->DetalleLineas)){
+
+            $arrayDetalle = array(
+                'Detalle_Lineas' => $this->DetalleLineas
+            );
+
+            $this->Info_Cliente = array_merge($this->Info_Cliente,$arrayDetalle);
+
+        }   
+
+        return  $this->respondWithData($this->Info_Cliente);
+        
     }
 }

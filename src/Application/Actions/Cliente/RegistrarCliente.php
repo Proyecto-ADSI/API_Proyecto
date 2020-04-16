@@ -7,6 +7,7 @@ namespace App\Application\Actions\Cliente;
 use App\Domain\Cliente\Cliente;
 use App\Domain\DBL\DBL;
 use App\Domain\Doc_Soporte\Doc_Soporte;
+use App\Domain\Linea\Linea;
 use App\Domain\Plan_Corporativo\Plan_Corporativo;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -16,9 +17,24 @@ class RegistrarCliente extends ClienteAction
     {
         $campos = $this->getFormData();
 
-        // return $this->respondWithData(["ok" => $campos]);
+        // Registrar Cliente
+        $Cliente = new Cliente(
+            NULL,
+            $campos->NIT_CDV,
+            $campos->Razon_Social,
+            $campos->Telefono,
+            $campos->Encargado,
+            $campos->Ext_Tel_Contacto,
+            $campos->Direccion,
+            $campos->Barrio_Vereda,
+            NULL
+        );  
 
+        $this->ClienteRepository->RegistrarCliente($Cliente);
 
+        $infoCliente = $this->ClienteRepository->ConsultarUltimoRegistrado();
+
+        
         // Validar si se registra el plan corporativo
 
         if ($campos->Validacion_PLan_C) {
@@ -46,8 +62,9 @@ class RegistrarCliente extends ClienteAction
                     (int) $InfoIdDoc['Id_Documentos'],
                     $campos->Fecha_Inicio,
                     $campos->Fecha_Fin,
+                    $campos->Clausula,
                     $campos->Descripcion,
-                    $campos->Estado_Plan_Corporativo,
+                    NULL
                 );
 
                 $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($Plan_Corporativo);
@@ -59,8 +76,9 @@ class RegistrarCliente extends ClienteAction
                     NULL,
                     $campos->Fecha_Inicio,
                     $campos->Fecha_Fin,
+                    $campos->Clausula,
                     $campos->Descripcion,
-                    $campos->Estado_Plan_Corporativo
+                    NULL
                 );
 
                 $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($Plan_Corporativo);
@@ -72,17 +90,14 @@ class RegistrarCliente extends ClienteAction
 
             $DBL = new DBL(
                 NULL,
+                (int) $infoCliente['Id_Cliente'],
                 $campos->Id_Operador,
                 (int) $InfoIdPlan['Id_Plan_Corporativo'],
                 $campos->Cantidad_Lineas,
                 $campos->Valor_Mensual,
-                $campos->Cantidad_Minutos,
-                $campos->Cantidad_Navegacion,
-                $campos->Llamadas_Internacionales,
-                $campos->Mensajes_Texto,
-                $campos->Aplicaciones,
-                $campos->Roaming_Internacional,
-                $campos->Estado_DBL
+                $campos->Id_Calificacion_Operador,
+                $campos->Razones,
+                NULL
             );
 
             $this->DBLRepository->RegistrarDBL($DBL);
@@ -92,44 +107,48 @@ class RegistrarCliente extends ClienteAction
             // Datos básicos líneas sin plan corporativo
             $DBL = new DBL(
                 NULL,
+                (int) $infoCliente['Id_Cliente'],
                 $campos->Id_Operador,
                 NULL,
                 $campos->Cantidad_Lineas,
                 $campos->Valor_Mensual,
-                $campos->Cantidad_Minutos,
-                $campos->Cantidad_Navegacion,
-                $campos->Llamadas_Internacionales,
-                $campos->Mensajes_Texto,
-                $campos->Aplicaciones,
-                $campos->Roaming_Internacional,
-                $campos->Estado_DBL
+                $campos->Id_Calificacion_Operador,
+                $campos->Razones,
+                NULL
             );
 
             $this->DBLRepository->RegistrarDBL($DBL);
         }
 
-
         //Id_Datos_Basicos_Lineas
         $InfoIdDBL = $this->DBLRepository->ConsultarUltimoRegistrado();
 
-        // Registrar Cliente
-        $Cliente = new Cliente(
-            NULL,
-            (int)$InfoIdDBL['Id_DBL'],
-            $campos->NIT_CDV,
-            $campos->Razon_Social,
-            $campos->Telefono,
-            $campos->Encargado,
-            $campos->Extension,
-            $campos->Telefono_Contacto,
-            $campos->Direccion,
-            $campos->Barrio_Vereda,
-            $campos->Estado_Cliente
-        );
+        $arrayLineas = $campos->DetalleLineas;
+        $validacion = NULL;
 
-        $respuesta = $this->ClienteRepository->RegistrarCliente($Cliente);
+        foreach($arrayLineas as $lineaItem){
+
+            $linea = new Linea(
+                NULL,
+                NULL,
+                $lineaItem->minutos,
+                $lineaItem->navegacion,
+                $lineaItem->mensajes,
+                $lineaItem->redes,
+                $lineaItem->llamadas,
+                $lineaItem->roaming,
+                $lineaItem->cargo
+            );
+            
+            
+            $this->LineaRepository->RegistrarLinea($linea);
+
+            $infoIdLinea = $this->LineaRepository->ConsultarUltimaLinea();
+
+            $validacion = $this->LineaRepository->RegistrarDetalleLinea((int)$infoIdLinea['Id_Linea'], (int) $InfoIdDBL['Id_DBL']);
+        }
 
         // Respuesta es TRUE || FALSE
-        return $this->respondWithData(["ok" => $respuesta]);
+        return $this->respondWithData(["ok" => $validacion]);
     }
 }

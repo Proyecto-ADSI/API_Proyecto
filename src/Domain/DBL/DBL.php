@@ -10,16 +10,13 @@ class DBL implements JsonSerializable
 {
 
     private $Id_DBL;     
+    private $Id_Cliente;     
     private $Id_Operador;    
     private $Id_Plan_Corporativo;    
-    private $Cantidad_Lineas;    
-    private $Valor_Mensual;    
-    private $Cantidad_Minutos;    
-    private $Cantidad_Navegacion;    
-    private $Llamadas_Internacionales;    
-    private $Mensajes_Texto;    
-    private $Aplicaciones;    
-    private $Roaming_Internacional;    
+    private $Cantidad_Total_Lineas;    
+    private $Valor_Total_Mensual;    
+    private $Id_Calificacion_Operador;    
+    private $Razones;       
     private $Estado_DBL;    
 
      public function __GET($attr){
@@ -28,30 +25,24 @@ class DBL implements JsonSerializable
 
     function __construct(
         ?int $Id_DBL,
-        int $Id_Operador,
+        int $Id_Cliente,
+        ?int $Id_Operador,
         ?int $Id_Plan_Corporativo,
-        int $Cantidad_Lineas,
-        string $Valor_Mensual,
-        string $Cantidad_Minutos,
-        string $Cantidad_Navegacion,
-        string $Llamadas_Internacionales,
-        string $Mensajes_Texto,
-        string $Aplicaciones,
-        string $Roaming_Internacional,
+        ?int $Cantidad_Total_Lineas,
+        ?string $Valor_Total_Mensual,
+        ?int $Id_Calificacion_Operador,
+        ?string $Razones,
         ?int $Estado_DBL
         ) 
     {
         $this->Id_DBL = $Id_DBL;
+        $this->Id_Cliente = $Id_Cliente;
         $this->Id_Operador = $Id_Operador;
         $this->Id_Plan_Corporativo = $Id_Plan_Corporativo;
-        $this->Cantidad_Lineas = $Cantidad_Lineas;
-        $this->Valor_Mensual = $Valor_Mensual;
-        $this->Cantidad_Minutos = $Cantidad_Minutos;
-        $this->Cantidad_Navegacion = $Cantidad_Navegacion;
-        $this->Llamadas_Internacionales = $Llamadas_Internacionales;
-        $this->Mensajes_Texto = $Mensajes_Texto;
-        $this->Aplicaciones = $Aplicaciones;
-        $this->Roaming_Internacional = $Roaming_Internacional;
+        $this->Cantidad_Total_Lineas = $Cantidad_Total_Lineas;
+        $this->Valor_Total_Mensual = $Valor_Total_Mensual;
+        $this->Id_Calificacion_Operador = $Id_Calificacion_Operador;
+        $this->Razones = $Razones;
         $this->Estado_DBL = $Estado_DBL;
     }
 
@@ -60,16 +51,13 @@ class DBL implements JsonSerializable
     {
         return [
             "Id_DBL"=>$this->Id_DBL,
+            "Id_Cliente"=>$this->Id_Cliente,
             "Id_Operador"=>$this->Id_Operador,
             "Id_Plan_Corporativo"=>$this->Id_Plan_Corporativo,
-            "Cantidad_Lineas"=>$this->Cantidad_Lineas,
-            "Valor_Mensual"=>$this->Valor_Mensual,
-            "Cantidad_Minutos"=>$this->Cantidad_Minutos,
-            "Cantidad_Navegacion"=>$this->Cantidad_Navegacion,
-            "Llamadas_Internacionales"=>$this->Llamadas_Internacionales,
-            "Mensajes_Texto"=>$this->Mensajes_Texto,
-            "Aplicaciones"=>$this->Aplicaciones,
-            "Roaming_Internacional"=>$this->Roaming_Internacional,
+            "Cantidad_Total_Lineas"=>$this->Cantidad_Total_Lineas,
+            "Valor_Total_Mensual"=>$this->Valor_Total_Mensual,
+            "Id_Calificacion_Operador"=>$this->Id_Calificacion_Operador,
+            "Razones"=>$this->Razones,
             "Estado_DBL"=>$this->Estado_DBL
         ];
     }
