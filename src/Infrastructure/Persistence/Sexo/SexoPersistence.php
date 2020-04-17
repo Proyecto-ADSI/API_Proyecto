@@ -96,6 +96,35 @@ class SexoPersistence implements SexoRepository
         }
     }
 
+    
+    public function ValidarEliminarSexo(int $Id_Sexo){
+        $sql = "SELECT Id_Sexo FROM empleados WHERE Id_Sexo = ?";
+ 
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1, $Id_Sexo);
+            $stm->execute();
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+ 
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function EliminarSexo(int $Id_Sexo){
+        $sql = "DELETE FROM sexos WHERE Id_Sexo = ?";
+ 
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1, $Id_Sexo);
+            
+            return $stm->execute();
+ 
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
 
     
 }

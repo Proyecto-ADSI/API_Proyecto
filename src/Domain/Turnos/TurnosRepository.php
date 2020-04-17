@@ -14,4 +14,8 @@ interface TurnosRepository {
     public function ObtenerDatosTurno(int $Id_Turno);
 
     public function EditarTurno(Turnos $Turnos);
+
+    public function ValidarEliminarTurno(int $Id_Turno);
+
+    public function EliminarTurno(int $Id_Turno);
 }
