@@ -101,7 +101,7 @@ class RegistrarCliente extends ClienteAction
             );
 
             $this->DBLRepository->RegistrarDBL($DBL);
-
+           
         } else {
 
             // Datos básicos líneas sin plan corporativo
@@ -137,7 +137,8 @@ class RegistrarCliente extends ClienteAction
                 $lineaItem->redes,
                 $lineaItem->llamadas,
                 $lineaItem->roaming,
-                $lineaItem->cargo
+                $lineaItem->cargo,
+                $lineaItem->grupo
             );
             
             

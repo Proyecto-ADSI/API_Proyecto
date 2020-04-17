@@ -23,8 +23,9 @@ class LineaPersistence implements LineaRepository
     
     public function RegistrarLinea(Linea $linea){
 
-        $sql = "INSERT INTO lineas(Linea, Minutos, Navegacion, Mensajes, Redes_Sociales, Llamadas_Inter, Roaming, Cargo_Basico)
-        VALUES (?,?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO lineas(Linea, Minutos, Navegacion, Mensajes, Redes_Sociales, 
+        Llamadas_Inter, Roaming, Cargo_Basico,Grupo)
+        VALUES (?,?,?,?,?,?,?,?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -36,6 +37,7 @@ class LineaPersistence implements LineaRepository
             $stm->bindValue(6, $linea->__GET("Llamadas_Inter"));
             $stm->bindValue(7, $linea->__GET("Roaming"));
             $stm->bindValue(8, $linea->__GET("Cargo_Basico"));
+            $stm->bindValue(9, $linea->__GET("Grupo"));
 
             $stm->execute();
 
