@@ -68,6 +68,35 @@ class SubTipoPersistence implements SubTipoRepository
             return $e->getMessage();
         }
       }
+      public function ValidarSubTipoEliminar(int $Id_SubTipo_Barrio_Vereda){
+        $sql = "SELECT Id_Subtipo_Barrio_Vereda FROM barrios_veredas WHERE Id_SubTipo_Barrio_Vereda = ?";
+   
+        try {
+          $stm = $this->db->prepare($sql);
+          $stm->bindValue(1, $Id_SubTipo_Barrio_Vereda);
+   
+          return $stm->execute();
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+      }
+
+      public function EliminarSubTipo(int $Id_SubTipo_Barrio_Vereda)
+      {
+        $sql = "DELETE  FROM subtipo_barrio_vereda WHERE Id_SubTipo_Barrio_Vereda = ?";
+   
+        try {
+          $stm = $this->db->prepare($sql);
+          $stm->bindValue(1, $Id_SubTipo_Barrio_Vereda);
+   
+          return $stm->execute();
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+      }
+        
   
       public function ObtenerDatosSubTipo(int $Id_SubTipo_Barrio_Vereda){
         $sql = "SELECT Id_SubTipo_Barrio_Vereda, SubTipo  FROM subtipo_barrio_vereda WHERE Id_SubTipo_Barrio_Vereda = ?";

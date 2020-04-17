@@ -53,6 +53,7 @@ use App\Application\Actions\Departamento\ObtenerDatosDepartamentoAction;
 use App\Application\Actions\Departamento\ConsultarDepartamentosPaisAction;
 use App\Application\Actions\Departamento\EditarDepartamentoAction;
 use App\Application\Actions\Departamento\CambiarEstadoDepartamentoAction;
+use App\Application\Actions\Departamento\EliminarDepartamentoAction;
 //Municipio
 use App\Application\Actions\Municipio\ListarMunicipioAction;
 use App\Application\Actions\Municipio\RegistrarMunicipioAction;
@@ -60,12 +61,14 @@ use App\Application\Actions\Municipio\ObtenerDatosMunicipioAction;
 use App\Application\Actions\Municipio\EditarMunicipioAction;
 use App\Application\Actions\Municipio\ConsultarMunicipiosDepartamentoAction;
 use App\Application\Actions\Municipio\CambiarEstadoMunicipioAction;
+use App\Application\Actions\Municipio\EliminarMunicipioAction;
 //SubTipo
 use App\Application\Actions\SubTipo\ListarSubTipoAction;
 use App\Application\Actions\SubTipo\RegistrarSubTipoAction;
 use App\Application\Actions\SubTipo\ObtenerSubTipoAction;
 use App\Application\Actions\SubTipo\EditarSubTipoAction;
 use App\Application\Actions\SubTipo\CambiarEstadoSubTipoAction;
+use App\Application\Actions\SubTipo\EliminarSubTipoAction;
 //BarriosVeredas
 use App\Application\Actions\BarriosVeredas\ListarBarriosVeredasAction;
 use App\Application\Actions\BarriosVeredas\RegistrarBarriosVeredasAction;
@@ -199,6 +202,7 @@ return function (App $app) {
         $group->get('/ConsultarDepartamento/{Id_Pais}', ConsultarDepartamentosPaisAction::class);
         $group->put('', EditarDepartamentoAction::class);
         $group->patch('/{Id_Departamento}/{Estado}', CambiarEstadoDepartamentoAction::class);
+        $group->delete('/{Id_Departamento}', EliminarDepartamentoAction::class);
     });
 
     $app->group('/Municipio', function (Group $group) {
@@ -208,9 +212,8 @@ return function (App $app) {
         $group->get('/ConsultarMunicipio/{Id_Departamento}', ConsultarMunicipiosDepartamentoAction::class);
         $group->put('', EditarMunicipioAction::class);
         $group->patch('/{Id_Municipio}/{Estado}', CambiarEstadoMunicipioAction::class);
+        $group->delete('/{Id_Municipio}', EliminarMunicipioAction::class);
     });
-
-
 
     $app->group('/SubTipo', function (Group $group) {
         $group->post('', RegistrarSubTipoAction::class);
@@ -218,6 +221,7 @@ return function (App $app) {
         $group->get('/ObtenerSubTipo/{Id_SubTipo_Barrio_Vereda}', ObtenerSubTipoAction::class);
         $group->put('', EditarSubTipoAction::class);
         $group->patch('/{Id_SubTipo_Barrio_Vereda}/{Estado}', CambiarEstadoSubTipoAction::class);
+        $group->delete('/{Id_SubTipo_Barrio_Vereda}', EliminarSubTipoAction::class);
     });
     $app->group('/BarriosVeredas', function (Group $group) {
         $group->post('', RegistrarBarriosVeredasAction::class);

@@ -13,5 +13,9 @@ interface SubTipoRepository {
 
     public function ObtenerDatosSubTipo(int $Id_SubTipo_Barrio_Vereda);
 
+    public function ValidarSubTipoEliminar(int $Id_SubTipo_Barrio_Vereda);
+
+    public function EliminarSubTipo(int $Id_SubTipo_Barrio_Vereda);
+
     public function EditarSubTipo(SubTipo $SubTipo);
 }

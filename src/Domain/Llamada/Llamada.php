@@ -9,7 +9,7 @@ use JsonSerializable;
 class Llamada implements JsonSerializable
 {
     private $Id_Llamada;
-    private $Id_DBL;
+    private $Id_Cliente;
     private $Id_Usuario;
     private $Id_Estado_Llamada;
     private $Persona_Responde;
@@ -22,12 +22,12 @@ class Llamada implements JsonSerializable
     }
 
     function __construct(
-        ?int $Id_Llamada, int $Id_DBL, int $Id_Usuario,string $Id_Estado_Llamada, 
+        ?int $Id_Llamada, int $Id_Cliente, int $Id_Usuario,string $Id_Estado_Llamada, 
         string $Persona_Responde,string $Fecha_Llamada,string $Info_Habeas_Data,string $Observacion
     )
     {   
         $this->Id_Llamada = $Id_Llamada;
-        $this->Id_DBL = $Id_DBL;
+        $this->Id_Cliente = $Id_Cliente;
         $this->Id_Usuario = $Id_Usuario;
         $this->Id_Estado_Llamada = $Id_Estado_Llamada;
         $this->Persona_Responde = $Persona_Responde;
@@ -41,7 +41,7 @@ class Llamada implements JsonSerializable
     {
         return[
             "Id_Llamada" => $this->Id_Llamada,
-            "Id_DBL" => $this->Id_DBL,
+            "Id_Cliente" => $this->Id_Cliente,
             "Id_Usuario" => $this->Id_Usuario,
             "Id_Estado_Llamada" => $this->Id_Estado_Llamada,
             "Persona_Responde" => $this->Persona_Responde,

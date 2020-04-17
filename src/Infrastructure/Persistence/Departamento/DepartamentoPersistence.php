@@ -101,6 +101,39 @@ class DepartamentoPersistence implements DepartamentoRepository
         }
     }
 
+    public function EliminarDepartamento(int $Id_Departamento){
+
+        $sql = "DELETE FROM departamento WHERE Id_Departamento = ?";
+
+        try{
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Departamento);
+
+            return $stm->execute();
+
+        }catch(Exception $e){
+
+            return $e->getMessage();
+        }
+    }
+
+    public function ValidarDepartamentoEliminar(int $Id_Departamento){
+
+        $sql = "SELECT Id_Departamento FROM municipio WHERE Id_Departamento = ?";
+
+        try{
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Departamento);
+            $stm->execute();
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+
+        }catch(Exception $e){
+
+            return $e->getMessage();
+        }
+    }
+
+
     public function ConsultarDepartamentosPais(int $Id_Pais){
 
         $sql = "SELECT Id_Departamento, Nombre_Departamento FROM departamento WHERE Id_Pais = ?";
