@@ -8,7 +8,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 class CargarDatosUbicacion extends ClienteAction
 {
-
     protected function action(): Response
     {
         $DatosUbicacion = [];
