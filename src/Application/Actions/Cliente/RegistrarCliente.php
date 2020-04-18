@@ -17,6 +17,7 @@ class RegistrarCliente extends ClienteAction
     {
         $campos = $this->getFormData();
 
+       
         // Registrar Cliente
         $Cliente = new Cliente(
             NULL,
@@ -127,20 +128,35 @@ class RegistrarCliente extends ClienteAction
         $validacion = NULL;
 
         foreach($arrayLineas as $lineaItem){
-
-            $linea = new Linea(
-                NULL,
-                NULL,
-                $lineaItem->minutos,
-                $lineaItem->navegacion,
-                $lineaItem->mensajes,
-                $lineaItem->redes,
-                $lineaItem->llamadas,
-                $lineaItem->roaming,
-                $lineaItem->cargo,
-                $lineaItem->grupo
-            );
-            
+           
+            if(!empty($lineaItem->numero)){
+                
+                $linea = new Linea(
+                    NULL,
+                    $lineaItem->numero,
+                    $lineaItem->minutos,
+                    $lineaItem->navegacion,
+                    $lineaItem->mensajes,
+                    $lineaItem->redes,
+                    $lineaItem->llamadas,
+                    $lineaItem->roaming,
+                    $lineaItem->cargo,
+                    $lineaItem->grupo
+                );
+            }else{
+                $linea = new Linea(
+                    NULL,
+                    NULL,
+                    $lineaItem->minutos,
+                    $lineaItem->navegacion,
+                    $lineaItem->mensajes,
+                    $lineaItem->redes,
+                    $lineaItem->llamadas,
+                    $lineaItem->roaming,
+                    $lineaItem->cargo,
+                    $lineaItem->grupo
+                );
+            }
             
             $this->LineaRepository->RegistrarLinea($linea);
 
