@@ -78,7 +78,7 @@ class EditarCliente extends ClienteAction {
                 NULL
             );
 
-            $this->DBLRepository->EditarDBL($DBL);
+           $this->DBLRepository->EditarDBL($DBL);
 
         } else {
 
@@ -103,49 +103,41 @@ class EditarCliente extends ClienteAction {
 
         foreach($arrayLineas as $lineaItem){
 
+            // $linea = null;
 
-            if(!empty($lineaItem->id)){
+            $linea = new Linea(
+                NULL,
+                NULL,
+                $lineaItem->minutos,
+                $lineaItem->navegacion,
+                $lineaItem->mensajes,
+                $lineaItem->redes,
+                $lineaItem->llamadas,
+                $lineaItem->roaming,
+                $lineaItem->cargo,
+                $lineaItem->grupo
+            );
 
-                $linea = new Linea(
-                    $lineaItem->id,
-                    NULL,
-                    $lineaItem->minutos,
-                    $lineaItem->navegacion,
-                    $lineaItem->mensajes,
-                    $lineaItem->redes,
-                    $lineaItem->llamadas,
-                    $lineaItem->roaming,
-                    $lineaItem->cargo,
-                    $lineaItem->grupo
-                );
+            if($lineaItem->numero !== "0"){
 
-            }else{
-
-                $linea = new Linea(
-                    NULL,
-                    $lineaItem->linea,
-                    $lineaItem->minutos,
-                    $lineaItem->navegacion,
-                    $lineaItem->mensajes,
-                    $lineaItem->redes,
-                    $lineaItem->llamadas,
-                    $lineaItem->roaming,
-                    $lineaItem->cargo,
-                    $lineaItem->grupo
-                );
-
-
+                $linea->__set("Linea",$lineaItem->numero);
             }
 
+            if($lineaItem->id > 0){
 
-            
-            
-            
-            // $this->LineaRepository->RegistrarLinea($linea);
+                $linea->__set("Id_Linea",$lineaItem->id);
 
-            // $infoIdLinea = $this->LineaRepository->ConsultarUltimaLinea();
+                // Editar
+             $validacion = $this->LineaRepository->EditarLinea($linea);
 
-            // $validacion = $this->LineaRepository->RegistrarDetalleLinea((int)$infoIdLinea['Id_Linea'], (int) $InfoIdDBL['Id_DBL']);
+              
+            }else{
+
+                // Agregar
+                $this->LineaRepository->RegistrarLinea($linea);
+                $infoIdLinea = $this->LineaRepository->ConsultarUltimaLinea();
+                $validacion =  $this->LineaRepository->RegistrarDetalleLinea((int)$infoIdLinea['Id_Linea'], $campos->Id_DBL);
+            }
         }
 
         // Editar Cliente
@@ -160,6 +152,8 @@ class EditarCliente extends ClienteAction {
             $campos->Barrio_Vereda,
             NULL
         );
+        
+        // return $this->respondWithData(["ok" => $validacion]);
 
         $respuesta = $this->ClienteRepository->EditarCliente($Cliente);
 

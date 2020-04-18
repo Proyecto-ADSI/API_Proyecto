@@ -99,23 +99,21 @@ class ClientePersistence implements ClienteRepository
     public function EditarCliente(Cliente $Cliente)
     {
 
-        $sql = "UPDATE Directorio SET Id_DBL = ?, NIT_CDV = ?, Razon_Social = ?, Telefono = ?, 
-        Encargado = ?, Extension = ?, Telefono_Contacto = ?, Direccion = ?, 
-        Id_Barrios_Veredas = ? WHERE Id_Cliente = ?";
+        $sql = "UPDATE Directorio SET NIT_CDV = ?, Razon_Social = ?, Telefono = ?, 
+        Encargado = ?, Ext_Tel_Contacto = ?, Direccion = ?, Id_Barrios_Veredas = ? 
+        WHERE Id_Cliente = ?";
 
         try {
 
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1, $Cliente->__GET("Id_DBL"));
-            $stm->bindValue(2, $Cliente->__GET("NIT_CDV"));
-            $stm->bindValue(3, $Cliente->__GET("Razon_Social"));
-            $stm->bindValue(4, $Cliente->__GET("Telefono"));
-            $stm->bindValue(5, $Cliente->__GET("Encargado"));
-            $stm->bindValue(6, $Cliente->__GET("Extension"));
-            $stm->bindValue(7, $Cliente->__GET("Telefono_Contacto"));
-            $stm->bindValue(8, $Cliente->__GET("Direccion"));
-            $stm->bindValue(9, $Cliente->__GET("Id_Barrios_Veredas"));
-            $stm->bindValue(10, $Cliente->__GET("Id_Cliente"));
+            $stm->bindValue(1, $Cliente->__GET("NIT_CDV"));
+            $stm->bindValue(2, $Cliente->__GET("Razon_Social"));
+            $stm->bindValue(3, $Cliente->__GET("Telefono"));
+            $stm->bindValue(4, $Cliente->__GET("Encargado"));
+            $stm->bindValue(5, $Cliente->__GET("Ext_Tel_Contacto"));
+            $stm->bindValue(6, $Cliente->__GET("Direccion"));
+            $stm->bindValue(7, $Cliente->__GET("Id_Barrios_Veredas"));
+            $stm->bindValue(8, $Cliente->__GET("Id_Cliente"));
 
             return $stm->execute();
         } catch (Exception $e) {

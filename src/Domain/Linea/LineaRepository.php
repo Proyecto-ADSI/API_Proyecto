@@ -9,7 +9,7 @@ interface LineaRepository{
 
     public function ConsultarUltimaLinea();
 
-    // public function EditarLinea(Linea $linea);
+    public function EditarLinea(Linea $linea);
 
     public function RegistrarDetalleLinea(int $IdLinea, int $IdDBL);
 }

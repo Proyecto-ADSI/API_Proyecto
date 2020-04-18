@@ -91,26 +91,20 @@ class DBLPersistence implements DBLRepository
     {
 
         $sql = "UPDATE Datos_Basicos_lineas SET  Id_Operador = ?, Id_Plan_Corporativo = ?,
-        Cantidad_Lineas = ?, Valor_Mensual = ?, Cantidad_Minutos = ?, Cantidad_Navegacion = ?,
-        Llamadas_Internacionales = ?, Mensajes_Texto = ?,Aplicaciones = ?, Roaming_Internacional = ?, Estado_DBL = ? 
-        WHERE Id_DBL = ?";
-
+        Cantidad_Total_Lineas = ?, Valor_Total_Mensual = ?, Id_Calificacion_Operador = ?,
+        Razones = ? WHERE Id_DBL = ?";
+        
         try {
 
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $DBL->__GET("Id_Operador"));
             $stm->bindValue(2, $DBL->__GET("Id_Plan_Corporativo"));
-            $stm->bindValue(3, $DBL->__GET("Cantidad_Lineas"));
-            $stm->bindValue(4, $DBL->__GET("Valor_Mensual"));
-            $stm->bindValue(5, $DBL->__GET("Cantidad_Minutos"));
-            $stm->bindValue(6, $DBL->__GET("Cantidad_Navegacion"));
-            $stm->bindValue(7, $DBL->__GET("Llamadas_Internacionales"));
-            $stm->bindValue(8, $DBL->__GET("Mensajes_Texto"));
-            $stm->bindValue(9, $DBL->__GET("Aplicaciones"));
-            $stm->bindValue(10, $DBL->__GET("Roaming_Internacional"));
-            $stm->bindValue(11, $DBL->__GET("Estado_DBL"));
-            $stm->bindValue(12, $DBL->__GET("Id_DBL"));
-
+            $stm->bindValue(3, $DBL->__GET("Cantidad_Total_Lineas"));
+            $stm->bindValue(4, $DBL->__GET("Valor_Total_Mensual"));
+            $stm->bindValue(5, $DBL->__GET("Id_Calificacion_Operador"));
+            $stm->bindValue(6, $DBL->__GET("Razones"));
+            $stm->bindValue(7, $DBL->__GET("Id_DBL"));
+            
             return $stm->execute();
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -168,7 +162,7 @@ class DBLPersistence implements DBLRepository
     public function ConsultarDetalleLineas(int $DBL)
     {
 
-        $sql = " SELECT d.Id_DBL, l.Id_Linea, IFNULL(l.Linea, '-') Linea, l.Minutos, l.Navegacion, l.Mensajes, l.Redes_Sociales, l.Llamadas_Inter,
+        $sql = " SELECT d.Id_DBL, l.Id_Linea, IFNULL(l.Linea, '0') Linea, l.Minutos, l.Navegacion, l.Mensajes, l.Redes_Sociales, l.Llamadas_Inter,
         l.Roaming, l.Cargo_Basico, l.Grupo FROM Detalle_Lineas d JOIN Lineas l ON(d.Id_Linea = l.Id_Linea) WHERE d.Id_DBL = ?";
 
         try {

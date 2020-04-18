@@ -20,9 +20,14 @@ class Linea implements JsonSerializable
     private $Cargo_Basico;    
     private $Grupo;    
 
-     public function __GET($attr){
+     public function __get($attr){
         return $this->$attr;
-    }   
+    }
+    
+    public function __set($name, $value)
+    {
+        $this->$name = $value;
+    }
 
     function __construct(
         ?int $Id_Linea,
