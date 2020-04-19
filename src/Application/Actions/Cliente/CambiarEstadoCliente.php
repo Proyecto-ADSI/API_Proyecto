@@ -13,10 +13,10 @@ class CambiarEstadoCliente extends ClienteAction
         $Id_Cliente = (int) $this->resolveArg('Id_Cliente_CE');
 
         $Estado = (int) $this->resolveArg('Estado');
-
+        
         $respuesta = $this->ClienteRepository->CambiarEstadoCliente($Id_Cliente,$Estado);
 
-        return $this->respondWithData($respuesta);
+        return $this->respondWithData(["ok" => $respuesta]);
 
     }
 }

@@ -139,13 +139,22 @@ class ClientePersistence implements ClienteRepository
 
     public function CambiarEstadoCliente(int $Id_Cliente, int $Estado)
     {
+        
         $sql = "UPDATE directorio SET Estado_Cliente = ? WHERE Id_Cliente = ?";
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Estado);
             $stm->bindValue(2, $Id_Cliente);
 
-            return $stm->execute();
+            $stm->execute();
+
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                return true;
+            } else {
+                return $stm->errorInfo();
+            }
+
         } catch (Exception $e) {
 
             return "Error al cambiar estado " + $e->getMessage();
