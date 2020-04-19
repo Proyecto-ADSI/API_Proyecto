@@ -132,7 +132,26 @@ class LineaPersistence implements LineaRepository
 
             return $e->getMessage();
         }
+    }
 
+    public function EliminarLinea(int $IdLinea){
 
+        $sql = "DELETE FROM lineas WHERE Id_Linea = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1, $IdLinea);
+            $stm->execute();
+
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                return true;
+            } else {
+                return $stm->errorInfo();
+            }
+        } catch (\Exception $e) {
+
+            return $e->getMessage();
+        }
     }
 }

@@ -50,7 +50,7 @@ class ObtenerCliente extends ClienteAction
 
         // Obtener datos básicos de lineas del cliente
 
-        $this->DBL = $this->DBLRepository->ListarDBL($Id_Cliente);
+        $this->DBL = $this->DBLRepository->ListarDBL($Id_Cliente,1);
    
         // Validar si tiene plan corporativo
         $Id_Plan_Corporativo = (int) $this->DBL["Id_Plan_Corporativo"];

@@ -56,7 +56,7 @@ class DBLPersistence implements DBLRepository
         }
     }
 
-    public function ListarDBL(int $Id_Cliente)
+    public function ListarDBL(int $Id_Cliente, int $Estado_DBL)
     {
 
         $sql = "SELECT dbl.Id_DBL, dbl.Id_Cliente, dbl.Id_Operador, o.Nombre_Operador,  
@@ -72,7 +72,7 @@ class DBLPersistence implements DBLRepository
 
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Id_Cliente);
-            $stm->bindValue(2, 1);
+            $stm->bindValue(2, $Estado_DBL);
 
             $stm->execute();
 
@@ -159,7 +159,7 @@ class DBLPersistence implements DBLRepository
         }
     }
 
-    public function ConsultarDetalleLineas(int $DBL)
+    public function ConsultarDetalleLineas(int $Id_DBL)
     {
 
         $sql = " SELECT d.Id_DBL, l.Id_Linea, IFNULL(l.Linea, '0') Linea, l.Minutos, l.Navegacion, l.Mensajes, l.Redes_Sociales, l.Llamadas_Inter,
@@ -168,7 +168,7 @@ class DBLPersistence implements DBLRepository
         try {
 
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1, $DBL);
+            $stm->bindValue(1, $Id_DBL);
 
             $stm->execute();
 
@@ -181,5 +181,26 @@ class DBLPersistence implements DBLRepository
         } catch (\Exception $e) {
             return $e->getMessage();
         } 
+    }
+
+    public function EliminarDetalleLineas(int $Id_DBL){
+
+        $sql = "DELETE FROM detalle_lineas WHERE Id_DBL = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1, $Id_DBL);
+            $stm->execute();
+
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                return true;
+            } else {
+                return $stm->errorInfo();
+            }
+        } catch (\Exception $e) {
+
+            return $e->getMessage();
+        }
     }
 }

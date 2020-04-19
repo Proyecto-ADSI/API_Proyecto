@@ -8,7 +8,7 @@ interface DBLRepository {
 
     public function RegistrarDBL(DBL $DBL);
 
-    public function ListarDBL(int $Id_Cliente);
+    public function ListarDBL(int $Id_Cliente, int $Estado_DBL);
 
     public function EditarDBL(DBL $DBL);
 
@@ -19,6 +19,8 @@ interface DBLRepository {
     public function ConsultarUltimoRegistrado();
     
     public function ConsultarDetalleLineas(int $DBL);
+
+    public function EliminarDetalleLineas(int $Id_DBL);
 
 }
 

@@ -17,7 +17,8 @@ class RegistrarCliente extends ClienteAction
     {
         $campos = $this->getFormData();
 
-       
+        $validacion = NULL;
+
         // Registrar Cliente
         $Cliente = new Cliente(
             NULL,
@@ -31,7 +32,7 @@ class RegistrarCliente extends ClienteAction
             NULL
         );  
 
-        $this->ClienteRepository->RegistrarCliente($Cliente);
+        $validacion = $this->ClienteRepository->RegistrarCliente($Cliente);
 
         $infoCliente = $this->ClienteRepository->ConsultarUltimoRegistrado();
 
@@ -125,27 +126,13 @@ class RegistrarCliente extends ClienteAction
         $InfoIdDBL = $this->DBLRepository->ConsultarUltimoRegistrado();
 
         $arrayLineas = $campos->DetalleLineas;
-        $validacion = NULL;
+        
 
-        foreach($arrayLineas as $lineaItem){
-           
-            if(!empty($lineaItem->numero)){
+        if(!empty($arrayLineas)){
+            foreach($arrayLineas as $lineaItem){
                 
                 $linea = new Linea(
                     NULL,
-                    $lineaItem->numero,
-                    $lineaItem->minutos,
-                    $lineaItem->navegacion,
-                    $lineaItem->mensajes,
-                    $lineaItem->redes,
-                    $lineaItem->llamadas,
-                    $lineaItem->roaming,
-                    $lineaItem->cargo,
-                    $lineaItem->grupo
-                );
-            }else{
-                $linea = new Linea(
-                    NULL,
                     NULL,
                     $lineaItem->minutos,
                     $lineaItem->navegacion,
@@ -156,13 +143,17 @@ class RegistrarCliente extends ClienteAction
                     $lineaItem->cargo,
                     $lineaItem->grupo
                 );
+
+                if(!empty($lineaItem->numero)){
+                    $linea->__set("Linea",$lineaItem->numero);
+                }
+                
+                $this->LineaRepository->RegistrarLinea($linea);
+    
+                $infoIdLinea = $this->LineaRepository->ConsultarUltimaLinea();
+    
+                $validacion = $this->LineaRepository->RegistrarDetalleLinea((int)$infoIdLinea['Id_Linea'], (int) $InfoIdDBL['Id_DBL']);
             }
-            
-            $this->LineaRepository->RegistrarLinea($linea);
-
-            $infoIdLinea = $this->LineaRepository->ConsultarUltimaLinea();
-
-            $validacion = $this->LineaRepository->RegistrarDetalleLinea((int)$infoIdLinea['Id_Linea'], (int) $InfoIdDBL['Id_DBL']);
         }
 
         // Respuesta es TRUE || FALSE
