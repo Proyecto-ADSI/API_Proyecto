@@ -36,15 +36,36 @@ class RegistrarCliente extends ClienteAction
 
         $infoCliente = $this->ClienteRepository->ConsultarUltimoRegistrado();
 
-        
+        $DBL = new DBL(
+            NULL,
+            (int) $infoCliente['Id_Cliente'],
+            $campos->Id_Operador,
+            NULL,
+            $campos->Cantidad_Lineas,
+            $campos->Valor_Mensual,
+            $campos->Id_Calificacion_Operador,
+            $campos->Razones,
+            NULL
+        );
+
         // Validar si se registra el plan corporativo
 
         if ($campos->Validacion_PLan_C) {
 
+            // Plan Corporativo sin documentos
+            $Plan_Corporativo = new Plan_Corporativo(
+                NULL,
+                NULL,
+                $campos->Fecha_Inicio,
+                $campos->Fecha_Fin,
+                $campos->Clausula,
+                $campos->Descripcion,
+                NULL
+            );
+
             if ($campos->Validacion_Doc_S) {
 
                 // Registrar documentos
-
                 $Doc_Soporte = new Doc_Soporte(
                     Null,
                     $campos->Camara_Comercio,
@@ -56,78 +77,34 @@ class RegistrarCliente extends ClienteAction
                 $this->Doc_SoporteRepository->RegistrarDocSoporte($Doc_Soporte);
 
                 $InfoIdDoc = $this->Doc_SoporteRepository->ConsultarUltimoRegistrado();
+                $Id_Documentos = (int) $InfoIdDoc['Id_Documentos'];
 
                 // Registrar plan corporativo
-
-                $Plan_Corporativo = new Plan_Corporativo(
-                    NULL,
-                    (int) $InfoIdDoc['Id_Documentos'],
-                    $campos->Fecha_Inicio,
-                    $campos->Fecha_Fin,
-                    $campos->Clausula,
-                    $campos->Descripcion,
-                    NULL
-                );
-
+                $Plan_Corporativo->__set("Id_Documentos",$Id_Documentos);
                 $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($Plan_Corporativo);
+
             } else {
                 
-                // Plan Corporativo sin documentos
-                $Plan_Corporativo = new Plan_Corporativo(
-                    NULL,
-                    NULL,
-                    $campos->Fecha_Inicio,
-                    $campos->Fecha_Fin,
-                    $campos->Clausula,
-                    $campos->Descripcion,
-                    NULL
-                );
-
                 $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($Plan_Corporativo);
             }
 
             // Datos básicos líneas con plan corporativo
-
             $InfoIdPlan = $this->Plan_CorporativoRepository->ConsultarUltimoRegistrado();
-
-            $DBL = new DBL(
-                NULL,
-                (int) $infoCliente['Id_Cliente'],
-                $campos->Id_Operador,
-                (int) $InfoIdPlan['Id_Plan_Corporativo'],
-                $campos->Cantidad_Lineas,
-                $campos->Valor_Mensual,
-                $campos->Id_Calificacion_Operador,
-                $campos->Razones,
-                NULL
-            );
-
+            $Id_Plan_Corporativo = (int) $InfoIdPlan['Id_Plan_Corporativo'];
+            $DBL->__set("Id_Plan_Corporativo",$Id_Plan_Corporativo);
             $this->DBLRepository->RegistrarDBL($DBL);
            
         } else {
 
             // Datos básicos líneas sin plan corporativo
-            $DBL = new DBL(
-                NULL,
-                (int) $infoCliente['Id_Cliente'],
-                $campos->Id_Operador,
-                NULL,
-                $campos->Cantidad_Lineas,
-                $campos->Valor_Mensual,
-                $campos->Id_Calificacion_Operador,
-                $campos->Razones,
-                NULL
-            );
-
             $this->DBLRepository->RegistrarDBL($DBL);
         }
-
+        
         //Id_Datos_Basicos_Lineas
         $InfoIdDBL = $this->DBLRepository->ConsultarUltimoRegistrado();
-
+        $Id_DBL = (int) $InfoIdDBL['Id_DBL'];
         $arrayLineas = $campos->DetalleLineas;
         
-
         if(!empty($arrayLineas)){
             foreach($arrayLineas as $lineaItem){
                 
@@ -151,8 +128,8 @@ class RegistrarCliente extends ClienteAction
                 $this->LineaRepository->RegistrarLinea($linea);
     
                 $infoIdLinea = $this->LineaRepository->ConsultarUltimaLinea();
-    
-                $validacion = $this->LineaRepository->RegistrarDetalleLinea((int)$infoIdLinea['Id_Linea'], (int) $InfoIdDBL['Id_DBL']);
+                $Id_Linea = (int)$infoIdLinea['Id_Linea'];
+                $validacion = $this->LineaRepository->RegistrarDetalleLinea($Id_Linea, $Id_DBL );
             }
         }
 
