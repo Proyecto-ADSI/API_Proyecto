@@ -1,7 +1,5 @@
 .idea/
 /coverage/
 /vendor/
-/logs/ejm.tex
+/logs/*
 !/logs/README.md
-/src/Infraestructure/DataBase.php
-/src/Application/Actions/Usuario/CargarImagenUsuario.php
