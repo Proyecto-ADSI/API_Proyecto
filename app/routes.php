@@ -77,6 +77,14 @@ use App\Application\Actions\BarriosVeredas\EditarBarriosVeredasAction;
 use App\Application\Actions\BarriosVeredas\CambiarEstadoBarriosVeredasAction;
 use App\Application\Actions\BarriosVeredas\ConsultarBarriosVeredasMunicipioAction;
 
+// Calificación operador
+use App\Application\Actions\Calificacion\CambiarEstadoCalificacionAction;
+use App\Application\Actions\Calificacion\EditarCalificacionAction;
+use App\Application\Actions\Calificacion\EliminarCalificacionAction;
+use App\Application\Actions\Calificacion\ListarCalificacionAction;
+use App\Application\Actions\Calificacion\ObtenerCalificacionAction;
+use App\Application\Actions\Calificacion\RegistrarCalificacionAction;
+
 //Turnos
 use App\Application\Actions\Turnos\ListarTurnosAction;
 use App\Application\Actions\Turnos\RegistrarTurnosAction;
@@ -108,8 +116,11 @@ use App\Application\Actions\Cliente\CambiarEstadoCliente;
 use App\Application\Actions\Cliente\CargarDatosUbicacion;
 use App\Application\Actions\Cliente\EliminarCliente;
 use App\Application\Actions\Cliente\ImportarClientes;
-
-
+use App\Application\Actions\Razones\EditarRazonesAction;
+use App\Application\Actions\Razones\EliminarRazonesAction;
+use App\Application\Actions\Razones\ListarRazonesAction;
+use App\Application\Actions\Razones\ObtenerRazonesAction;
+use App\Application\Actions\Razones\RegistrarRazonesAction;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -247,12 +258,29 @@ return function (App $app) {
         $group->put('', EditarRolAction::class);
         $group->patch('/{Id_Rol}/{Estado}', CambiarEstadoRolAction::class);
     });
-
+    
     $app->group('/Operador', function (Group $group) {
         $group->post('', RegistrarOperadorAction::class);
         $group->get('', ListarOperadorAction::class);
         $group->get('/ObtenerOperador/{Id_Operador}', ObtenerOperadorAction::class);
         $group->put('', EditarOperadorAction::class);
         $group->patch('/{Id_Operador}/{Estado}', CambiarEstadoOperadorAction::class);
+    });
+
+    $app->group('/Calificaciones', function (Group $group) {
+        $group->post('', RegistrarCalificacionAction::class);
+        $group->get('', ListarCalificacionAction::class);
+        $group->get('/ObtenerCalificacion/{Id_Calificacion_Operador}', ObtenerCalificacionAction::class);
+        $group->put('', EditarCalificacionAction::class);
+        $group->patch('/{Id_Calificacion_Operador}/{Estado_Calificacion}', CambiarEstadoCalificacionAction::class);
+        $group->delete('/{Id_Calificacion}',EliminarCalificacionAction::class);
+    });
+
+    $app->group('/Razones', function (Group $group) {
+        $group->post('', RegistrarRazonesAction::class);
+        $group->get('', ListarRazonesAction::class);
+        $group->get('/ObtenerRazones/{Id_Razon_Calificacion}', ObtenerRazonesAction::class);
+        $group->put('', EditarRazonesAction::class);
+        $group->delete('/{Id_Razon_Calificacion}',EliminarRazonesAction::class);
     });
 };

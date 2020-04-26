@@ -11,12 +11,14 @@ use App\Domain\Departamento\DepartamentoRepository;
 use App\Domain\Municipio\MunicipioRepository;
 use App\Domain\SubTipo\SubTipoRepository;
 use App\Domain\BarriosVeredas\BarriosVeredasRepository;
+use App\Domain\Calificacion\CalificacionRepository;
 use App\Domain\Cliente\ClienteRepository;
 use App\Domain\DBL\DBLRepository;
 use App\Domain\Doc_Soporte\Doc_SoporteRepository;
 use App\Domain\Linea\LineaRepository;
 use App\Domain\Operador\OperadorRepository;
 use App\Domain\Plan_Corporativo\Plan_CorporativoRepository;
+use App\Domain\Razones\RazonesRepository;
 use App\Domain\Turnos\TurnosRepository;
 use App\Domain\Rol\RolRepository;
 
@@ -31,12 +33,14 @@ use App\Infrastructure\Persistence\Departamento\DepartamentoPersistence;
 use App\Infrastructure\Persistence\Municipio\MunicipioPersistence;
 use App\Infrastructure\Persistence\SubTipo\SubTipoPersistence;
 use App\Infrastructure\Persistence\BarriosVeredas\BarriosVeredasPersistence;
+use App\Infrastructure\Persistence\Calificacion\CalificacionPersistence;
 use App\Infrastructure\Persistence\Cliente\ClientePersistence;
 use App\Infrastructure\Persistence\DBL\DBLPersistence;
 use App\Infrastructure\Persistence\Doc_Soporte\Doc_SoportePersistence;
 use App\Infrastructure\Persistence\Linea\LineaPersistence;
 use App\Infrastructure\Persistence\Operador\OperadorPersistence;
 use App\Infrastructure\Persistence\Plan_Corporativo\Plan_CorporativoPersistence;
+use App\Infrastructure\Persistence\Razones\RazonesPersistence;
 use App\Infrastructure\Persistence\Turnos\TurnosPersistence;
 use App\Infrastructure\Persistence\Rol\RolPersistence;
 use DI\ContainerBuilder;
@@ -62,6 +66,8 @@ return function (ContainerBuilder $containerBuilder) {
         Plan_CorporativoRepository::class => \DI\autowire(Plan_CorporativoPersistence::class),
         Doc_SoporteRepository::class => \DI\autowire(Doc_SoportePersistence::class),
         LineaRepository::class => \DI\autowire(LineaPersistence::class),
+        CalificacionRepository::class => \DI\autowire(CalificacionPersistence::class),
+        RazonesRepository::class => \DI\autowire(RazonesPersistence::class)
     ]);
 };
  

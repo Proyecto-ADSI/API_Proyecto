@@ -19,16 +19,21 @@ class EliminarCliente extends ClienteAction
         }else{
 
             $infoDBL = $this->DBLRepository->ListarDBL($Id_Cliente,1);
-        
+            $this->logger->info("infoDetalleLinea ".json_encode($Id_Cliente));
             $Id_DBL = (int)$infoDBL['Id_DBL'];
             $Id_Plan_C = (int)$infoDBL['Id_Plan_Corporativo'];
+            $Id_Documentos = 0;
+
+            if($Id_Plan_C > 0 ){
+
+                $infoPlan = $this->Plan_CorporativoRepository->ListarPlan_Corporativo($Id_Plan_C);
+                $Id_Documentos = (int)$infoPlan['Id_Documentos'];
+            }
             
-            $infoPlan = $this->Plan_CorporativoRepository->ListarPlan_Corporativo($Id_Plan_C);
-            $Id_Documentos = (int)$infoPlan['Id_Documentos'];
            
             $infoDetalleLinea = $this->DBLRepository->ConsultarDetalleLineas($Id_DBL);
 
-            $this->logger->info("infoDetalleLinea ".json_encode($infoDetalleLinea));
+            
 
             if(!empty($infoDetalleLinea)){
                

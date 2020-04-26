@@ -90,9 +90,13 @@ class RegistrarCliente extends ClienteAction
 
             // Datos básicos líneas con plan corporativo
             $InfoIdPlan = $this->Plan_CorporativoRepository->ConsultarUltimoRegistrado();
+            
             $Id_Plan_Corporativo = (int) $InfoIdPlan['Id_Plan_Corporativo'];
             $DBL->__set("Id_Plan_Corporativo",$Id_Plan_Corporativo);
-            $this->DBLRepository->RegistrarDBL($DBL);
+            
+            $r = $this->DBLRepository->RegistrarDBL($DBL);
+            
+           $this->logger->info(" Datos: ".json_encode($r));
            
         } else {
 
