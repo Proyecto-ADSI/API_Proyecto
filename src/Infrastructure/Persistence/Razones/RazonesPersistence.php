@@ -22,13 +22,21 @@ class RazonesPersistence implements RazonesRepository
     }
 
     public function RegistrarRazones(Razones $Razones){
-        $sql = "INSERT INTO razones_calificacion (Razon) VALUES (?)";
+        $sql = "INSERT INTO razones (Razon,Tipo_Razon) VALUES (?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Razones->__GET("Razon"));
+            $stm->bindValue(2, $Razones->__GET("Tipo_Razon"));
 
-            return $stm->execute();
+            $stm->execute();
+
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                return true;
+            } else {
+                return $stm->errorInfo();
+            }
 
         } catch (Exception $e) {
 
@@ -37,7 +45,7 @@ class RazonesPersistence implements RazonesRepository
     }
 
     public function ListarRazones(){
-        $sql = "SELECT Id_Razon_Calificacion,Razon FROM razones_calificacion";
+        $sql = "SELECT Id_Razon_Calificacion,Razon,Tipo_Razon FROM razones";
 
         try {
 
@@ -51,8 +59,24 @@ class RazonesPersistence implements RazonesRepository
         }
     }
 
+    public function ListarRazonesTipo(string $Tipo){
+        $sql = "SELECT Id_Razon_Calificacion,Razon,Tipo_Razon FROM razones WHERE Tipo_Razon = ?";
+
+        try {
+
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Tipo);
+            $stm->execute();
+
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
     public function ObtenerDatosRazones($Id_Razon_Calificacion){
-        $sql = "SELECT Id_Razon_Calificacion, Razon FROM razones_calificacion   
+        $sql = "SELECT Id_Razon_Calificacion, Razon, Tipo_Razon FROM razones   
         WHERE Id_Razon_Calificacion = ?";
  
         try {
@@ -68,12 +92,13 @@ class RazonesPersistence implements RazonesRepository
     }
 
     public function EditarRazones(Razones $Razones){
-        $sql = "UPDATE razones_calificacion SET Razon = ?  WHERE Id_Razon_Calificacion = ?";
+        $sql = "UPDATE razones SET Razon = ?, Tipo_Razon = ?  WHERE Id_Razon_Calificacion = ?";
         
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Razones->__GET("Razon"));
-            $stm->bindValue(2, $Razones->__GET("Id_Razon_Calificacion"));
+            $stm->bindValue(2, $Razones->__GET("Tipo_Razon"));
+            $stm->bindValue(3, $Razones->__GET("Id_Razon_Calificacion"));
             
             return $stm->execute();
  
@@ -83,7 +108,7 @@ class RazonesPersistence implements RazonesRepository
     }
     
     public function EliminarRazones(int $Id_Razones){
-        $sql = "DELETE FROM razones_calificacion WHERE Id_Razon_Calificacion = ?";
+        $sql = "DELETE FROM razones WHERE Id_Razon_Calificacion = ?";
 
         try{
             $stm = $this->db->prepare($sql);

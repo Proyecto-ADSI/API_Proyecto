@@ -22,8 +22,8 @@ class Llamada implements JsonSerializable
     }
 
     function __construct(
-        ?int $Id_Llamada, int $Id_Cliente, int $Id_Usuario,string $Id_Estado_Llamada, 
-        string $Persona_Responde,string $Fecha_Llamada,string $Info_Habeas_Data,string $Observacion
+        ?int $Id_Llamada, int $Id_Usuario, int $Id_Cliente,?string $Persona_Responde, 
+        ?string $Fecha_Llamada, ?int $Info_Habeas_Data, string $Observacion, int $Id_Estado_Llamada
     )
     {   
         $this->Id_Llamada = $Id_Llamada;
@@ -34,7 +34,6 @@ class Llamada implements JsonSerializable
         $this->Fecha_Llamada = $Fecha_Llamada;
         $this->Info_Habeas_Data = $Info_Habeas_Data;
         $this->Observacion = $Observacion;
-
     }
 
     public function jsonSerialize()

@@ -15,7 +15,8 @@ class EditarRazonesAction extends RazonesAction
 
         $datos = new Razones(
             $campos->Id_Razon_Calificacion,
-            $campos->Razon
+            $campos->Razon,
+            $campos->Tipo_Razon
         );
         
         $datos = $this->RazonesRepository->EditarRazones($datos);

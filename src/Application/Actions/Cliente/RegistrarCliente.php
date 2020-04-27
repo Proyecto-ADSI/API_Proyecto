@@ -13,9 +13,19 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 class RegistrarCliente extends ClienteAction
 {
+
     protected function action(): Response
     {
         $campos = $this->getFormData();
+
+        $respuesta = $this->RegistrarClientes($campos);
+        
+        // Respuesta es TRUE || FALSE
+        return $this->respondWithData(["ok" => $respuesta]);
+      
+    }
+
+    public function RegistrarClientes($campos){
 
         $validacion = NULL;
 
@@ -136,8 +146,6 @@ class RegistrarCliente extends ClienteAction
                 $validacion = $this->LineaRepository->RegistrarDetalleLinea($Id_Linea, $Id_DBL );
             }
         }
-
-        // Respuesta es TRUE || FALSE
-        return $this->respondWithData(["ok" => $validacion]);
+        return $validacion;
     }
 }

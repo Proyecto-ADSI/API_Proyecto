@@ -10,6 +10,8 @@ interface RazonesRepository {
 
     public function ListarRazones();
 
+    public function ListarRazonesTipo(string $Tipo);
+
     public function ObtenerDatosRazones(int $Id_Razones);
 
     public function EditarRazones(Razones $Razones);

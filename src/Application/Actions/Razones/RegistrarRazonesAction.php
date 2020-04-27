@@ -16,7 +16,8 @@ class RegistrarRazonesAction extends RazonesAction
 
         $datos = new Razones(
             NULL,
-            $campos->Razon
+            $campos->Razon,
+            $campos->Tipo_Razon
         );
         
         $datos = $this->RazonesRepository->RegistrarRazones($datos);

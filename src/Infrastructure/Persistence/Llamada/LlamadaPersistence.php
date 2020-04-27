@@ -45,28 +45,28 @@ class LlamadaPersistence implements LlamadaRepository
         }
     }
 
-    public function EditarLlamada(Llamada $Llamada){
+    // public function EditarLlamada(Llamada $Llamada){
 
-        $sql ="UPDATE llamadas SET Persona_Responde = ?, Fecha_Llamada = ?,Info_Habeas_Data = ?, 
-        Observacion = ?, Id_Estado_Llamada = ? WHERE Id_Llamada = ?";
+    //     $sql ="UPDATE llamadas SET Persona_Responde = ?, Fecha_Llamada = ?,Info_Habeas_Data = ?, 
+    //     Observacion = ?, Id_Estado_Llamada = ? WHERE Id_Llamada = ?";
             
-        try{
+    //     try{
 
-            $stm = $this->db->prepare($sql);
-            $stm->bindValue(1, $Llamada->__GET("Persona_Responde"));
-            $stm->bindValue(2, $Llamada->__GET("Fecha_Llamada"));
-            $stm->bindValue(3, $Llamada->__GET("Info_Habeas_Data"));
-            $stm->bindValue(4, $Llamada->__GET("Observacion"));
-            $stm->bindValue(5, $Llamada->__GET("Id_Estado_Llamada"));
-            $stm->bindValue(6, $Llamada->__GET("Id_Llamada"));
+    //         $stm = $this->db->prepare($sql);
+    //         $stm->bindValue(1, $Llamada->__GET("Persona_Responde"));
+    //         $stm->bindValue(2, $Llamada->__GET("Fecha_Llamada"));
+    //         $stm->bindValue(3, $Llamada->__GET("Info_Habeas_Data"));
+    //         $stm->bindValue(4, $Llamada->__GET("Observacion"));
+    //         $stm->bindValue(5, $Llamada->__GET("Id_Estado_Llamada"));
+    //         $stm->bindValue(6, $Llamada->__GET("Id_Llamada"));
       
-            return $stm->execute();             
-        }
-        catch(Exception $e){
+    //         return $stm->execute();             
+    //     }
+    //     catch(Exception $e){
 
-            return $e->getMessage();
+    //         return $e->getMessage();
 
-        }
-    }
+    //     }
+    // }
     
 }

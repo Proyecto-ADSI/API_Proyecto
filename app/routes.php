@@ -24,6 +24,9 @@ use App\Application\Actions\Usuario\CargarImagenUsuario;
 // Empleados
 use App\Application\Actions\Empleado\ListarEmpleados;
 
+// Llamadas
+use App\Application\Actions\Llamada\RegistrarLlamadaNPAction;
+
 
 //Documento
 use App\Application\Actions\Documento\ListarDocumento;
@@ -105,6 +108,13 @@ use App\Application\Actions\Operador\ListarOperadorAction;
 use App\Application\Actions\Operador\ObtenerOperadorAction;
 use App\Application\Actions\Operador\RegistrarOperadorAction;
 
+// Razones
+use App\Application\Actions\Razones\EditarRazonesAction;
+use App\Application\Actions\Razones\EliminarRazonesAction;
+use App\Application\Actions\Razones\ListarRazonesAction;
+use App\Application\Actions\Razones\ListarRazonesTipoAction;
+use App\Application\Actions\Razones\ObtenerRazonesAction;
+use App\Application\Actions\Razones\RegistrarRazonesAction;
 
 // Cliente
 use App\Application\Actions\Cliente\RegistrarCliente;
@@ -116,11 +126,7 @@ use App\Application\Actions\Cliente\CambiarEstadoCliente;
 use App\Application\Actions\Cliente\CargarDatosUbicacion;
 use App\Application\Actions\Cliente\EliminarCliente;
 use App\Application\Actions\Cliente\ImportarClientes;
-use App\Application\Actions\Razones\EditarRazonesAction;
-use App\Application\Actions\Razones\EliminarRazonesAction;
-use App\Application\Actions\Razones\ListarRazonesAction;
-use App\Application\Actions\Razones\ObtenerRazonesAction;
-use App\Application\Actions\Razones\RegistrarRazonesAction;
+
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -178,6 +184,11 @@ return function (App $app) {
         $group->delete('/{Id_Cliente_Eliminar}', EliminarCliente::class);
         $group->post('/ImportarClientes', ImportarClientes::class);
     });
+
+    $app->group('/Llamadas', function (Group $group) {
+        $group->post('/LlamadaNP', RegistrarLlamadaNPAction::class);
+    });
+
 
     $app->group('/Documento', function (Group $group) {
         $group->post('', DocumentoRegistroAction::class);
@@ -279,6 +290,7 @@ return function (App $app) {
     $app->group('/Razones', function (Group $group) {
         $group->post('', RegistrarRazonesAction::class);
         $group->get('', ListarRazonesAction::class);
+        $group->get('/{Tipo}', ListarRazonesTipoAction::class);
         $group->get('/ObtenerRazones/{Id_Razon_Calificacion}', ObtenerRazonesAction::class);
         $group->put('', EditarRazonesAction::class);
         $group->delete('/{Id_Razon_Calificacion}',EliminarRazonesAction::class);

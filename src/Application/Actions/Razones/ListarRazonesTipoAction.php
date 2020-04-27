@@ -6,11 +6,12 @@ declare(strict_types=1);
 
   use Psr\Http\Message\ResponseInterface as Response;
 
-  class ListarRazonesAction extends RazonesAction
+  class ListarRazonesTipoAction extends RazonesAction
   {
    protected function action(): Response
    {
-      $Razones = $this->RazonesRepository->ListarRazones();
+      $Tipo = $this->resolveArg("Tipo");
+      $Razones = $this->RazonesRepository->ListarRazonesTipo($Tipo);
 
       return $this->respondWithData($Razones);
    }
