@@ -7,6 +7,6 @@ interface LlamadaRepository{
 
     public function RegistrarLlamada(Llamada $Llamada);
 
-    // public function EditarLlamada(Llamada $Llamada);
+    public function ConsultarUltimaLlamada();
     
 }

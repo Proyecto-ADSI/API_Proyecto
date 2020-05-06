@@ -46,14 +46,22 @@ class MunicipioPersistence implements MunicipioRepository
         FROM municipios m INNER JOIN departamento d ON (m.Id_Departamento = d.Id_Departamento)";
 
         try {
+            // return $this->db;
 
             $stm = $this->db->prepare($sql);
             $stm->execute();
 
-            return $stm->fetchAll(PDO::FETCH_ASSOC);
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                return $stm->fetchAll(PDO::FETCH_ASSOC);
+                // return "hola";
+                
+            } else {
+                return $stm->errorInfo();
+            }
 
         } catch (Exception $e) {
-            return $e->getMessage();
+            return "Error al listar" . $e->getMessage();
         }
     }
 

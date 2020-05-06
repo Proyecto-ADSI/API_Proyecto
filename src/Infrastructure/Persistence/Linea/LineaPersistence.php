@@ -54,8 +54,7 @@ class LineaPersistence implements LineaRepository
         }
     }
 
-    public function ConsultarUltimaLinea()
-    {
+    public function ConsultarUltimaLinea(){
         $sql = "SELECT MAX(Id_Linea) AS Id_Linea FROM lineas ";
 
         try {

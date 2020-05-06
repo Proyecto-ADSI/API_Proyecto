@@ -11,7 +11,7 @@ class CargarImagenUsuario extends UsuarioAction
 
     protected function action(): Response
     {
-        $directory = 'C:\Users\alexx\Desktop\Proyecto\Cliente_Proyecto\assets\images\usuarios';
+        $directory = 'D:\Escritorio\Proyecto\Cliente_Proyecto\assets\images\usuarios';
 
         $uploadedFiles = $this->request->getUploadedFiles();
 

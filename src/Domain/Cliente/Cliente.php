@@ -18,8 +18,14 @@ class Cliente implements JsonSerializable
     private $Id_Barrios_Veredas;
     private $Estado_Cliente;
     
-    public function __GET($attr){
-        return $this->$attr;
+    public function __get($name)
+    {
+        return $this->$name;
+    }
+
+    public function __set($name, $value)
+    {
+        $this->$name = $value;
     }
 
     function __construct(
