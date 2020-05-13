@@ -3,4 +3,3 @@
 /vendor/
 /logs/*
 !/logs/README.md
-src/Infraestructure/DataBase.php

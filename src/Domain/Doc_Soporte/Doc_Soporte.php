@@ -15,8 +15,13 @@ class Doc_Soporte implements JsonSerializable{
     private $Detalles_Plan_Corporativo;
 
 
-    public function __GET($attr){
+    public function __get($attr){
         return $this->$attr;
+    }
+
+    public function __set($name, $value)
+    {
+        $this->$name = $value;
     }
 
     function __construct(?int $Id_Documentos, string $Camara_Comercio, string $Cedula_RL, string $Soporte_Ingresos, string $Detalles_Plan_Corporativo)

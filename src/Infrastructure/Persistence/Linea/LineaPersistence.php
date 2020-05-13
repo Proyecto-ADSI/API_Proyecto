@@ -23,8 +23,9 @@ class LineaPersistence implements LineaRepository
     
     public function RegistrarLinea(Linea $linea){
 
-        $sql = "INSERT INTO lineas(Linea, Minutos, Navegacion, Mensajes, Redes_Sociales, Llamadas_Inter, Roaming, Cargo_Basico)
-        VALUES (?,?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO lineas(Linea, Minutos, Navegacion, Mensajes, Redes_Sociales, 
+        Llamadas_Inter, Roaming, Cargo_Basico,Grupo)
+        VALUES (?,?,?,?,?,?,?,?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -36,6 +37,7 @@ class LineaPersistence implements LineaRepository
             $stm->bindValue(6, $linea->__GET("Llamadas_Inter"));
             $stm->bindValue(7, $linea->__GET("Roaming"));
             $stm->bindValue(8, $linea->__GET("Cargo_Basico"));
+            $stm->bindValue(9, $linea->__GET("Grupo"));
 
             $stm->execute();
 
@@ -52,8 +54,7 @@ class LineaPersistence implements LineaRepository
         }
     }
 
-    public function ConsultarUltimaLinea()
-    {
+    public function ConsultarUltimaLinea(){
         $sql = "SELECT MAX(Id_Linea) AS Id_Linea FROM lineas ";
 
         try {
@@ -92,6 +93,61 @@ class LineaPersistence implements LineaRepository
                 return $stm->errorInfo();
             }
 
+        } catch (\Exception $e) {
+
+            return $e->getMessage();
+        }
+    }
+
+    public function EditarLinea(Linea $linea){
+
+        $sql = "UPDATE lineas SET  Linea = ?, Minutos = ?, Navegacion = ?, 
+        Mensajes = ?, Redes_Sociales = ?, Llamadas_Inter = ?, Roaming = ?, Cargo_Basico = ?, Grupo = ?
+        WHERE Id_Linea = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1, $linea->__GET("Linea"));
+            $stm->bindValue(2, $linea->__GET("Minutos"));
+            $stm->bindValue(3, $linea->__GET("Navegacion"));
+            $stm->bindValue(4, $linea->__GET("Mensajes"));
+            $stm->bindValue(5, $linea->__GET("Redes_Sociales"));
+            $stm->bindValue(6, $linea->__GET("Llamadas_Inter"));
+            $stm->bindValue(7, $linea->__GET("Roaming"));
+            $stm->bindValue(8, $linea->__GET("Cargo_Basico"));
+            $stm->bindValue(9, $linea->__GET("Grupo"));
+            $stm->bindValue(10, $linea->__GET("Id_Linea"));
+            
+            $stm->execute();
+            
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                return true;
+            } else {
+                return $stm->errorInfo();
+            }
+
+        } catch (\Exception $e) {
+
+            return $e->getMessage();
+        }
+    }
+
+    public function EliminarLinea(int $IdLinea){
+
+        $sql = "DELETE FROM lineas WHERE Id_Linea = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1, $IdLinea);
+            $stm->execute();
+
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                return true;
+            } else {
+                return $stm->errorInfo();
+            }
         } catch (\Exception $e) {
 
             return $e->getMessage();

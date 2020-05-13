@@ -23,8 +23,7 @@ class ClientePersistence implements ClienteRepository
     }
 
 
-    public function ListarCliente()
-    {
+    public function ListarCliente(){
         $sql = "SELECT d.Id_Cliente, d.NIT_CDV, d.Razon_Social, d.Telefono, o.Nombre_Operador AS Operador,
         CASE WHEN  ISNULL(dbl.Id_Plan_Corporativo) = 0 THEN 'Si' 
         ELSE 'No' END AS Corporativo, d.Estado_Cliente 
@@ -48,8 +47,7 @@ class ClientePersistence implements ClienteRepository
         }
     }
 
-    public function ObtenerCliente(int $id)
-    {
+    public function ObtenerCliente(int $id){
         $sql = "SELECT * FROM Directorio WHERE Id_Cliente = ?";
 
         try {
@@ -66,8 +64,7 @@ class ClientePersistence implements ClienteRepository
     }
 
 
-    public function RegistrarCliente(Cliente $Cliente)
-    {
+    public function RegistrarCliente(Cliente $Cliente){
         $sql = "INSERT INTO Directorio(NIT_CDV,Razon_Social, Telefono, Encargado,Ext_Tel_Contacto, Direccion, Id_Barrios_Veredas) 
         VALUES (?,?,?,?,?,?,?)";
 
@@ -81,11 +78,11 @@ class ClientePersistence implements ClienteRepository
             $stm->bindValue(6, $Cliente->__GET("Direccion"));
             $stm->bindValue(7, $Cliente->__GET("Id_Barrios_Veredas"));
 
-            $stm->execute();
+            $respuesta =$stm->execute();
 
             $error = $stm->errorCode();
             if ($error === '00000') {
-                return true;
+                return $respuesta;
             } else {
                 return $stm->errorInfo();
             }
@@ -96,26 +93,23 @@ class ClientePersistence implements ClienteRepository
         }
     }
 
-    public function EditarCliente(Cliente $Cliente)
-    {
+    public function EditarCliente(Cliente $Cliente){
 
-        $sql = "UPDATE Directorio SET Id_DBL = ?, NIT_CDV = ?, Razon_Social = ?, Telefono = ?, 
-        Encargado = ?, Extension = ?, Telefono_Contacto = ?, Direccion = ?, 
-        Id_Barrios_Veredas = ? WHERE Id_Cliente = ?";
+        $sql = "UPDATE Directorio SET NIT_CDV = ?, Razon_Social = ?, Telefono = ?, 
+        Encargado = ?, Ext_Tel_Contacto = ?, Direccion = ?, Id_Barrios_Veredas = ? 
+        WHERE Id_Cliente = ?";
 
         try {
 
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1, $Cliente->__GET("Id_DBL"));
-            $stm->bindValue(2, $Cliente->__GET("NIT_CDV"));
-            $stm->bindValue(3, $Cliente->__GET("Razon_Social"));
-            $stm->bindValue(4, $Cliente->__GET("Telefono"));
-            $stm->bindValue(5, $Cliente->__GET("Encargado"));
-            $stm->bindValue(6, $Cliente->__GET("Extension"));
-            $stm->bindValue(7, $Cliente->__GET("Telefono_Contacto"));
-            $stm->bindValue(8, $Cliente->__GET("Direccion"));
-            $stm->bindValue(9, $Cliente->__GET("Id_Barrios_Veredas"));
-            $stm->bindValue(10, $Cliente->__GET("Id_Cliente"));
+            $stm->bindValue(1, $Cliente->__GET("NIT_CDV"));
+            $stm->bindValue(2, $Cliente->__GET("Razon_Social"));
+            $stm->bindValue(3, $Cliente->__GET("Telefono"));
+            $stm->bindValue(4, $Cliente->__GET("Encargado"));
+            $stm->bindValue(5, $Cliente->__GET("Ext_Tel_Contacto"));
+            $stm->bindValue(6, $Cliente->__GET("Direccion"));
+            $stm->bindValue(7, $Cliente->__GET("Id_Barrios_Veredas"));
+            $stm->bindValue(8, $Cliente->__GET("Id_Cliente"));
 
             return $stm->execute();
         } catch (Exception $e) {
@@ -124,8 +118,7 @@ class ClientePersistence implements ClienteRepository
         }
     }
 
-    public function ValidarEstadoCliente(int $Id_Cliente)
-    {
+    public function ValidarEstadoCliente(int $Id_Cliente){
         $sql = "SELECT Estado_Cliente FROM directorio WHERE Id_Cliente = ?";
         try {
             $stm = $this->db->prepare($sql);
@@ -139,15 +132,23 @@ class ClientePersistence implements ClienteRepository
     }
 
 
-    public function CambiarEstadoCliente(int $Id_Cliente, int $Estado)
-    {
+    public function CambiarEstadoCliente(int $Id_Cliente, int $Estado){
+        
         $sql = "UPDATE directorio SET Estado_Cliente = ? WHERE Id_Cliente = ?";
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Estado);
             $stm->bindValue(2, $Id_Cliente);
 
-            return $stm->execute();
+            $stm->execute();
+
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                return true;
+            } else {
+                return $stm->errorInfo();
+            }
+
         } catch (Exception $e) {
 
             return "Error al cambiar estado " + $e->getMessage();
@@ -155,8 +156,7 @@ class ClientePersistence implements ClienteRepository
     }
 
 
-    public function EliminarCliente(int $Id_Cliente)
-    {
+    public function EliminarCliente(int $Id_Cliente){
 
         $sql = "DELETE FROM Directorio WHERE Id_Cliente = ?";
 
@@ -171,8 +171,7 @@ class ClientePersistence implements ClienteRepository
         }
     }
 
-    public function ValidarEliminarCliente(int $Id_Cliente)
-    {
+    public function ValidarEliminarCliente(int $Id_Cliente){
 
         $sql = "SELECT Id_Llamada FROM Llamadas WHERE Id_Cliente = ?";
 

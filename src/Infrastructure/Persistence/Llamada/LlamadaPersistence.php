@@ -23,16 +23,16 @@ class LlamadaPersistence implements LlamadaRepository
 
     public function RegistrarLlamada(Llamada $Llamada)
     {
-        $sql = "INSERT INTO llamadas(Id_Usuario,Id_Cliente, Persona_Responde, Fecha_Llamada,
+        $sql = "INSERT INTO llamadas(Id_Usuario,Id_Cliente, Persona_Responde, Duracion_Llamada,
         Info_Habeas_Data,Observacion,Id_Estado_Llamada) 
-        VALUES (?,?,?,?,?,?,?,?,?)";
+        VALUES (?,?,?,?,?,?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Llamada->__GET("Id_Usuario"));
             $stm->bindValue(2, $Llamada->__GET("Id_Cliente"));
             $stm->bindValue(3, $Llamada->__GET("Persona_Responde"));
-            $stm->bindValue(4, $Llamada->__GET("Fecha_Llamada"));
+            $stm->bindValue(4, $Llamada->__GET("Duracion_Llamada"));
             $stm->bindValue(5, $Llamada->__GET("Info_Habeas_Data"));
             $stm->bindValue(6, $Llamada->__GET("Observacion"));
             $stm->bindValue(7, $Llamada->__GET("Id_Estado_Llamada"));
@@ -45,27 +45,25 @@ class LlamadaPersistence implements LlamadaRepository
         }
     }
 
-    public function EditarLlamada(Llamada $Llamada){
+    public function ConsultarUltimaLlamada(){
+        $sql = "SELECT MAX(Id_Llamada) AS Id_Llamada FROM llamadas ";
 
-        $sql ="UPDATE llamadas SET Persona_Responde = ?, Fecha_Llamada = ?,Info_Habeas_Data = ?, 
-        Observacion = ?, Id_Estado_Llamada = ? WHERE Id_Llamada = ?";
-            
-        try{
-
+        try {
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1, $Llamada->__GET("Persona_Responde"));
-            $stm->bindValue(2, $Llamada->__GET("Fecha_Llamada"));
-            $stm->bindValue(3, $Llamada->__GET("Info_Habeas_Data"));
-            $stm->bindValue(4, $Llamada->__GET("Observacion"));
-            $stm->bindValue(5, $Llamada->__GET("Id_Estado_Llamada"));
-            $stm->bindValue(6, $Llamada->__GET("Id_Llamada"));
-      
-            return $stm->execute();             
-        }
-        catch(Exception $e){
+            $stm->execute();
 
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+
+                return  $stm->fetch(PDO::FETCH_ASSOC);
+
+            } else {
+                return $stm->errorInfo();
+            }
+
+            
+        } catch (\Exception $e) {
             return $e->getMessage();
-
         }
     }
     

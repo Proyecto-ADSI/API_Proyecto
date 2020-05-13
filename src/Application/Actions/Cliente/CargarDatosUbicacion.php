@@ -23,7 +23,7 @@ class CargarDatosUbicacion extends ClienteAction
         $arraDepartamentos = array(
             'Departamentos' => $departamentos
         );
-
+        
         $municipios = $this->MunicipioRepository->ListarMunicipio();
         
         $arrayMunicipios =array(
@@ -46,6 +46,7 @@ class CargarDatosUbicacion extends ClienteAction
         $DatosUbicacion = array_merge($DatosUbicacion,$arrayPaises,$arraDepartamentos,$arrayMunicipios,$arraySubtipo,$arrayBarriosVeredas);
         
         return $this->respondWithData($DatosUbicacion);
+       
     }
 }
 

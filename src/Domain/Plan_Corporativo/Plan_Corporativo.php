@@ -16,10 +16,15 @@ class Plan_Corporativo implements JsonSerializable{
     private $Descripcion;
     private $Estado_Plan_Corporativo;
 
-    public function __GET($attr){
+    public function __get($attr){
         return $this->$attr;
     }
 
+    public function __set($name, $value)
+    {
+        $this->$name = $value;
+    }
+    
     function __construct(
     ?int $Id_Plan_Corporativo, 
     ?int $Id_Documentos, 

@@ -9,5 +9,9 @@ interface LineaRepository{
 
     public function ConsultarUltimaLinea();
 
+    public function EditarLinea(Linea $linea);
+
+    public function EliminarLinea(int $IdLinea);
+
     public function RegistrarDetalleLinea(int $IdLinea, int $IdDBL);
 }

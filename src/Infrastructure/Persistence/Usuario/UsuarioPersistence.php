@@ -23,14 +23,15 @@ class UsuarioPersistence implements UsuarioRepository
 
     public function ListarUsuarios()
     {
-        $sql = "SELECT u.Id_Usuario, u.Usuario, u.Conexion, u.Estado_Usuario, u.Id_Rol, r.Nombre AS Rol, u.Id_Empleado, 
+        $sql = "SELECT u.Id_Usuario, u.Usuario, c.Conexion, u.Estado_Usuario, u.Id_Rol, r.Nombre AS Rol, u.Id_Empleado, 
         d.Nombre AS 'Tipo Documento', e.Documento, e.Nombre, e.Apellidos, e.Email AS Correo, s.Nombre AS Sexo, Celular, Imagen, t.Nombre AS Turno       
         FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) 
         INNER JOIN roles r ON (u.Id_Rol = r.Id_rol) 
         INNER JOIN documentos d ON (e.Tipo_Documento = d.Id_Documento) 
         INNER JOIN sexos s ON (e.Id_Sexo = s.Id_Sexo)
-        INNER JOIN turnos t ON (e.Id_Turno = t.Id_Turno)";
-
+        INNER JOIN turnos t ON (e.Id_Turno = t.Id_Turno)
+        INNER JOIN conexiones_usuario c ON (c.Id_Conexion_Usuario = u.Id_Conexion_Usuario)";
+        
         try {
             $stm = $this->db->prepare($sql);
             $stm->execute();
@@ -53,14 +54,15 @@ class UsuarioPersistence implements UsuarioRepository
 
     public function ObtenerUsuario(int $Id_Usuario)
     {
-        $sql = "SELECT u.Id_Usuario, u.Usuario, u.Conexion, u.Estado_Usuario, u.Id_Rol, r.Nombre AS Rol, u.Id_Empleado, d.Id_Documento,
+        $sql = "SELECT u.Id_Usuario, u.Usuario, c.Conexion, u.Estado_Usuario, u.Id_Rol, r.Nombre AS Rol, u.Id_Empleado, d.Id_Documento,
         d.Nombre AS 'Tipo_Documento', e.Documento, e.Nombre, e.Apellidos, e.Email AS Correo, s.Id_Sexo, s.Nombre AS Sexo,
          Celular, Imagen, t.Id_Turno, t.Nombre AS Turno       
         FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) 
         INNER JOIN roles r ON (u.Id_Rol = r.Id_rol) 
         INNER JOIN documentos d ON (e.Tipo_Documento = d.Id_Documento) 
         INNER JOIN sexos s ON (e.Id_Sexo = s.Id_Sexo)
-        INNER JOIN turnos t ON (e.Id_Turno = t.Id_Turno) WHERE u.Id_Usuario = ?";
+        INNER JOIN turnos t ON (e.Id_Turno = t.Id_Turno)
+        INNER JOIN conexiones_usuario c ON (c.Id_Conexion_Usuario = u.Id_Conexion_Usuario) WHERE u.Id_Usuario = ?";
 
         try {
             $stm = $this->db->prepare($sql);

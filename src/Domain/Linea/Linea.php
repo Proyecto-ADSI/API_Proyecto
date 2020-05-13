@@ -18,10 +18,16 @@ class Linea implements JsonSerializable
     private $Llamadas_Inter;    
     private $Roaming;       
     private $Cargo_Basico;    
+    private $Grupo;    
 
-     public function __GET($attr){
+     public function __get($attr){
         return $this->$attr;
-    }   
+    }
+    
+    public function __set($name, $value)
+    {
+        $this->$name = $value;
+    }
 
     function __construct(
         ?int $Id_Linea,
@@ -32,7 +38,9 @@ class Linea implements JsonSerializable
         ?int $Redes_Sociales,
         ?int $Llamadas_Inter,
         ?int $Roaming,
-        ?string $Cargo_Basico
+        ?string $Cargo_Basico,
+        ?int $Grupo
+
         ) 
     {
         $this->Id_Linea = $Id_Linea;
@@ -44,6 +52,7 @@ class Linea implements JsonSerializable
         $this->Llamadas_Inter = $Llamadas_Inter;
         $this->Roaming = $Roaming;
         $this->Cargo_Basico = $Cargo_Basico;
+        $this->Grupo = $Grupo;
     }
 
 
@@ -58,7 +67,8 @@ class Linea implements JsonSerializable
             "Redes_Sociales"=>$this->Redes_Sociales,
             "Llamadas_Inter"=>$this->Llamadas_Inter,
             "Roaming"=>$this->Roaming,
-            "Cargo_Basico"=>$this->Cargo_Basico
+            "Cargo_Basico"=>$this->Cargo_Basico,
+            "Grupo"=>$this->Grupo
         ];
     }
 }
