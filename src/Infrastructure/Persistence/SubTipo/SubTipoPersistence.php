@@ -84,7 +84,7 @@ class SubTipoPersistence implements SubTipoRepository
 
       public function EliminarSubTipo(int $Id_SubTipo_Barrio_Vereda)
       {
-        $sql = "DELETE  FROM subtipo_barrio_vereda WHERE Id_SubTipo_Barrio_Vereda = ?";
+        $sql = "DELETE FROM subtipo_barrio_vereda WHERE Id_SubTipo_Barrio_Vereda = ?";
    
         try {
           $stm = $this->db->prepare($sql);
