@@ -76,6 +76,7 @@ use App\Application\Actions\BarriosVeredas\ObtenerBarriosVeredasAction;
 use App\Application\Actions\BarriosVeredas\EditarBarriosVeredasAction;
 use App\Application\Actions\BarriosVeredas\CambiarEstadoBarriosVeredasAction;
 use App\Application\Actions\BarriosVeredas\ConsultarBarriosVeredasMunicipioAction;
+use App\Application\Actions\BarriosVeredas\EliminarBarriosVeredasAction;
 
 //Turnos
 use App\Application\Actions\Turnos\ListarTurnosAction;
@@ -230,6 +231,7 @@ return function (App $app) {
         $group->get('/ConsultarBarriosVeredas/{Id_Municipio}/{Id_SubTipo}', ConsultarBarriosVeredasMunicipioAction::class);
         $group->put('', EditarBarriosVeredasAction::class);
         $group->patch('/{Id_Barrios_Veredas}/{Estado}', CambiarEstadoBarriosVeredasAction::class);
+        $group->delete('/{Id_Barrios_Veredas}',EliminarBarriosVeredasAction::class);
     });
     $app->group('/Turnos', function (Group $group) {
         $group->post('', RegistrarTurnosAction::class);

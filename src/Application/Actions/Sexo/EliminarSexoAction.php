@@ -18,6 +18,7 @@ class EliminarSexoAction extends SexoAction
         if(!empty($Validar)){
 
             return $this->respondWithData(["Eliminar" => false]);
+            
         }else{
 
            $Eliminar = $this->SexoRepository->EliminarSexo($Id_Sexos);

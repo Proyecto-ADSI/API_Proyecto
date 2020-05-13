@@ -114,6 +114,41 @@ class BarriosVeredasPersistence implements BarriosVeredasRepository
         }
     }
 
+    public function ValidarBarriosVeredas(int $Id_Barrios_Veredas)
+    {
+        $sql = "SELECT Id_Barrios_Veredas FROM citas WHERE  Id_Barrios_Veredas = ?";
+
+
+        try {
+
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Barrios_Veredas);
+            $stm->execute();
+
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Exception $e) {
+        return $e->getMessage();
+        }
+    }
+
+    public function EliminarBarriosVeredas(int $Id_Barrios_Veredas)
+    {
+        $sql = "DELETE FROM barrios_veredas WHERE Id_Barrios_Veredas = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Barrios_Veredas);
+            $stm->execute();
+
+
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
     
 
     public function ConsultarBarriosVeredasMunicipio(int $Id_Municipio, int $Id_SubTipo){
