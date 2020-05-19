@@ -29,9 +29,14 @@ class EditarCliente extends ClienteAction {
             NULL
         );
 
-        $Id_Plan_Corporativo = (int) $campos->Id_Plan_Corporativo;
-        $Id_Documentos = (int) $campos->Id_Documentos;
+        if(isset($campos->Id_Plan_Corporativo)){
+            $Id_Plan_Corporativo = (int) $campos->Id_Plan_Corporativo;
+        }
 
+        if(isset($campos->Id_Documentos)){
+            $Id_Documentos = (int) $campos->Id_Documentos;
+        }
+        
         // Validar si se edita o registra el plan corporativo
         if ($campos->Validacion_PLan_C) {
 
@@ -94,7 +99,9 @@ class EditarCliente extends ClienteAction {
                     // Editar plan corporativo sin documentos.
                     $Plan_Corporativo->__set("Id_Plan_Corporativo",$Id_Plan_Corporativo);
                     $this->Plan_CorporativoRepository->EditarPlan_Corporativo($Plan_Corporativo);
-                    $this->Doc_SoporteRepository->EliminarDocSoporte($Id_Documentos);
+                    if(isset($Id_Documentos)){
+                        $this->Doc_SoporteRepository->EliminarDocSoporte($Id_Documentos);
+                    }
                 }else{
                     // Registrar plan corporativo sin documentos.
                     $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($Plan_Corporativo);

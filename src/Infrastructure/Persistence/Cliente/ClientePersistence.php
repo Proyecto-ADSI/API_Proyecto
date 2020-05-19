@@ -26,10 +26,12 @@ class ClientePersistence implements ClienteRepository
     public function ListarCliente(){
         $sql = "SELECT d.Id_Cliente, d.NIT_CDV, d.Razon_Social, d.Telefono, o.Nombre_Operador AS Operador,
         CASE WHEN  ISNULL(dbl.Id_Plan_Corporativo) = 0 THEN 'Si' 
-        ELSE 'No' END AS Corporativo, d.Estado_Cliente 
+        ELSE 'No' END AS Corporativo, m.Nombre_Municipio AS Municipio, d.Estado_Cliente 
         FROM Directorio d 
         INNER JOIN Datos_Basicos_Lineas dbl ON(d.Id_Cliente= dbl.Id_Cliente) 
-        INNER JOIN Operadores o ON(dbl.Id_Operador = o.Id_Operador)";
+        INNER JOIN Operadores o ON(dbl.Id_Operador = o.Id_Operador)
+        LEFT JOIN barrios_veredas bv ON(d.Id_Barrios_Veredas = bv.Id_Barrios_Veredas)
+        LEFT JOIN municipios m ON (bv.Id_Municipio = m.Id_Municipio)";
 
         try {
 
@@ -173,15 +175,17 @@ class ClientePersistence implements ClienteRepository
 
     public function ValidarEliminarCliente(int $Id_Cliente){
 
-        $sql = "SELECT Id_Llamada FROM Llamadas WHERE Id_Cliente = ?";
+            $sql = "SELECT Id_Cliente FROM directorio WHERE Id_Cliente IN 
+            (SELECT Id_Cliente from llamadas WHERE Id_cliente = ?) OR Id_Cliente IN 
+            (SELECT Id_Cliente from visita_interna WHERE Id_cliente = ?)";
 
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Id_Cliente);
+            $stm->bindValue(2, $Id_Cliente);
             $stm->execute();
             return $stm->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-
             return $e->getMessage();
         }
     }
@@ -245,8 +249,7 @@ class ClientePersistence implements ClienteRepository
         }
     }
 
-    public function ListarClienteImportados()
-    {
+    public function ListarClienteImportados(){
 
         $sql = "SELECT * FROM Importar_Clientes WHERE Estado_Cliente_Importado = 1";
 
@@ -263,8 +266,7 @@ class ClientePersistence implements ClienteRepository
     }
 
 
-    public function ValidarUbicacionCliente(?string $Municipio, ?string $Lugar)
-    {
+    public function ValidarUbicacionCliente(?string $Municipio, ?string $Lugar){
 
         if (!empty($Lugar)) {
 
@@ -320,8 +322,7 @@ class ClientePersistence implements ClienteRepository
         }       
     }
 
-    public function ValidarOperadorCliente(string $operador)
-    {   
+    public function ValidarOperadorCliente(string $operador){   
         $sql = "SELECT  o.Id_Operador  FROM operadores o WHERE o.Nombre_Operador = ?";
 
         try {

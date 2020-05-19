@@ -19,11 +19,16 @@ class Empleado implements JsonSerializable
     private $Imagen;
     private $Turno;
     
-    public function __GET($attr){
+    public function __get($attr){
         return $this->$attr;
     }
 
-    function __construct(?int $Id_Empleado, int $Tipo_Documento, string $Documento,string $Nombre, string $Apellidos, string $Email, int $Sexo, string $Celular, ?string $Imagen, int $Turno)
+    public function __set($name, $value)
+    {
+        $this->$name = $value;
+    }
+
+    function __construct(?int $Id_Empleado, ?int $Tipo_Documento, ?string $Documento, string $Nombre, string $Apellidos, string $Email, ?int $Sexo, ?string $Celular, ?string $Imagen, ?int $Turno)
     {   
         $this->Id_Empleado = $Id_Empleado;
         $this->Tipo_Documento = $Tipo_Documento;

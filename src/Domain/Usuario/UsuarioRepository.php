@@ -30,4 +30,6 @@ interface UsuarioRepository{
     public function EliminarUsuario(int $Id_Usuario);
 
     public function ValidarEliminarUsuario(int $Id_Usuario);
+
+    public  function ObtenerUsuarioRol(int $Id_Usuario);
 }  

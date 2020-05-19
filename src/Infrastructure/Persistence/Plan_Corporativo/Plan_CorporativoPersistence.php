@@ -66,7 +66,7 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
     {
 
         $sql = "UPDATE Plan_Corporativo SET Id_Documentos = ?, Fecha_Inicio = ?, 
-        Fecha_Fin = ?, Descripcion = ? WHERE Id_Plan_Corporativo = ?";
+        Fecha_Fin = ?, Clausula_Permanencia = ?, Descripcion = ? WHERE Id_Plan_Corporativo = ?";
 
         try {
 
@@ -74,9 +74,9 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
             $stm->bindValue(1, $Plan_Corporativo->__GET("Id_Documentos"));
             $stm->bindValue(2, $Plan_Corporativo->__GET("Fecha_Inicio"));
             $stm->bindValue(3, $Plan_Corporativo->__GET("Fecha_Fin"));
-            $stm->bindValue(4, $Plan_Corporativo->__GET("Descripcion"));
-            $stm->bindValue(5, $Plan_Corporativo->__GET("Id_Plan_Corporativo"));
-
+            $stm->bindValue(4, $Plan_Corporativo->__GET("Clausula_Permanencia"));
+            $stm->bindValue(5, $Plan_Corporativo->__GET("Descripcion"));
+            $stm->bindValue(6, $Plan_Corporativo->__GET("Id_Plan_Corporativo"));
 
             return $stm->execute();
         } catch (\Exception $e) {

@@ -96,6 +96,21 @@ class RolPersistence implements RolRepository
         }
     }
 
+    public function RolValUsuario(int $Id_Rol){
+        $sql = null;
+        if($Id_Rol == 1){
+            $sql = "SELECT Id_Rol, Nombre FROM roles";
+        }else if($Id_Rol == 2){
+            $sql = "SELECT Id_Rol, Nombre FROM roles WHERE Id_Rol NOT IN ('1','2')";
+        }
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->execute();
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 
     
 }

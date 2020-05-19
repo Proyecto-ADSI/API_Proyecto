@@ -40,7 +40,7 @@ class Doc_SoportePersistence implements Doc_SoporteRepository
 
     public function ListarDocSoporte(int $Id_Documentos)
     {
-        $sql = "SELECT Camara_Comercio,Cedula_RL,Soporte_Ingresos,Detalles_Plan_Corporativo 
+        $sql = "SELECT Camara_Comercio,Cedula_RL,Soporte_Ingresos,Detalles_Plan_Corporativo, Oferta 
         FROM Documentos_Soporte WHERE Id_Documentos = ? ";
 
         try {

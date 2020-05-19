@@ -24,7 +24,7 @@ class Doc_Soporte implements JsonSerializable{
         $this->$name = $value;
     }
 
-    function __construct(?int $Id_Documentos, string $Camara_Comercio, string $Cedula_RL, string $Soporte_Ingresos, string $Detalles_Plan_Corporativo)
+    function __construct(?int $Id_Documentos, string $Camara_Comercio, string $Cedula_RL, string $Soporte_Ingresos, ?string $Detalles_Plan_Corporativo)
     {
         $this->Id_Documentos = $Id_Documentos;
         $this->Camara_Comercio = $Camara_Comercio;
