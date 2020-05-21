@@ -28,6 +28,11 @@ use App\Application\Actions\Empleado\ListarEmpleados;
 // Llamadas
 use App\Application\Actions\Llamada\RegistrarLlamadaNPAction;
 
+// Notificaciones
+use App\Application\Actions\Notificaciones\ListarNotificaciones;
+use App\Application\Actions\Notificaciones\ListarNotificacionesNL;
+use App\Application\Actions\Notificaciones\EliminarNotificaciones;
+
 
 //Documento
 use App\Application\Actions\Documento\ListarDocumento;
@@ -194,7 +199,12 @@ return function (App $app) {
         $group->post('/LlamadaNP', RegistrarLlamadaNPAction::class);
     });
 
-
+    $app->group('/Notificaciones', function (Group $group) {
+        $group->get('/{Id_Usuario}', ListarNotificaciones::class);
+        $group->get('/NoLeidas/{Id_Usuario}', ListarNotificacionesNL::class);
+        $group->delete('/{Id_Notificacion}', EliminarNotificaciones::class);
+    });
+    
     $app->group('/Documento', function (Group $group) {
         $group->post('', DocumentoRegistroAction::class);
         $group->get('', ListarDocumento::class);

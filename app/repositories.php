@@ -24,6 +24,8 @@ use App\Domain\Razones\RazonesRepository;
 use App\Domain\Turnos\TurnosRepository;
 use App\Domain\Rol\RolRepository;
 use App\Domain\Llamada_Programada\Llamada_ProgramadaRepository;
+use App\Domain\Notificacion\NotificacionRepository;
+use App\Domain\Notificaciones_Usuario\Notificaciones_UsuarioRepository;
 
 
 use App\Infrastructure\Persistence\Empleado\EmpleadoPersistence;
@@ -49,6 +51,8 @@ use App\Infrastructure\Persistence\Razones\RazonesPersistence;
 use App\Infrastructure\Persistence\Turnos\TurnosPersistence;
 use App\Infrastructure\Persistence\Rol\RolPersistence;
 use App\Infrastructure\Persistence\Llamada_Programada\Llamada_ProgramadaPersistence;
+use App\Infrastructure\Persistence\Notificacion\NotificacionPersistence;
+use App\Infrastructure\Persistence\Notificaciones_Usuario\Notificaciones_UsuarioPersistence;
 
 
 use DI\ContainerBuilder;
@@ -78,7 +82,9 @@ return function (ContainerBuilder $containerBuilder) {
         RazonesRepository::class => \DI\autowire(RazonesPersistence::class),
         LlamadaRepository::class => \DI\autowire(LlamadaPersistence::class),
         CitaRepository::class => \DI\autowire(CitaPersistence::class),
-        Llamada_ProgramadaRepository::class=>\DI\autowire(Llamada_ProgramadaPersistence::class)
+        Llamada_ProgramadaRepository::class=>\DI\autowire(Llamada_ProgramadaPersistence::class),
+        NotificacionRepository::class=>\DI\autowire(NotificacionPersistence::class),
+        Notificaciones_UsuarioRepository::class=>\DI\autowire(Notificaciones_UsuarioPersistence::class)
     ]);
 };
  

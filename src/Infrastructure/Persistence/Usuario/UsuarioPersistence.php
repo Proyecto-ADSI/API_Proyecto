@@ -27,9 +27,9 @@ class UsuarioPersistence implements UsuarioRepository
         d.Nombre AS 'Tipo Documento', e.Documento, e.Nombre, e.Apellidos, e.Email AS Correo, s.Nombre AS Sexo, Celular, Imagen, t.Nombre AS Turno       
         FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) 
         INNER JOIN roles r ON (u.Id_Rol = r.Id_rol) 
-        INNER JOIN documentos d ON (e.Tipo_Documento = d.Id_Documento) 
-        INNER JOIN sexos s ON (e.Id_Sexo = s.Id_Sexo)
-        INNER JOIN turnos t ON (e.Id_Turno = t.Id_Turno)
+        LEFT JOIN documentos d ON (e.Tipo_Documento = d.Id_Documento) 
+        LEFT JOIN sexos s ON (e.Id_Sexo = s.Id_Sexo)
+        LEFT JOIN turnos t ON (e.Id_Turno = t.Id_Turno)
         INNER JOIN conexiones_usuario c ON (c.Id_Conexion_Usuario = u.Id_Conexion_Usuario)";
         
         try {
@@ -188,8 +188,7 @@ class UsuarioPersistence implements UsuarioRepository
         }   
     }
 
-    public function RestablecerContrasena(int $Id_Usuario, string $Contrasena)
-    {
+    public function RestablecerContrasena(int $Id_Usuario, string $Contrasena){
         $sql = "UPDATE usuarios SET Contrasena = ? WHERE Id_Usuario = ?";
 
         try {
@@ -205,8 +204,7 @@ class UsuarioPersistence implements UsuarioRepository
         }
     }
 
-    public function ValidarUsuario(string $usuario)
-    {
+    public function ValidarUsuario(string $usuario){
         $sql = "SELECT e.Email FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) WHERE u.Usuario = ? ";
 
         try {
@@ -223,8 +221,7 @@ class UsuarioPersistence implements UsuarioRepository
         }
     }
 
-    public function EditarUsuario(Usuario $usuario)
-    {
+    public function EditarUsuario(Usuario $usuario){
        $sql = "UPDATE usuarios SET Usuario = ?, Id_Rol = ? WHERE Id_Usuario = ?";
        
        try {
@@ -304,9 +301,9 @@ class UsuarioPersistence implements UsuarioRepository
             d.Nombre AS 'Tipo Documento', e.Documento, e.Nombre, e.Apellidos, e.Email AS Correo, s.Nombre AS Sexo, Celular, Imagen, t.Nombre AS Turno       
             FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) 
             INNER JOIN roles r ON (u.Id_Rol = r.Id_rol) 
-            INNER JOIN documentos d ON (e.Tipo_Documento = d.Id_Documento) 
-            INNER JOIN sexos s ON (e.Id_Sexo = s.Id_Sexo)
-            INNER JOIN turnos t ON (e.Id_Turno = t.Id_Turno)
+            LEFT JOIN documentos d ON (e.Tipo_Documento = d.Id_Documento) 
+            LEFT JOIN sexos s ON (e.Id_Sexo = s.Id_Sexo)
+            LEFT JOIN turnos t ON (e.Id_Turno = t.Id_Turno)
             INNER JOIN conexiones_usuario c ON (c.Id_Conexion_Usuario = u.Id_Conexion_Usuario)";
         }else if($Id_Rol == 2){
 
@@ -314,9 +311,9 @@ class UsuarioPersistence implements UsuarioRepository
             d.Nombre AS 'Tipo Documento', e.Documento, e.Nombre, e.Apellidos, e.Email AS Correo, s.Nombre AS Sexo, Celular, Imagen, t.Nombre AS Turno       
             FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) 
             INNER JOIN roles r ON (u.Id_Rol = r.Id_rol) 
-            INNER JOIN documentos d ON (e.Tipo_Documento = d.Id_Documento) 
-            INNER JOIN sexos s ON (e.Id_Sexo = s.Id_Sexo)
-            INNER JOIN turnos t ON (e.Id_Turno = t.Id_Turno)
+            LEFT JOIN documentos d ON (e.Tipo_Documento = d.Id_Documento) 
+            LEFT JOIN sexos s ON (e.Id_Sexo = s.Id_Sexo)
+            LEFT JOIN turnos t ON (e.Id_Turno = t.Id_Turno)
             INNER JOIN conexiones_usuario c ON (c.Id_Conexion_Usuario = u.Id_Conexion_Usuario)
             WHERE u.Id_Rol NOT IN ('1','2')";
         }

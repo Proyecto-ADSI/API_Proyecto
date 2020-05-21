@@ -18,6 +18,8 @@ use App\Domain\Municipio\MunicipioRepository;
 use App\Domain\Pais\PaisRepository;
 use App\Domain\SubTipo\SubTipoRepository;
 use App\Domain\Operador\OperadorRepository;
+use App\Domain\Notificacion\NotificacionRepository;
+use App\Domain\Notificaciones_Usuario\Notificaciones_UsuarioRepository;
 use Psr\Log\LoggerInterface;
 
 abstract class LlamadaAction extends Action
@@ -36,9 +38,8 @@ abstract class LlamadaAction extends Action
     protected $LineaRepository;
     protected $Llamada_ProgramadaRepository;
     protected $OperadorRepository;
-
-    
-
+    protected $NotificacionRepository;
+    protected $Notificaciones_UsuarioRepository;
 
     public function __construct(
 
@@ -56,7 +57,9 @@ abstract class LlamadaAction extends Action
         LlamadaRepository $LlamadaRepository,
         CitaRepository $CitaRepository,
         Llamada_ProgramadaRepository $Llamada_ProgramadaRepository,
-        OperadorRepository $OperadorRepository
+        OperadorRepository $OperadorRepository,
+        NotificacionRepository $NotificacionRepository,
+        Notificaciones_UsuarioRepository $Notificaciones_UsuarioRepository
     )
     {
         parent::__construct($logger);
@@ -74,5 +77,7 @@ abstract class LlamadaAction extends Action
         $this->CitaRepository = $CitaRepository;
         $this->Llamada_ProgramadaRepository = $Llamada_ProgramadaRepository;
         $this->OperadorRepository = $OperadorRepository;
+        $this->NotificacionRepository = $NotificacionRepository;
+        $this->Notificaciones_UsuarioRepository = $Notificaciones_UsuarioRepository;
     }
 }
