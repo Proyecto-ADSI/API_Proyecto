@@ -6,7 +6,7 @@ namespace App\Application\Actions\Notificaciones;
 
 use Psr\Http\Message\ResponseInterface as Response;
 
-class ListarNotificacionesNL extends NotificacionesAction
+class ListarNotificacionesNV extends NotificacionesAction
 {
 
     protected function action(): Response
@@ -14,7 +14,7 @@ class ListarNotificacionesNL extends NotificacionesAction
         
         $Id_Usuario = (int) $this->resolveArg("Id_Usuario");
         
-        $Notificaciones = $this->Notificaciones_UsuarioRepository->ListarNotificacionesNoLeidas($Id_Usuario);
+        $Notificaciones = $this->Notificaciones_UsuarioRepository->ListarNotificacionesNoVisitadas($Id_Usuario);
 
         return $this->respondWithData($Notificaciones);
     }

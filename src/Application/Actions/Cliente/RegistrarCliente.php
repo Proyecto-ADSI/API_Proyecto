@@ -159,7 +159,8 @@ class RegistrarCliente extends ClienteAction
             $campos->Id_Usuario,
             NULL,
             $mensaje,
-            2
+            2,
+            (int) $infoCliente['Id_Cliente']
         );
         
         $usuarios = array(1,2);

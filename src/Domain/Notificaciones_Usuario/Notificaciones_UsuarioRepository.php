@@ -9,9 +9,11 @@ interface Notificaciones_UsuarioRepository{
 
     public function ListarNotificaciones_Usuario(int $Id_Usuario);
 
-    public function ListarNotificacionesNoLeidas(int $Id_Usuario);
+    public function ListarNotificacionesNoVisitadas(int $Id_Usuario);
     
-    public function CambiarEstadoNU(int $Id_Usuario, int $EstadoNU);
+    public function CambiarEstadoLecturaNU(int $Id_Usuario);
+
+    public function CambiarEstadoVisitaNU(int $Id_NU);
 
     public function EliminarNotificacion_Usuario(int $Id_NU);
 

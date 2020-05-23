@@ -280,7 +280,7 @@ class UsuarioPersistence implements UsuarioRepository
 
     public function ValidarEliminarUsuario(int $Id_Usuario){
 
-        $sql = "SELECT Id_Llamada FROM Llamadas WHERE Id_Usuario = ?";
+        $sql = "SELECT Id_Llamada FROM llamadas WHERE Id_Usuario = ?";
 
         try{
             $stm = $this->db->prepare($sql);

@@ -45,7 +45,7 @@ class Notificaciones_UsuarioPersistence implements Notificaciones_UsuarioReposit
 
     public function ListarNotificaciones_Usuario(int $Id_Usuario){
         $sql = "SELECT nu.Id_NU, n.Id_Notificacion, DATE_FORMAT(n.Fecha_Notificacion,'%e/%b/%Y %h:%i %p') as Fecha_Notificacion,
-        n.Mensaje, cn.Id_Categoria_N, cn.Categoria, u.Id_Usuario, 
+        n.Mensaje, n.Id_Registro, cn.Id_Categoria_N, cn.Categoria, u.Id_Usuario, 
         u.Usuario, e.Imagen, r.Nombre as Nombre_Rol    
         FROM notificaciones_usuarios nu
         JOIN notificaciones n ON(nu.Id_Notificacion = n.Id_Notificacion)
@@ -71,13 +71,13 @@ class Notificaciones_UsuarioPersistence implements Notificaciones_UsuarioReposit
         }
     }
 
-    public function ListarNotificacionesNoLeidas(int $Id_Usuario){
+    public function ListarNotificacionesNoVisitadas(int $Id_Usuario){
         $sql = "SELECT nu.Id_NU, DATE_FORMAT(n.Fecha_Notificacion,'%e/%b/%Y %h:%i %p') as Fecha_Notificacion,
-        n.Mensaje, n.Id_Categoria_N, u.Usuario  
+        n.Mensaje, n.Id_Categoria_N, n.Id_Registro, u.Usuario, nu.Estado_Lectura, nu.Estado_Visita  
         FROM notificaciones_usuarios nu
         JOIN notificaciones n ON(nu.Id_Notificacion = n.Id_Notificacion)
         JOIN usuarios u ON(n.Id_Usuario = u.Id_Usuario) 
-        WHERE nu.Id_Usuario = ? AND nu.Estado_Notificacion = ? ORDER BY n.Fecha_Notificacion desc";
+        WHERE nu.Id_Usuario = ? AND nu.Estado_Visita = ? ORDER BY n.Fecha_Notificacion desc";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -96,14 +96,29 @@ class Notificaciones_UsuarioPersistence implements Notificaciones_UsuarioReposit
         }
     }
 
-    public function CambiarEstadoNU(int $Id_NU, int $EstadoNU){
-        $sql = "UPDATE notificaciones_usuarios SET Estado_Notificacion= ? WHERE Id_NU = ?";
+    public function CambiarEstadoLecturaNU(int $Id_Usuario){
+        $sql = "UPDATE notificaciones_usuarios SET Estado_Lectura = ? WHERE Id_Usuario = ? AND Estado_Lectura = ?";
    
         try {
           $stm = $this->db->prepare($sql);
-          $stm->bindParam(1, $Estado);
-          $stm->bindParam(2, $Id_Pais);
+          $stm->bindValue(1, 1);
+          $stm->bindValue(2, $Id_Usuario);
+          $stm->bindValue(3, 0);
    
+          return $stm->execute();
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function CambiarEstadoVisitaNU(int $Id_NU){
+        $sql = "UPDATE notificaciones_usuarios SET Estado_Visita = ? WHERE Id_NU = ?";
+   
+        try {
+          $stm = $this->db->prepare($sql);
+          $stm->bindValue(1, 1);
+          $stm->bindValue(2, $Id_NU);
           return $stm->execute();
 
         } catch (\Exception $e) {

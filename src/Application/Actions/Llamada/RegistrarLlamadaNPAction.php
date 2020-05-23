@@ -73,6 +73,7 @@ class RegistrarLlamadaNPAction extends LlamadaAction
             $Id_Llamada = (int) $infoLlamada['Id_Llamada'];
 
             $CitaRegistrada = false;
+            $Id_Cita = null;
             // Validar si se agenda cita
             if ($campos->Validacion_Cita) {
 
@@ -167,7 +168,8 @@ class RegistrarLlamadaNPAction extends LlamadaAction
                     $campos->Id_Usuario,
                     null,
                     $mensaje,
-                    4
+                    4,
+                    $Id_Cita
                 );
                 // Roles a los que desea notificar.
                 $roles = array(1, 2);

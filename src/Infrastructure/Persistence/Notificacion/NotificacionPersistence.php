@@ -22,13 +22,14 @@ class NotificacionPersistence implements NotificacionRepository
     }
 
     public function RegistrarNotificacion(Notificacion $Notificacion){
-        $sql = "INSERT INTO Notificaciones (Id_Usuario, Mensaje, Id_Categoria_N) VALUES (?,?,?)";
+        $sql = "INSERT INTO notificaciones (Id_Usuario, Mensaje, Id_Categoria_N, Id_Registro) VALUES (?,?,?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Notificacion->__GET("Id_Usuario"));
             $stm->bindValue(2, $Notificacion->__GET("Mensaje"));
             $stm->bindValue(3, $Notificacion->__GET("Id_Categoria_N"));
+            $stm->bindValue(4, $Notificacion->__GET("Id_Registro"));
             $r = $stm->execute();
             $error = $stm->errorCode();
             if ($error === '00000') {

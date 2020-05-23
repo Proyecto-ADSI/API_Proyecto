@@ -18,6 +18,8 @@ class Notificacion implements JsonSerializable
 
     private $Id_Categoria_N;
 
+    private $Id_Registro;
+
     public function __get($attr)
     {
         return $this->$attr;
@@ -28,13 +30,14 @@ class Notificacion implements JsonSerializable
         $this->$name = $value;
     }
 
-    public function __construct(?int $Id_Notificacion, int $Id_Usuario, ?string $Fecha, string $Mensaje, int $Id_Categoria_N)
+    public function __construct(?int $Id_Notificacion, int $Id_Usuario, ?string $Fecha, string $Mensaje, int $Id_Categoria_N, int $Id_Registro)
     {
         $this->Id_Notificacion = $Id_Notificacion;
         $this->Id_Usuario = $Id_Usuario;
         $this->Fecha = $Fecha;
         $this->Mensaje = $Mensaje;
         $this->Id_Categoria_N = $Id_Categoria_N;
+        $this->Id_Registro = $Id_Registro;
     }
 
     public function jsonSerialize()
@@ -44,7 +47,8 @@ class Notificacion implements JsonSerializable
             "Id_Usuario" => $this->Id_Usuario,
             "Fecha" => $this->Fecha,
             "Mensaje" => $this->Mensaje,
-            "Id_Categoria_N" => $this->Id_Categoria_N
+            "Id_Categoria_N" => $this->Id_Categoria_N,
+            "Id_Registro" => $this->Id_Registro
         ];
     }
 }
