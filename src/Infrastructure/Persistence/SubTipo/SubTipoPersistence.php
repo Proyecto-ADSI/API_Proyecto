@@ -69,7 +69,7 @@ class SubTipoPersistence implements SubTipoRepository
         }
       }
       public function ValidarSubTipoEliminar(int $Id_SubTipo_Barrio_Vereda){
-        $sql = "SELECT Id_Subtipo_Barrio_Vereda FROM barrio_veredas WHERE Id_SubTipo_Barrio_Vereda = ?";
+        $sql = "SELECT Id_Subtipo_Barrio_Vereda FROM barrios_veredas WHERE Id_SubTipo_Barrio_Vereda = ?";
    
         try {
           $stm = $this->db->prepare($sql);
@@ -79,7 +79,7 @@ class SubTipoPersistence implements SubTipoRepository
           return $stm->fetchAll(PDO::FETCH_ASSOC);
           
           $error = $stm->errorCode();
-          
+
           if ($error === '00000') {
               return true;
           } else {

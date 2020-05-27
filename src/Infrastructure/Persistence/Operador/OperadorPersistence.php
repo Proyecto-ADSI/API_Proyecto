@@ -98,4 +98,49 @@ class OperadorPersistence implements OperadorRepository
             return $e->getMessage();
         }
     }    
+
+    public function ValidarOperadorDa(int $Id_Operador)
+    {
+        $sql = "SELECT Id_Operador FROM datos_basicos_lineas WHERE Id_Operador = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Operador);
+            $stm->execute();
+
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+             return $e->getMessage();
+        }
+    }
+
+    public function ValidarOperadorRe(int $Id_Operador)
+    {
+        $sql = "SELECT Operadores_Id_Operador FROM reportes_operador WHERE Operadores_Id_Operador = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Operador);
+            $stm->execute();
+
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+             return $e->getMessage();
+        }
+    }
+
+    public function EliminarOperador(int $Id_Operador)
+    {
+        $sql ="DELETE FROM operadores WHERE Id_Operador = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Operador);
+
+           return $stm->execute();
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }

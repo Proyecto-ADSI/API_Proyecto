@@ -16,20 +16,18 @@ class EliminarSubTipoAction extends SubTipoAction
 
        
 
-        return $this->respondWithData(["Eliminar" => $Validar]);
+        // return $this->respondWithData(["Eliminar" => $Validar]);
 
-        // if(!empty($Validar)){
+        if(!empty($Validar)){
 
-        //     return $this->respondWithData(["Eliminar" => false]);
+            return $this->respondWithData(["Eliminar" => false]);
 
-        // }else{
+        }else{
 
-        //     $Eliminar = $this->SubTipoRepository->EliminarSubTipo($Id_SubTipo_Barrio_Vereda);
+            $Eliminar = $this->SubTipoRepository->EliminarSubTipo($Id_SubTipo_Barrio_Vereda);
 
-        //     return $this->respondWithData(["Eliminar" => $Eliminar]);
-         
-        // }
-        
+            return $this->respondWithData(["Eliminar" => $Eliminar]);
+        }
     }
 }
 

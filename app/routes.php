@@ -108,6 +108,7 @@ use App\Application\Actions\Operador\EditarOperadorAction;
 use App\Application\Actions\Operador\ListarOperadorAction;
 use App\Application\Actions\Operador\ObtenerOperadorAction;
 use App\Application\Actions\Operador\RegistrarOperadorAction;
+use App\Application\Actions\Operador\EliminarOperadorAction;
 
 // Razones
 use App\Application\Actions\Razones\EditarRazonesAction;
@@ -278,6 +279,7 @@ return function (App $app) {
         $group->get('/ObtenerOperador/{Id_Operador}', ObtenerOperadorAction::class);
         $group->put('', EditarOperadorAction::class);
         $group->patch('/{Id_Operador}/{Estado}', CambiarEstadoOperadorAction::class);
+        $group->delete('/{Id_Operador}',EliminarOperadorAction::class);
     });
 
     $app->group('/Calificaciones', function (Group $group) {

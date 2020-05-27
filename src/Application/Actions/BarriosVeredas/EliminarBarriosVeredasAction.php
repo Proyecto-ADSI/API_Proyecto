@@ -12,21 +12,20 @@ class EliminarBarriosVeredasAction extends BarriosVeredasAction
     protected function action(): Response
     {
         $Id_Barrios_Veredas = (int)$this->resolveArg("Id_Barrios_Veredas");
-        $Eliminar = $this->BarriosVeredasRepository->EliminarBarriosVeredas($Id_Barrios_Veredas);
+        // $Eliminar = $this->BarriosVeredasRepository->EliminarBarriosVeredas($Id_Barrios_Veredas);
 
         $Validar = $this->BarriosVeredasRepository->ValidarBarriosVeredas($Id_Barrios_Veredas);
 
-        return $this->respondWithData(["Eliminar"=> $Validar]);
 
-        // if(!empty($Validar)){
+        if(!empty($Validar)){
 
-        //     return $this->respondWithData(["Eliminar" => false]);
-        // }else{
+            return $this->respondWithData(["Eliminar" => false]);
+        }else{
 
-        //    $Eliminar = $this->BarriosVeredasRepository->EliminarBarriosVeredas($Id_Barrios_Veredas);
+           $Eliminar = $this->BarriosVeredasRepository->EliminarBarriosVeredas($Id_Barrios_Veredas);
 
-        //     return $this->respondWithData(["Eliminar" => $Eliminar]);
-        // }
+            return $this->respondWithData(["Eliminar" => $Eliminar]);
+        }
         
     }
 }

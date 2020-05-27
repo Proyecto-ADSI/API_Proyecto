@@ -139,10 +139,9 @@ class BarriosVeredasPersistence implements BarriosVeredasRepository
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1,$Id_Barrios_Veredas);
-            $stm->execute();
 
-
-            return $stm->fetchAll(PDO::FETCH_ASSOC);
+            
+            return $stm->execute();
 
 
         } catch (Exception $e) {
