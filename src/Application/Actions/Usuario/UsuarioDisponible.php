@@ -12,12 +12,6 @@ class UsuarioDisponible extends UsuarioAction
     {
         $usuario  = $this->request->getQueryParams();
 
-        // $usuario = $this->getFormData();
-
-        // return $this->respondWithData($usuario);
-
-        // return $this->respondWithData($usuario['txtUsuario']);
-
         $respuesta = $this->usuarioRepository->ValidarUsuario($usuario['txtUsuario']);
 
         if($respuesta){
