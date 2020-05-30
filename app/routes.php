@@ -138,6 +138,7 @@ use App\Application\Actions\Cliente\CargarDatosUbicacion;
 use App\Application\Actions\Cliente\EliminarCliente;
 use App\Application\Actions\Cliente\ImportarClientes;
 use App\Application\Actions\Cliente\CargarDocumentosSoporte;
+use App\Application\Actions\Cliente\ValidarCliente;
 
 // Cita
 use App\Application\Actions\Cita\ListarCitaAction;
@@ -197,6 +198,7 @@ return function (App $app) {
         $group->get('/ValidarEstado/{Id_Cliente_VE}', ValidarEstadoCliente::class);
         $group->get('/CambiarEstado/{Id_Cliente_CE}/{Estado}', CambiarEstadoCliente::class);
         $group->get('/Datos/Ubicacion', CargarDatosUbicacion::class);
+        $group->get('/ValidarCliente/Disponibilidad', ValidarCliente::class);
         $group->put('', EditarCliente::class);
         $group->delete('/{Id_Cliente_Eliminar}', EliminarCliente::class);
         $group->post('/ImportarClientes', ImportarClientes::class);

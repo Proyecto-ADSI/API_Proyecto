@@ -31,4 +31,5 @@ interface ClienteRepository{
 
     public function ValidarOperadorCliente(string $operador);
     
+    public function ValidarCliente(string $texto);
 }
