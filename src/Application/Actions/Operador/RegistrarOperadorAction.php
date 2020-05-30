@@ -19,6 +19,7 @@ class RegistrarOperadorAction extends OperadorAction
         $datos = new Operador(
             0,
             $campos->Nombre,
+            $campos->Color,
             $campos->Estado,
         );
         

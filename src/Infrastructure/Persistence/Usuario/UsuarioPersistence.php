@@ -27,9 +27,9 @@ class UsuarioPersistence implements UsuarioRepository
         d.Nombre AS 'Tipo Documento', e.Documento, e.Nombre, e.Apellidos, e.Email AS Correo, s.Nombre AS Sexo, Celular, Imagen, t.Nombre AS Turno       
         FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) 
         INNER JOIN roles r ON (u.Id_Rol = r.Id_rol) 
-        INNER JOIN documentos d ON (e.Tipo_Documento = d.Id_Documento) 
-        INNER JOIN sexos s ON (e.Id_Sexo = s.Id_Sexo)
-        INNER JOIN turnos t ON (e.Id_Turno = t.Id_Turno)
+        LEFT JOIN documentos d ON (e.Tipo_Documento = d.Id_Documento) 
+        LEFT JOIN sexos s ON (e.Id_Sexo = s.Id_Sexo)
+        LEFT JOIN turnos t ON (e.Id_Turno = t.Id_Turno)
         INNER JOIN conexiones_usuario c ON (c.Id_Conexion_Usuario = u.Id_Conexion_Usuario)";
         
         try {
@@ -42,9 +42,6 @@ class UsuarioPersistence implements UsuarioRepository
             }else{
                return $stm->errorInfo();
             }
-
-         
-
         } catch (\Exception $e) {
             return "Error al listar usuarios: " . $e;
         }
@@ -123,8 +120,16 @@ class UsuarioPersistence implements UsuarioRepository
             $stm->bindValue(2, $usuario->__GET("Contrasena"));
             $stm->bindValue(3, $usuario->__GET("Id_Rol"));
             $stm->bindValue(4, $usuario->__GET("Id_Empleado"));
-            
-            return $stm->execute();
+            $res = $stm->execute();
+            $error = $stm->errorCode();
+            if($error === '00000'){
+                return $res;
+            }else{
+                $error = $stm->errorInfo();
+                return $error;
+                
+            }
+           
             
         } catch (Exception $e) {
 
@@ -183,8 +188,7 @@ class UsuarioPersistence implements UsuarioRepository
         }   
     }
 
-    public function RestablecerContrasena(int $Id_Usuario, string $Contrasena)
-    {
+    public function RestablecerContrasena(int $Id_Usuario, string $Contrasena){
         $sql = "UPDATE usuarios SET Contrasena = ? WHERE Id_Usuario = ?";
 
         try {
@@ -200,8 +204,7 @@ class UsuarioPersistence implements UsuarioRepository
         }
     }
 
-    public function ValidarUsuario(string $usuario)
-    {
+    public function ValidarUsuario(string $usuario){
         $sql = "SELECT e.Email FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) WHERE u.Usuario = ? ";
 
         try {
@@ -218,8 +221,7 @@ class UsuarioPersistence implements UsuarioRepository
         }
     }
 
-    public function EditarUsuario(Usuario $usuario)
-    {
+    public function EditarUsuario(Usuario $usuario){
        $sql = "UPDATE usuarios SET Usuario = ?, Id_Rol = ? WHERE Id_Usuario = ?";
        
        try {
@@ -278,7 +280,7 @@ class UsuarioPersistence implements UsuarioRepository
 
     public function ValidarEliminarUsuario(int $Id_Usuario){
 
-        $sql = "SELECT Id_Llamada FROM Llamadas WHERE Id_Usuario = ?";
+        $sql = "SELECT Id_Llamada FROM llamadas WHERE Id_Usuario = ?";
 
         try{
             $stm = $this->db->prepare($sql);
@@ -289,6 +291,45 @@ class UsuarioPersistence implements UsuarioRepository
         }catch(Exception $e){
 
             return $e->getMessage();
+        }
+    }
+
+    public  function ObtenerUsuarioRol(int $Id_Rol){
+        $sql = null;
+        if($Id_Rol == 1){
+            $sql = "SELECT u.Id_Usuario, u.Usuario, c.Conexion, u.Estado_Usuario, u.Id_Rol, r.Nombre AS Rol, u.Id_Empleado, 
+            d.Nombre AS 'Tipo Documento', e.Documento, e.Nombre, e.Apellidos, e.Email AS Correo, s.Nombre AS Sexo, Celular, Imagen, t.Nombre AS Turno       
+            FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) 
+            INNER JOIN roles r ON (u.Id_Rol = r.Id_rol) 
+            LEFT JOIN documentos d ON (e.Tipo_Documento = d.Id_Documento) 
+            LEFT JOIN sexos s ON (e.Id_Sexo = s.Id_Sexo)
+            LEFT JOIN turnos t ON (e.Id_Turno = t.Id_Turno)
+            INNER JOIN conexiones_usuario c ON (c.Id_Conexion_Usuario = u.Id_Conexion_Usuario)";
+        }else if($Id_Rol == 2){
+
+            $sql = "SELECT u.Id_Usuario, u.Usuario, c.Conexion, u.Estado_Usuario, u.Id_Rol, r.Nombre AS Rol, u.Id_Empleado, 
+            d.Nombre AS 'Tipo Documento', e.Documento, e.Nombre, e.Apellidos, e.Email AS Correo, s.Nombre AS Sexo, Celular, Imagen, t.Nombre AS Turno       
+            FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) 
+            INNER JOIN roles r ON (u.Id_Rol = r.Id_rol) 
+            LEFT JOIN documentos d ON (e.Tipo_Documento = d.Id_Documento) 
+            LEFT JOIN sexos s ON (e.Id_Sexo = s.Id_Sexo)
+            LEFT JOIN turnos t ON (e.Id_Turno = t.Id_Turno)
+            INNER JOIN conexiones_usuario c ON (c.Id_Conexion_Usuario = u.Id_Conexion_Usuario)
+            WHERE u.Id_Rol NOT IN ('1','2')";
+        }
+        
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->execute();
+
+            $error = $stm->errorCode();
+            if($error === '00000'){
+                return $stm->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+               return $stm->errorInfo();
+            }
+        } catch (\Exception $e) {
+            return "Error al listar usuarios: " . $e;
         }
     }
 

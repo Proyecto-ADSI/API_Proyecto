@@ -27,7 +27,7 @@ class DBLPersistence implements DBLRepository
     public function RegistrarDBL(DBL $DBL)
     {
 
-        $sql = "INSERT INTO Datos_Basicos_Lineas(Id_Cliente,Id_Operador,Id_Plan_Corporativo, Cantidad_Total_Lineas, 
+        $sql = "INSERT INTO datos_basicos_lineas(Id_Cliente,Id_Operador,Id_Plan_Corporativo, Cantidad_Total_Lineas, 
         Valor_Total_Mensual, Id_Calificacion_Operador, Razones) VALUES (?,?,?,?,?,?,?)";
 
         try {
@@ -63,7 +63,7 @@ class DBLPersistence implements DBLRepository
         IFNULL(dbl.Id_Plan_Corporativo,0) Id_Plan_Corporativo, dbl.Cantidad_Total_Lineas, 
         dbl.Valor_Total_Mensual, dbl.Id_Calificacion_Operador, IFNULL(c.Calificacion,'Sin calificar') Calificacion, 
         IFNULL(dbl.Razones,'Sin especificar') Razones, dbl.Id_Estado_DBL, e.Estado_DBL
-        FROM Datos_Basicos_Lineas dbl JOIN Estados_DBL e ON( dbl.Id_Estado_DBL = e.Id_Estado_DBL)
+        FROM datos_basicos_lineas dbl JOIN Estados_DBL e ON( dbl.Id_Estado_DBL = e.Id_Estado_DBL)
         LEFT JOIN Operadores o ON( dbl.Id_Operador = o.Id_Operador)
         LEFT JOIN Calificacion_Operador c ON(dbl.Id_Calificacion_Operador = c.Id_Calificacion_Operador)
         WHERE dbl.Id_Cliente = ? AND dbl.Id_Estado_DBL = ? ";
@@ -90,7 +90,7 @@ class DBLPersistence implements DBLRepository
     public function EditarDBL(DBL $DBL)
     {
 
-        $sql = "UPDATE Datos_Basicos_lineas SET  Id_Operador = ?, Id_Plan_Corporativo = ?,
+        $sql = "UPDATE datos_basicos_lineas SET  Id_Operador = ?, Id_Plan_Corporativo = ?,
         Cantidad_Total_Lineas = ?, Valor_Total_Mensual = ?, Id_Calificacion_Operador = ?,
         Razones = ? WHERE Id_DBL = ?";
         
@@ -114,7 +114,7 @@ class DBLPersistence implements DBLRepository
     public function CambiarEstadoDBL(int $Id_DBL, int $Estado)
     {
 
-        $sql = "UPDATE Datos_Basicos_Lineas SET Estado_DBL = ? WHERE Id_DBL = ?";
+        $sql = "UPDATE datos_basicos_lineas SET Estado_DBL = ? WHERE Id_DBL = ?";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -131,7 +131,7 @@ class DBLPersistence implements DBLRepository
     public function ELiminarDBL(int $Id_DBL)
     {
 
-        $sql = "DELETE FROM Datos_Basicos_Lineas WHERE Id_DBL = ?";
+        $sql = "DELETE FROM datos_basicos_lineas WHERE Id_DBL = ?";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -147,7 +147,7 @@ class DBLPersistence implements DBLRepository
     public function ConsultarUltimoRegistrado()
     {
 
-        $sql = "SELECT Id_DBL FROM Datos_Basicos_Lineas ORDER BY 1 DESC LIMIT 1";
+        $sql = "SELECT Id_DBL FROM datos_basicos_lineas ORDER BY 1 DESC LIMIT 1";
 
         try {
 

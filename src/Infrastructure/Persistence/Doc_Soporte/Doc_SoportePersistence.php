@@ -21,7 +21,7 @@ class Doc_SoportePersistence implements Doc_SoporteRepository
 
     public function RegistrarDocSoporte(Doc_Soporte $Doc_Soporte)
     {
-        $sql = "INSERT INTO Documentos_Soporte(Camara_Comercio,Cedula_RL,Soporte_Ingresos, Detalles_Plan_Corporativo)
+        $sql = "INSERT INTO documentos_soporte(Camara_Comercio,Cedula_RL,Soporte_Ingresos, Detalles_Plan_Corporativo)
         VALUES(?,?,?,?)";
 
         try {
@@ -40,8 +40,8 @@ class Doc_SoportePersistence implements Doc_SoporteRepository
 
     public function ListarDocSoporte(int $Id_Documentos)
     {
-        $sql = "SELECT Camara_Comercio,Cedula_RL,Soporte_Ingresos,Detalles_Plan_Corporativo 
-        FROM Documentos_Soporte WHERE Id_Documentos = ? ";
+        $sql = "SELECT Camara_Comercio,Cedula_RL,Soporte_Ingresos,Detalles_Plan_Corporativo, Oferta 
+        FROM documentos_soporte WHERE Id_Documentos = ? ";
 
         try {
 
@@ -58,7 +58,7 @@ class Doc_SoportePersistence implements Doc_SoporteRepository
 
     public function EditarDocSoporte(Doc_Soporte $Doc_Soporte){
 
-        $sql = "UPDATE Documentos_Soporte SET Camara_Comercio = ?,Cedula_RL = ?, 
+        $sql = "UPDATE documentos_soporte SET Camara_Comercio = ?,Cedula_RL = ?, 
         Soporte_Ingresos = ?, Detalles_Plan_Corporativo = ? WHERE Id_Documentos = ?";
 
         try{
@@ -79,7 +79,7 @@ class Doc_SoportePersistence implements Doc_SoporteRepository
 
     public function EliminarDocSoporte(int $Id_Documentos)
     {
-        $sql = "DELETE FROM Documentos_Soporte WHERE Id_Documentos = ? ";
+        $sql = "DELETE FROM documentos_soporte WHERE Id_Documentos = ? ";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -93,7 +93,7 @@ class Doc_SoportePersistence implements Doc_SoporteRepository
 
     public function ConsultarUltimoRegistrado(){
 
-        $sql = "SELECT Id_Documentos FROM Documentos_Soporte ORDER BY 1 DESC LIMIT 1";
+        $sql = "SELECT Id_Documentos FROM documentos_soporte ORDER BY 1 DESC LIMIT 1";
 
         try{
 

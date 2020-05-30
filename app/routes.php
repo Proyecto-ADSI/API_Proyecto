@@ -20,12 +20,20 @@ use App\Application\Actions\Usuario\EditarUsuario;
 use App\Application\Actions\Usuario\CambiarEstadoUsuario;
 use App\Application\Actions\Usuario\EliminarUsuario;
 use App\Application\Actions\Usuario\CargarImagenUsuario;
+use App\Application\Actions\Usuario\ObtenerUsuarioRol;
 
 // Empleados
 use App\Application\Actions\Empleado\ListarEmpleados;
 
 // Llamadas
 use App\Application\Actions\Llamada\RegistrarLlamadaNPAction;
+
+// Notificaciones
+use App\Application\Actions\Notificaciones\ListarNotificaciones;
+use App\Application\Actions\Notificaciones\ListarNotificacionesNV;
+use App\Application\Actions\Notificaciones\EliminarNotificaciones;
+use App\Application\Actions\Notificaciones\CambiarEstadoLecturaNotificacion;
+use App\Application\Actions\Notificaciones\CambiarEstadoVisitaNotificacion;
 
 
 //Documento
@@ -101,6 +109,7 @@ use App\Application\Actions\Rol\CambiarEstadoRolAction;
 use App\Application\Actions\Rol\EditarRolAction;
 use App\Application\Actions\Rol\ListarRolAction;
 use App\Application\Actions\Rol\ObtenerDatosRolAction;
+use App\Application\Actions\Rol\RolValUsuario;
 use App\Application\Actions\Rol\RegistrarRolAction;
 //Operador
 use App\Application\Actions\Operador\CambiarEstadoOperadorAction;
@@ -128,6 +137,11 @@ use App\Application\Actions\Cliente\CambiarEstadoCliente;
 use App\Application\Actions\Cliente\CargarDatosUbicacion;
 use App\Application\Actions\Cliente\EliminarCliente;
 use App\Application\Actions\Cliente\ImportarClientes;
+use App\Application\Actions\Cliente\CargarDocumentosSoporte;
+
+// Cita
+use App\Application\Actions\Cita\ListarCitaAction;
+
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -162,6 +176,7 @@ return function (App $app) {
         $group->get('/EnviarCorreo/{usuario}', EnviarCorreo::class);
         $group->get('/Validacion/Disponible', UsuarioDisponible::class);
         $group->get('/CambiarEstado/{Id_Usuario_CE}/{Estado}', CambiarEstadoUsuario::class);
+        $group->get('/ObtenerUsuarioRol/{Id_Rol}', ObtenerUsuarioRol::class);
         $group->post('/Login', LoginAction::class);
         $group->post('', UsuarioRegistro::class);
         $group->get('/ValidarToken/{token}', ValidarToken::class);
@@ -185,13 +200,21 @@ return function (App $app) {
         $group->put('', EditarCliente::class);
         $group->delete('/{Id_Cliente_Eliminar}', EliminarCliente::class);
         $group->post('/ImportarClientes', ImportarClientes::class);
+        $group->post('/SubirDocSoporte', CargarDocumentosSoporte::class);
     });
 
     $app->group('/Llamadas', function (Group $group) {
         $group->post('/LlamadaNP', RegistrarLlamadaNPAction::class);
     });
 
-
+    $app->group('/Notificaciones', function (Group $group) {
+        $group->get('/{Id_Usuario}', ListarNotificaciones::class);
+        $group->get('/NoVisitadas/{Id_Usuario}', ListarNotificacionesNV::class);
+        $group->patch('/EstadoLectura/{Id_Usuario}', CambiarEstadoLecturaNotificacion::class);
+        $group->patch('/EstadoVisita/{Id_NU}', CambiarEstadoVisitaNotificacion::class);
+        $group->delete('/{Id_Notificacion}', EliminarNotificaciones::class);
+    });
+    
     $app->group('/Documento', function (Group $group) {
         $group->post('', DocumentoRegistroAction::class);
         $group->get('', ListarDocumento::class);
@@ -269,6 +292,7 @@ return function (App $app) {
         $group->post('', RegistrarRolAction::class);
         $group->get('', ListarRolAction::class);
         $group->get('/ObtenerRol/{Id_Rol}', ObtenerDatosRolAction::class);
+        $group->get('/ValUsuario/{Id_Rol}', RolValUsuario::class);
         $group->put('', EditarRolAction::class);
         $group->patch('/{Id_Rol}/{Estado}', CambiarEstadoRolAction::class);
     });
@@ -298,5 +322,8 @@ return function (App $app) {
         $group->get('/ObtenerRazones/{Id_Razon_Calificacion}', ObtenerRazonesAction::class);
         $group->put('', EditarRazonesAction::class);
         $group->delete('/{Id_Razon_Calificacion}',EliminarRazonesAction::class);
+    });
+    $app->group('/Cita', function (Group $group) {
+        $group->get('', ListarCitaAction::class);
     });
 };

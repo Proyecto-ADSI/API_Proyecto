@@ -26,10 +26,12 @@ class ClientePersistence implements ClienteRepository
     public function ListarCliente(){
         $sql = "SELECT d.Id_Cliente, d.NIT_CDV, d.Razon_Social, d.Telefono, o.Nombre_Operador AS Operador,
         CASE WHEN  ISNULL(dbl.Id_Plan_Corporativo) = 0 THEN 'Si' 
-        ELSE 'No' END AS Corporativo, d.Estado_Cliente 
-        FROM Directorio d 
-        INNER JOIN Datos_Basicos_Lineas dbl ON(d.Id_Cliente= dbl.Id_Cliente) 
-        INNER JOIN Operadores o ON(dbl.Id_Operador = o.Id_Operador)";
+        ELSE 'No' END AS Corporativo, m.Nombre_Municipio AS Municipio, d.Estado_Cliente 
+        FROM directorio d 
+        INNER JOIN datos_basicos_lineas dbl ON(d.Id_Cliente= dbl.Id_Cliente) 
+        INNER JOIN operadores o ON(dbl.Id_Operador = o.Id_Operador)
+        LEFT JOIN barrios_veredas bv ON(d.Id_Barrios_Veredas = bv.Id_Barrios_Veredas)
+        LEFT JOIN municipios m ON (bv.Id_Municipio = m.Id_Municipio)";
 
         try {
 
@@ -48,7 +50,7 @@ class ClientePersistence implements ClienteRepository
     }
 
     public function ObtenerCliente(int $id){
-        $sql = "SELECT * FROM Directorio WHERE Id_Cliente = ?";
+        $sql = "SELECT * FROM directorio WHERE Id_Cliente = ?";
 
         try {
 
@@ -65,7 +67,7 @@ class ClientePersistence implements ClienteRepository
 
 
     public function RegistrarCliente(Cliente $Cliente){
-        $sql = "INSERT INTO Directorio(NIT_CDV,Razon_Social, Telefono, Encargado,Ext_Tel_Contacto, Direccion, Id_Barrios_Veredas) 
+        $sql = "INSERT INTO directorio(NIT_CDV,Razon_Social, Telefono, Encargado,Ext_Tel_Contacto, Direccion, Id_Barrios_Veredas) 
         VALUES (?,?,?,?,?,?,?)";
 
         try {
@@ -95,7 +97,7 @@ class ClientePersistence implements ClienteRepository
 
     public function EditarCliente(Cliente $Cliente){
 
-        $sql = "UPDATE Directorio SET NIT_CDV = ?, Razon_Social = ?, Telefono = ?, 
+        $sql = "UPDATE directorio SET NIT_CDV = ?, Razon_Social = ?, Telefono = ?, 
         Encargado = ?, Ext_Tel_Contacto = ?, Direccion = ?, Id_Barrios_Veredas = ? 
         WHERE Id_Cliente = ?";
 
@@ -158,7 +160,7 @@ class ClientePersistence implements ClienteRepository
 
     public function EliminarCliente(int $Id_Cliente){
 
-        $sql = "DELETE FROM Directorio WHERE Id_Cliente = ?";
+        $sql = "DELETE FROM directorio WHERE Id_Cliente = ?";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -173,15 +175,17 @@ class ClientePersistence implements ClienteRepository
 
     public function ValidarEliminarCliente(int $Id_Cliente){
 
-        $sql = "SELECT Id_Llamada FROM Llamadas WHERE Id_Cliente = ?";
+            $sql = "SELECT Id_Cliente FROM directorio WHERE Id_Cliente IN 
+            (SELECT Id_Cliente from llamadas WHERE Id_cliente = ?) OR Id_Cliente IN 
+            (SELECT Id_Cliente from visita_interna WHERE Id_cliente = ?)";
 
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Id_Cliente);
+            $stm->bindValue(2, $Id_Cliente);
             $stm->execute();
             return $stm->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-
             return $e->getMessage();
         }
     }
@@ -189,7 +193,7 @@ class ClientePersistence implements ClienteRepository
     public function ConsultarUltimoRegistrado()
     {
 
-        $sql = "SELECT Id_Cliente FROM Directorio ORDER BY 1 DESC LIMIT 1";
+        $sql = "SELECT Id_Cliente FROM directorio ORDER BY 1 DESC LIMIT 1";
 
         try {
 
@@ -204,7 +208,7 @@ class ClientePersistence implements ClienteRepository
     public function ImportarClientes(ClienteImportado $Cliente)
     {
 
-        $sql = "INSERT INTO Importar_Clientes(
+        $sql = "INSERT INTO importar_clientes(
         NIT,Razon_Social, Telefono, Encargado,Ext_Tel_Contacto,
         Direccion, Municipio,Tiene_PC,Operador_Actual,Cantidad_Total_Lineas,Valor_Total_Mensual,
         Calificacion,Razones,Fecha_Inicio,Fecha_Fin,Clausula_Permanencia,Descripcion,Estado_Cliente_Importado)
@@ -245,10 +249,9 @@ class ClientePersistence implements ClienteRepository
         }
     }
 
-    public function ListarClienteImportados()
-    {
+    public function ListarClienteImportados(){
 
-        $sql = "SELECT * FROM Importar_Clientes WHERE Estado_Cliente_Importado = 1";
+        $sql = "SELECT * FROM importar_clientes WHERE Estado_Cliente_Importado = 1";
 
         try {
 
@@ -263,8 +266,7 @@ class ClientePersistence implements ClienteRepository
     }
 
 
-    public function ValidarUbicacionCliente(?string $Municipio, ?string $Lugar)
-    {
+    public function ValidarUbicacionCliente(?string $Municipio, ?string $Lugar){
 
         if (!empty($Lugar)) {
 
@@ -320,8 +322,7 @@ class ClientePersistence implements ClienteRepository
         }       
     }
 
-    public function ValidarOperadorCliente(string $operador)
-    {   
+    public function ValidarOperadorCliente(string $operador){   
         $sql = "SELECT  o.Id_Operador  FROM operadores o WHERE o.Nombre_Operador = ?";
 
         try {

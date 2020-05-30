@@ -14,9 +14,14 @@ class Usuario implements JsonSerializable
     private $Contrasena;
     private $Id_Rol;
     
-    public function __GET($attr){
+    public function __get($attr){
         return $this->$attr;
     }
+    
+    public function __set($attr,$valor){
+         $this->$attr = $valor;
+    }
+
 
     function __construct(?int $Id_Usuario, int $Id_Empleado, string $Usuario, ?string $Contrasena,int $Id_Rol)
     {

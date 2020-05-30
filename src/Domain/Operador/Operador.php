@@ -11,6 +11,8 @@ class Operador implements JsonSerializable
     private $Id_Operador;
     
     private $Nombre;
+
+    private $Color;
     
     private $Estado;
 
@@ -18,10 +20,11 @@ class Operador implements JsonSerializable
         return $this->$attr;
     }
 
-    function __construct(?int $Id_Operador, string $Nombre ,?int $Estado)
+    function __construct(?int $Id_Operador, string $Nombre,?string $Color ,?int $Estado)
     {   
         $this->Id_Operador = $Id_Operador;
         $this->Nombre = $Nombre;
+        $this->Color = $Color;
         $this->Estado = $Estado;
     }
 
@@ -30,6 +33,7 @@ class Operador implements JsonSerializable
         return[
             "Id_Operador" => $this->Id_Operador,
             "Nombre" => $this->Nombre,
+            "Color" => $this->Color,
             "Estado" => $this->Estado
         ];    
     }

@@ -13,5 +13,7 @@ interface RolRepository {
 
     public function ObtenerDatosRol(int $Id_Rol);
 
+    public function RolValUsuario(int $Id_Rol);
+
     public function EditarRol(Rol $Rol);
 }

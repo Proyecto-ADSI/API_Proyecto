@@ -71,5 +71,52 @@ class CitaPersistence implements CitaRepository
             return $e->getMessage();
         }
     }
+
+    public function ListarCita()
+    {
+        $sql = "SELECT c.Id_Cita, c.Id_Llamada, c.Encargado_Cita, c.Representante_Legal, c.Fecha_Cita, c.Id_Barrios_Veredas, c.Lugar_Referencia,c.Id_Operador,c.Factibilidad,c.Id_Coordinador, c.Id_Estado_Cita,c.Direccion AS DireccionCita, esc.Estado_Cita, -- CITAS
+        l.Fecha_Llamada,l.Persona_Responde,l.Info_Habeas_Data,l.Id_Estado_Llamada,l.Observacion,esll.Estado_Llamada , -- LLAMADAS
+        d.Id_Cliente,d.NIT_CDV,d.Razon_Social,d.Telefono, 
+        s.SubTipo,b.Nombre_Barrio_Vereda,m.Nombre_Municipio, de.Nombre_Departamento, 
+        o.Nombre_Operador, 
+        viIn.Id_Visita_Interna,viIn.Id_Datos_Visita as DatosVisitaInterna,
+        viEx.Id_Visita_Externa,viEx.Id_Datos_Visita as DatosVisitaExterna , 
+        dVi.Id_Datos_Visita,dVi.Fecha_Visita,dVi.Hora_Visita,dVi.Tipo_Venta,dVi.Calificacion,dVi.Total_Cargos_Basicos,dVi.Sugerencias,dVi.Observacion AS ObservacionDatosVisitaInterna,
+        dVI.Id_Datos_Visita AS IdExterna ,dVI.Fecha_Visita AS FechaExterna ,dVI.Hora_Visita AS 'Hora Externa',dVI.Tipo_Venta 'Tipo venta externa',dVI.Calificacion 'Calificacion externa',dVI.Total_Cargos_Basicos 'Total cargos externa',dVI.Sugerencias ,dVI.Observacion AS ObservacionDatosVisitaExterna 
+        from citas c 
+
+        INNER JOIN llamadas l ON(c.Id_Llamada = l.Id_Llamada) 
+        INNER JOIN directorio d ON (l.Id_Cliente = d.Id_Cliente)
+        INNER JOIN barrios_veredas b ON (b.Id_Barrios_Veredas = c.Id_Barrios_Veredas)
+        INNER JOIN subtipo_barrio_vereda s ON (s.Id_SubTipo_Barrio_Vereda = b.Id_SubTipo_Barrio_Vereda)
+        INNER JOIN municipios m ON (m.Id_Municipio = b.Id_Municipio)
+        INNER JOIN departamento de ON (de.Id_Departamento = m.Id_Departamento)
+        INNER JOIN estados_llamadas esll ON (esll.Id_Estado_Llamada = l.Id_Estado_Llamada)
+        INNER JOIN Operadores o ON(o.Id_Operador = c.Id_Operador)
+        INNER JOIN estados_citas esc ON(esc.Id_Estado_Cita = c.Id_Estado_Cita)
+        INNER JOIN visita_interna viIn ON (viIn.Id_Cita = c.Id_Cita)
+        INNER JOIN visita_externa viEx ON(viEx.Id_Cliente = d.Id_Cliente)
+        INNER JOIN datos_visita dVi ON (viIn.Id_Datos_Visita = dVi.Id_Datos_Visita)
+        INNER JOIN datos_visita dVI ON (viEx.Id_Datos_Visita = dVI.Id_Datos_Visita)";
+
+
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->execute();
+
+            $error = $stm->errorCode();
+
+            // return $stm->fetch(PDO::FETCH_ASSOC);
+            if ($error === '00000') {
+                return $stm->fetch(PDO::FETCH_ASSOC);
+            } else {
+                return $stm->errorInfo();
+            }
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
     
 }

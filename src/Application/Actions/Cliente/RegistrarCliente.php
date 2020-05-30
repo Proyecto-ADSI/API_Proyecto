@@ -9,6 +9,11 @@ use App\Domain\DBL\DBL;
 use App\Domain\Doc_Soporte\Doc_Soporte;
 use App\Domain\Linea\Linea;
 use App\Domain\Plan_Corporativo\Plan_Corporativo;
+use App\Domain\Notificacion\Notificacion;
+use App\Domain\Notificaciones_Usuario\Notificaciones_Usuario;
+
+use App\Application\Actions\Notificaciones\RegistrarNotificaciones;
+
 use Psr\Http\Message\ResponseInterface as Response;
 
 class RegistrarCliente extends ClienteAction
@@ -146,6 +151,28 @@ class RegistrarCliente extends ClienteAction
                 $validacion = $this->LineaRepository->RegistrarDetalleLinea($Id_Linea, $Id_DBL );
             }
         }
-        return $validacion;
+
+        // Registrar notificación.
+        $mensaje = "Nueva empresa registrada.";
+        $notificacion = new Notificacion(
+            NULL,
+            $campos->Id_Usuario,
+            NULL,
+            $mensaje,
+            2,
+            (int) $infoCliente['Id_Cliente']
+        );
+        
+        $usuarios = array(1,2);
+
+        $RegistroNotificacion = new RegistrarNotificaciones(
+            $this->logger,
+            $this->Notificaciones_UsuarioRepository,
+            $this->NotificacionRepository
+        );
+
+        $RegistroNotificacion->RegistrarNotificacion($notificacion,$usuarios);
+
+        return true;
     }
 }

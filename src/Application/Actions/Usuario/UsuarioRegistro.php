@@ -15,34 +15,46 @@ class UsuarioRegistro extends UsuarioAction
         $campos = $this->getFormData();
 
         $Id_Empleado = NULL;
-        
-        if(isset($campos->Id_Empleado)){
-            
-           $Id_Empleado = (int)$campos->Id_Empleado;
 
-        }else{
+        if ($campos->SeleccionarEmpleado) {
+
+            $Id_Empleado = (int) $campos->Id_Empleado;
+        } else {
 
             $empleado = new Empleado(
                 0,
-                $campos->Tipo_Documento,
-                $campos->Documento,
+                null,
+                null,
                 $campos->Nombre,
                 $campos->Apellidos,
                 $campos->Email,
-                $campos->Sexo,
-                $campos->Celular,
+                null,
+                null,
                 $campos->Imagen,
-                $campos->Turno
+                null,
             );
-    
-            $this->EmpleadoRepository->RegistrarEmpleado($empleado);
-            
-            $respuesta = $this->EmpleadoRepository->ConsultarUltimoEmpleado();
-            $Id_Empleado = (int) $respuesta['Id_Empleado'];
+
+            if ($campos->RegistrarEmpleado) {
+
+                $empleado->__set("Tipo_Documento", $campos->Tipo_Documento);
+                $empleado->__set("Documento", $campos->Documento);
+                $empleado->__set("Sexo", $campos->Sexo);
+                $empleado->__set("Celular", $campos->Celular);
+                $empleado->__set("Turno", $campos->Turno);
+
+                $this->EmpleadoRepository->RegistrarEmpleado($empleado);
+                $respuesta = $this->EmpleadoRepository->ConsultarUltimoEmpleado();
+                $Id_Empleado = (int) $respuesta['Id_Empleado'];
+
+            } else if ($campos->RegistrarAsesorExterno) {
+
+                $this->EmpleadoRepository->RegistrarEmpleado($empleado);
+                $respuesta = $this->EmpleadoRepository->ConsultarUltimoEmpleado();
+                $Id_Empleado = (int) $respuesta['Id_Empleado'];
+            }
         }
-        
         //Encriptar contraseña
-        $Contrasena = password_hash($campos->Contrasena,PASSWORD_BCRYPT);
+        $Contrasena = password_hash($campos->Contrasena, PASSWORD_BCRYPT);
 
         $usuario = new Usuario(
             0,
@@ -53,8 +65,7 @@ class UsuarioRegistro extends UsuarioAction
         );
 
         $respuesta = $this->usuarioRepository->RegistrarUsuario($usuario);
-        
-        return $this->respondWithData(["ok"=> $respuesta]);
+
+        return $this->respondWithData(["ok" => $respuesta]);
     }
 }
-

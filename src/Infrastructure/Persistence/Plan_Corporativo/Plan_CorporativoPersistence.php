@@ -22,7 +22,7 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
     public function RegistrarPlan_Corporativo(Plan_Corporativo $Plan_Corporativo)
     {
 
-        $sql = "INSERT INTO Plan_Corporativo(Id_Documentos,Fecha_Inicio,Fecha_Fin, Clausula_Permanencia, Descripcion)
+        $sql = "INSERT INTO plan_corporativo(Id_Documentos,Fecha_Inicio,Fecha_Fin, Clausula_Permanencia, Descripcion)
         VALUES(?,?,?,?,?)";
 
         try {
@@ -49,7 +49,7 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
     public function ListarPlan_Corporativo(int $Id_Plan_Corporativo)
     {
         $sql = "SELECT IFNULL(Id_Documentos,0) Id_Documentos,Fecha_Inicio,Fecha_Fin,Clausula_Permanencia,Descripcion,
-        Estado_Plan_Corporativo FROM Plan_Corporativo WHERE Id_Plan_Corporativo = ? ";
+        Estado_Plan_Corporativo FROM plan_corporativo WHERE Id_Plan_Corporativo = ? ";
         try {
 
             $stm = $this->db->prepare($sql);
@@ -65,8 +65,8 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
     public function EditarPlan_Corporativo(Plan_Corporativo $Plan_Corporativo)
     {
 
-        $sql = "UPDATE Plan_Corporativo SET Id_Documentos = ?, Fecha_Inicio = ?, 
-        Fecha_Fin = ?, Descripcion = ? WHERE Id_Plan_Corporativo = ?";
+        $sql = "UPDATE plan_corporativo SET Id_Documentos = ?, Fecha_Inicio = ?, 
+        Fecha_Fin = ?, Clausula_Permanencia = ?, Descripcion = ? WHERE Id_Plan_Corporativo = ?";
 
         try {
 
@@ -74,9 +74,9 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
             $stm->bindValue(1, $Plan_Corporativo->__GET("Id_Documentos"));
             $stm->bindValue(2, $Plan_Corporativo->__GET("Fecha_Inicio"));
             $stm->bindValue(3, $Plan_Corporativo->__GET("Fecha_Fin"));
-            $stm->bindValue(4, $Plan_Corporativo->__GET("Descripcion"));
-            $stm->bindValue(5, $Plan_Corporativo->__GET("Id_Plan_Corporativo"));
-
+            $stm->bindValue(4, $Plan_Corporativo->__GET("Clausula_Permanencia"));
+            $stm->bindValue(5, $Plan_Corporativo->__GET("Descripcion"));
+            $stm->bindValue(6, $Plan_Corporativo->__GET("Id_Plan_Corporativo"));
 
             return $stm->execute();
         } catch (\Exception $e) {
@@ -86,7 +86,7 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
 
     public function CambiarEstado(int $Id_Plan_Corporativo, int $Estado)
     {
-        $sql = "UPDATE Plan_Corporativo SET Estado = ? WHERE Id_Plan_Corporativo = ? ";
+        $sql = "UPDATE plan_corporativo SET Estado = ? WHERE Id_Plan_Corporativo = ? ";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -102,7 +102,7 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
 
     public function EliminarPlan_Corporativo(int $Id_Plan_Corporativo)
     {
-        $sql = "DELETE FROM Plan_Corporativo WHERE Id_Plan_Corporativo = ? ";
+        $sql = "DELETE FROM plan_corporativo WHERE Id_Plan_Corporativo = ? ";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -116,7 +116,7 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
     public function ConsultarUltimoRegistrado()
     {
 
-        $sql = "SELECT Id_Plan_Corporativo FROM Plan_Corporativo ORDER BY 1 DESC LIMIT 1";
+        $sql = "SELECT Id_Plan_Corporativo FROM plan_corporativo ORDER BY 1 DESC LIMIT 1";
 
         try {
 
