@@ -12,17 +12,13 @@ use Psr\Http\Message\ResponseInterface as  Response;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class ImportarClientes extends ClienteAction
-{   
-
-    
+{
     private $arrayClientesImportados = [];
     private $arrayCliente = [];
 
     protected function action(): Response
     {
-
         // ------------------------------------------  1) Guardar el archivo  --------------------------------------------------------
-
         $directorio = __DIR__ . '\Archivos';
         $archivosCargados = $this->request->getUploadedFiles();
         $archivo = $archivosCargados['Archivo_Clientes'];
@@ -40,7 +36,6 @@ class ImportarClientes extends ClienteAction
 
             return $this->respondWithData(["ok" => false]);
         }
-
 
         // ---------------------------------------------- 2)  Cargar el archivo y recorrerlo -------------------------------------------
 
@@ -75,7 +70,7 @@ class ImportarClientes extends ClienteAction
                     $valorFormateado = $celda->getFormattedValue();
 
                     # Si es una fórmula y necesitamos su valor, llamamos a:
-                    $valorCalculado = (string)$celda->getCalculatedValue();
+                    $valorCalculado = (string) $celda->getCalculatedValue();
                     # Fila, que comienza en 1, luego 2 y así...
                     $fila = $celda->getRow();
                     # Columna, que es la A, B, C y así...
@@ -106,8 +101,8 @@ class ImportarClientes extends ClienteAction
                                 $this->arrayCliente[14],
                                 $this->arrayCliente[15]
                             );
-                            
-                       
+
+
 
                             // Agregar al array principla del clientes.
                             array_push($this->arrayClientesImportados, $DatosCliente);
@@ -127,145 +122,150 @@ class ImportarClientes extends ClienteAction
         $arrayClientesError = array();
         $Importacion = false;
 
-        foreach($arrayClientes as $cliente){
+        foreach ($arrayClientes as $cliente) {
 
 
             $clienteImportado = new ClienteImportado(
-                        NULL,
-              (string)  $cliente[0],
-              (string)  $cliente[1],
-              (string)  $cliente[2],
-              (string)  $cliente[3],
-              (string)  $cliente[4],
-              (string)  $cliente[5],
-              (string)  $cliente[6],
-              (string)  $cliente[7],
-              (string)  $cliente[8],
-              (string)  $cliente[9],
-              (string)  $cliente[10],
-              (string)  $cliente[11],
-              (string)  $cliente[12],
-              (string)  $cliente[13],
-              (string)  $cliente[14],
-              (string)  $cliente[15],
-                        NULL
-            ); 
+                NULL,
+                (string)  $cliente[0],
+                (string)  $cliente[1],
+                (string)  $cliente[2],
+                (string)  $cliente[3],
+                (string)  $cliente[4],
+                (string)  $cliente[5],
+                (string)  $cliente[6],
+                (string)  $cliente[7],
+                (string)  $cliente[8],
+                (string)  $cliente[9],
+                (string)  $cliente[10],
+                (string)  $cliente[11],
+                (string)  $cliente[12],
+                (string)  $cliente[13],
+                (string)  $cliente[14],
+                (string)  $cliente[15],
+                NULL
+            );
 
-            
-            
+
+
 
             // ---------------------  3.1 )  Validar objeto y registrar en la BD  (tablas principales.) -------------------------------------------
-                
-                // Validaciones
 
-                    // Validar barrio
-                    $idUbicacion = $this->ClienteRepository->ValidarUbicacionCliente($clienteImportado->__GET("Municipio"),$clienteImportado->__GET("Barrio"));
+            // Validaciones
 
-                    $idBarrioVereda = NULL;
-                    if(!empty($idUbicacion)){
+            // Validar barrio
+            $idUbicacion = $this->ClienteRepository->ValidarUbicacionCliente($clienteImportado->__GET("Municipio"), $clienteImportado->__GET("Barrio"));
 
-                        $idBarrioVereda = (int) $idUbicacion['Id_Barrios_Veredas'];
-                    }
+            $idBarrioVereda = NULL;
+            if (!empty($idUbicacion)) {
 
-                    // Validar operador
+                $idBarrioVereda = (int) $idUbicacion['Id_Barrios_Veredas'];
+            }
 
-                    $datosOperador = $this->ClienteRepository->ValidarOperadorCliente($clienteImportado->__GET("Operador_Actual"));
+            // Validar operador
 
-                    $idOperador = NULL;
-                    if(!empty($datosOperador)){
+            $datosOperador = $this->ClienteRepository->ValidarOperadorCliente($clienteImportado->__GET("Operador_Actual"));
 
-                        $idOperador = (int) $datosOperador['Id_Operador'];
-                    }
-   
-                    // Plan Corporativo
+            $idOperador = NULL;
+            if (!empty($datosOperador)) {
 
-                    if($clienteImportado->__GET("Tiene_PC") == "SI"){
+                $idOperador = (int) $datosOperador['Id_Operador'];
+            }
 
-                        $clausulaPermanencia = NULL;
-                        if($clienteImportado->__GET("Clausula_Permanencia") == "SI"){
-                            $clausulaPermanencia = 1;
-                        }else if($clienteImportado->__GET("Clausula_Permanencia") == "NO"){
-                            $clausulaPermanencia = 0;
-                        }
+            // Plan Corporativo
 
-                        
-                        $objPlanCorporativo = new Plan_Corporativo(
-                            NULL,
-                            NULL,
-                            $clienteImportado->__GET("Fecha_Inicio"),
-                            $clienteImportado->__GET("Fecha_Fin"),
-                            $clausulaPermanencia,
-                            $clienteImportado->__GET("Descripcion"),
-                            NULL
-                        );
+            if ($clienteImportado->__GET("Tiene_PC") == "SI") {
 
-                        $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($objPlanCorporativo);
-                    }
-
-                // Cliente
-                $objCliente = new Cliente(
-                    NULL,
-                    $clienteImportado->__GET("NIT_CDV"),
-                    $clienteImportado->__GET("Razon_Social"),
-                    $clienteImportado->__GET("Telefono"),
-                    $clienteImportado->__GET("Encargado"),
-                    $clienteImportado->__GET("Ext_Tel_Contacto"),
-                    $clienteImportado->__GET("Direccion"),
-                    $idBarrioVereda,
-                    NULL
-                );
-
-                $this->ClienteRepository->RegistrarCliente($objCliente);
-
-                // Datos Básicos Líneas
-                $idCLiente = $this->ClienteRepository->ConsultarUltimoRegistrado();
-                $idPlanCorporativo = $this->Plan_CorporativoRepository->ConsultarUltimoRegistrado();
-
-                $dbl = new DBL(
-                    NULL,
-                    (int) $idCLiente['Id_Cliente'],
-                    $idOperador,
-                    (int) $idPlanCorporativo['Id_Plan_Corporativo'],
-                    (int) $clienteImportado->__GET("Cantidad_Total_Lineas"),
-                    $clienteImportado->__GET("Valor_Total_Mensual"),
-                    NULL,
-                    NULL,
-                    NULL
-                );
-
-                $respuesta = $this->DBLRepository->RegistrarDBL($dbl);
-
-                if($respuesta === true){
-
-                    $Importacion = true;
+                $clausulaPermanencia = NULL;
+                if ($clienteImportado->__GET("Clausula_Permanencia") == "SI") {
+                    $clausulaPermanencia = 1;
+                } else if ($clienteImportado->__GET("Clausula_Permanencia") == "NO") {
+                    $clausulaPermanencia = 0;
                 }
-                
-               
 
-        // ----------------------------------  4) Registrar en la BD CLientes con conflictos (tabla temporal) -------------------------------------------
-        
+                // Fecha inicio.
+                $fechaInicioExcel = (int) $clienteImportado->__GET("Fecha_Inicio");
+                $fechaDateInicio = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($fechaInicioExcel);
+                $fechaFormateadaInicio = $fechaDateInicio->format('yy-m-d');
+                // Fecha fin.
+                $fechaFinExcel = (int) $clienteImportado->__GET("Fecha_Fin");
+                $fechaDateFin = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($fechaFinExcel);
+                $fechaFormateadaFin = $fechaDateFin->format('yy-m-d');
 
-        // $this->ClienteRepository->ImportarClientes($clienteImportado);     
-        // $arrayarrayClientesImportados = $this->ClienteRepository->ListarClienteImportados();
+                $objPlanCorporativo = new Plan_Corporativo(
+                    NULL,
+                    NULL,
+                    $fechaFormateadaInicio,
+                    $fechaFormateadaFin,
+                    $clausulaPermanencia,
+                    $clienteImportado->__GET("Descripcion"),
+                    NULL
+                );
+
+                $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($objPlanCorporativo);
+            }
+
+            // Cliente
+            $objCliente = new Cliente(
+                NULL,
+                $clienteImportado->__GET("NIT_CDV"),
+                $clienteImportado->__GET("Razon_Social"),
+                $clienteImportado->__GET("Telefono"),
+                $clienteImportado->__GET("Encargado"),
+                $clienteImportado->__GET("Ext_Tel_Contacto"),
+                $clienteImportado->__GET("Direccion"),
+                $idBarrioVereda,
+                NULL
+            );
+
+            $this->ClienteRepository->RegistrarCliente($objCliente);
+
+            // Datos Básicos Líneas
+            $idCLiente = $this->ClienteRepository->ConsultarUltimoRegistrado();
+            $idPlanCorporativo = $this->Plan_CorporativoRepository->ConsultarUltimoRegistrado();
+
+            $dbl = new DBL(
+                NULL,
+                (int) $idCLiente['Id_Cliente'],
+                $idOperador,
+                (int) $idPlanCorporativo['Id_Plan_Corporativo'],
+                (int) $clienteImportado->__GET("Cantidad_Total_Lineas"),
+                $clienteImportado->__GET("Valor_Total_Mensual"),
+                NULL,
+                NULL,
+                NULL
+            );
+
+            $respuesta = $this->DBLRepository->RegistrarDBL($dbl);
+
+            if ($respuesta === true) {
+
+                $Importacion = true;
+            }
+
+
+
+            // ----------------------------------  4) Registrar en la BD CLientes con conflictos (tabla temporal) -------------------------------------------
+
+
+            // $this->ClienteRepository->ImportarClientes($clienteImportado);     
+            // $arrayarrayClientesImportados = $this->ClienteRepository->ListarClienteImportados();
 
         }
-        
+
 
 
         // ----------------------------------  5) Retornar respuesta al cliente. ------------------------------------------------------------
-        
 
-        if($Importacion){
-            if(count($arrayClientesError) == 0){
+
+        if ($Importacion) {
+            if (count($arrayClientesError) == 0) {
                 return $this->respondWithData(["Importacion"  => true, "Errores"  => false]);
-            }else{
-                return $this->respondWithData(["Importacion"  => true, "Errores"  => true ]);
+            } else {
+                return $this->respondWithData(["Importacion"  => true, "Errores"  => true]);
             }
-        }else{
+        } else {
             return $this->respondWithData(["Importacion"  => false]);
         }
     }
 }
-
-
-

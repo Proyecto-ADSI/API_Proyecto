@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 declare(strict_types=1);
 
@@ -18,8 +18,9 @@ class Empleado implements JsonSerializable
     private $Celular;
     private $Imagen;
     private $Turno;
-    
-    public function __get($attr){
+
+    public function __get($attr)
+    {
         return $this->$attr;
     }
 
@@ -28,8 +29,8 @@ class Empleado implements JsonSerializable
         $this->$name = $value;
     }
 
-    function __construct(?int $Id_Empleado, ?int $Tipo_Documento, ?string $Documento, string $Nombre, string $Apellidos, string $Email, ?int $Sexo, ?string $Celular, ?string $Imagen, ?int $Turno)
-    {   
+    function __construct(?int $Id_Empleado, ?int $Tipo_Documento, ?string $Documento, string $Nombre, ?string $Apellidos, string $Email, ?int $Sexo, ?string $Celular, ?string $Imagen, ?int $Turno)
+    {
         $this->Id_Empleado = $Id_Empleado;
         $this->Tipo_Documento = $Tipo_Documento;
         $this->Documento = $Documento;
@@ -44,7 +45,7 @@ class Empleado implements JsonSerializable
 
     public function jsonSerialize()
     {
-        return[
+        return [
             "Id_Empleado" => $this->Id_Empleado,
             "Tipo_Documento" => $this->Tipo_Documento,
             "Documento" => $this->Documento,
@@ -55,6 +56,6 @@ class Empleado implements JsonSerializable
             "Celular" => $this->Celular,
             "Imagen" => $this->Imagen,
             "Turno" => $this->Turno
-        ];    
+        ];
     }
 }

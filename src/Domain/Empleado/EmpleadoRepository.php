@@ -1,10 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Domain\Empleado;
 
-interface EmpleadoRepository{
-
+interface EmpleadoRepository
+{
     public function ListarEmpleados();
 
     public function FiltrarEmpleados(string $texto);
@@ -19,4 +20,5 @@ interface EmpleadoRepository{
 
     public function EditarEmpleado(Empleado $empleado);
 
+    public function EditarEmpleadoAE(Empleado $empleado);
 }
