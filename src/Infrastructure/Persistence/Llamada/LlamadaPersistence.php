@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Llamada;
 
@@ -38,7 +38,6 @@ class LlamadaPersistence implements LlamadaRepository
             $stm->bindValue(7, $Llamada->__GET("Id_Estado_Llamada"));
 
             return $stm->execute();
-
         } catch (Exception $e) {
 
             return "Error al registrar " . $e->getMessage();
@@ -48,8 +47,10 @@ class LlamadaPersistence implements LlamadaRepository
     public function ListarLlamadas()
     {
 
-        $sql = "SELECT d.Razon_Social, d.Telefono, d.NIT_CDV, d.Encargado, d.Ext_Tel_Contacto, d.Direccion,
-        bv.Nombre_Barrio_Vereda, sbv.SubTipo, m.Nombre_Municipio, dep.Nombre_Departamento, p.Nombre_Pais, u.Id_Usuario, u.Usuario,
+        $sql = "SELECT d.Razon_Social, d.Telefono, d.NIT_CDV, d.Encargado, d.Ext_Tel_Contacto, IFNULL(d.Direccion,'No registrado') Direccion,
+        IFNULL(bv.Nombre_Barrio_Vereda,'No registrado') Nombre_Barrio_Vereda, IFNULL(sbv.SubTipo,'No registrado') SubTipo, 
+        IFNULL(m.Nombre_Municipio,'No registrado') Nombre_Municipio, IFNULL(dep.Nombre_Departamento,'No registrado') Nombre_Departamento,
+        IFNULL(p.Nombre_Pais,'No registrado') Nombre_Pais, u.Id_Usuario, u.Usuario,
         ll.Id_Llamada,ll.Persona_Responde, DATE_FORMAT(ll.Fecha_Llamada,'%e/%b/%Y %h:%i %p') Fecha_Llamada, ll.Duracion_Llamada,
         CASE WHEN  ll.Info_Habeas_Data = 1 THEN 'Si' ELSE 'No' END AS Info_Habeas_Data, ll.Id_Estado_Llamada, e.Estado_Llamada, ll.Observacion
         FROM llamadas ll 
@@ -71,11 +72,9 @@ class LlamadaPersistence implements LlamadaRepository
             if ($error === '00000') {
 
                 return $stm->fetchAll(PDO::FETCH_ASSOC);
-
             } else {
                 return $stm->errorInfo();
             }
-
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -93,14 +92,11 @@ class LlamadaPersistence implements LlamadaRepository
             if ($error === '00000') {
 
                 return $stm->fetch(PDO::FETCH_ASSOC);
-
             } else {
                 return $stm->errorInfo();
             }
-
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
-
 }

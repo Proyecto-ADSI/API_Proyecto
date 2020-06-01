@@ -217,13 +217,10 @@ class ImportarClientes extends ClienteAction
                 $idBarrioVereda,
                 NULL
             );
-
             $this->ClienteRepository->RegistrarCliente($objCliente);
-
             // Datos Básicos Líneas
             $idCLiente = $this->ClienteRepository->ConsultarUltimoRegistrado();
             $idPlanCorporativo = $this->Plan_CorporativoRepository->ConsultarUltimoRegistrado();
-
             $dbl = new DBL(
                 NULL,
                 (int) $idCLiente['Id_Cliente'],
@@ -235,29 +232,17 @@ class ImportarClientes extends ClienteAction
                 NULL,
                 NULL
             );
-
             $respuesta = $this->DBLRepository->RegistrarDBL($dbl);
-
             if ($respuesta === true) {
-
                 $Importacion = true;
             }
-
-
-
             // ----------------------------------  4) Registrar en la BD CLientes con conflictos (tabla temporal) -------------------------------------------
-
-
             // $this->ClienteRepository->ImportarClientes($clienteImportado);     
             // $arrayarrayClientesImportados = $this->ClienteRepository->ListarClienteImportados();
-
         }
-
-
-
-        // ----------------------------------  5) Retornar respuesta al cliente. ------------------------------------------------------------
-
-
+        // ----------------------------------  5) Eliminar archivo. ------------------------------------------------------------
+        unlink($rutaArchivo);
+        // ----------------------------------  6) Retornar respuesta al cliente. ------------------------------------------------------------
         if ($Importacion) {
             if (count($arrayClientesError) == 0) {
                 return $this->respondWithData(["Importacion"  => true, "Errores"  => false]);

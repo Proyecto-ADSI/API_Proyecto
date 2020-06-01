@@ -85,12 +85,13 @@ class UsuarioPersistence implements UsuarioRepository
         $sql = "SELECT u.Id_Usuario, u.Usuario, u.Contrasena, r.Id_Rol, r.Nombre Rol, e.Id_Empleado, e.Email, e.Imagen FROM usuarios u 
         JOIN roles r ON(u.Id_Rol = r.Id_Rol)
         JOIN empleados e ON(u.Id_Empleado = e.Id_Empleado) 
-        WHERE u.Usuario = ?";
+        WHERE u.Usuario = ? AND u.Estado_Usuario = ?";
 
         try {
 
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $usuario);
+            $stm->bindValue(2, 1);
             $stm->execute();
 
             $error = $stm->errorCode();

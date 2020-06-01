@@ -30,7 +30,7 @@ class EnviarCorreo extends UsuarioAction
 
             $Id_Empleado = (int) $respuesta['Id_Empleado'];
             $info = $this->EmpleadoRepository->ConsultarEmpleado($Id_Empleado);
-      
+
 
             // Datos Empleado
             $Email = $info['Email'];
@@ -64,7 +64,7 @@ class EnviarCorreo extends UsuarioAction
                 // Contenido
                 $mail->isHTML(true);                                  // Set email format to HTML
                 $mail->Subject = 'Restablecer contraseña';
-                $mail->Body    = 'Hola ' . $info['Nombre'] . ' has solicitado restablecer tu contraseña, ingresa al siguiente link para cambiarla <a href="http://127.0.0.1:5500/App/Restablecer/Restablecer.html?token=' . $token . '">Restablecer contraseña</a>';
+                $mail->Body    = 'Hola ' . $info['Nombre'] . ' has solicitado restablecer tu contraseña, ingresa al siguiente link para cambiarla <a href="http://localhost:3000/Restablecer?token=' . $token . '">Restablecer contraseña</a>';
 
 
                 if ($mail->send()) {
