@@ -27,6 +27,7 @@ use App\Application\Actions\Empleado\ListarEmpleados;
 
 // Llamadas
 use App\Application\Actions\Llamada\RegistrarLlamadaNPAction;
+use App\Application\Actions\Llamada\ListarLlamadas;
 
 // Notificaciones
 use App\Application\Actions\Notificaciones\ListarNotificaciones;
@@ -207,6 +208,7 @@ return function (App $app) {
     });
 
     $app->group('/Llamadas', function (Group $group) {
+        $group->get('', ListarLlamadas::class);
         $group->post('/LlamadaNP', RegistrarLlamadaNPAction::class);
     });
 

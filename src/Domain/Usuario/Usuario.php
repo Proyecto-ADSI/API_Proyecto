@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 declare(strict_types=1);
 
@@ -13,35 +13,35 @@ class Usuario implements JsonSerializable
     private $Usuario;
     private $Contrasena;
     private $Id_Rol;
-    
-    public function __get($attr){
+
+    public function __get($attr)
+    {
         return $this->$attr;
     }
-    
-    public function __set($attr,$valor){
-         $this->$attr = $valor;
+
+    public function __set($attr, $valor)
+    {
+        $this->$attr = $valor;
     }
 
 
-    function __construct(?int $Id_Usuario, int $Id_Empleado, string $Usuario, ?string $Contrasena,int $Id_Rol)
+    function __construct(?int $Id_Usuario, int $Id_Empleado, string $Usuario, ?string $Contrasena, ?int $Id_Rol)
     {
         $this->Id_Usuario = $Id_Usuario;
         $this->Id_Empleado = $Id_Empleado;
         $this->Usuario = $Usuario;
         $this->Contrasena = $Contrasena;
         $this->Id_Rol = $Id_Rol;
-    
-
     }
 
     public function jsonSerialize()
     {
-        return[
+        return [
             "Id_Usuario" => $this->Id_Usuario,
             "Id_Empleado" => $this->Id_Empleado,
             "Usuario" => $this->Usuario,
             "Contrasena" => $this->Contrasena,
             "Id_Rol" => $this->Id_Rol
-        ];    
+        ];
     }
 }

@@ -26,7 +26,7 @@ class UsuarioRegistro extends UsuarioAction
                 null,
                 null,
                 $campos->Nombre,
-                $campos->Apellidos,
+                null,
                 $campos->Email,
                 null,
                 null,
@@ -36,6 +36,7 @@ class UsuarioRegistro extends UsuarioAction
 
             if ($campos->RegistrarEmpleado) {
 
+                $empleado->__set("Apellidos", $campos->Apellidos);
                 $empleado->__set("Tipo_Documento", $campos->Tipo_Documento);
                 $empleado->__set("Documento", $campos->Documento);
                 $empleado->__set("Sexo", $campos->Sexo);
@@ -45,7 +46,6 @@ class UsuarioRegistro extends UsuarioAction
                 $this->EmpleadoRepository->RegistrarEmpleado($empleado);
                 $respuesta = $this->EmpleadoRepository->ConsultarUltimoEmpleado();
                 $Id_Empleado = (int) $respuesta['Id_Empleado'];
-
             } else if ($campos->RegistrarAsesorExterno) {
 
                 $this->EmpleadoRepository->RegistrarEmpleado($empleado);
