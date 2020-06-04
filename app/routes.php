@@ -142,7 +142,8 @@ use App\Application\Actions\Cliente\ValidarCliente;
 
 // Cita
 use App\Application\Actions\Cita\ListarCitaAction;
-
+use App\Application\Actions\Cita\CambiarEstadoCitaRCAction;
+use App\Application\Actions\Cita\CambiarEstadoCitaVAction;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -327,5 +328,7 @@ return function (App $app) {
     });
     $app->group('/Cita', function (Group $group) {
         $group->get('', ListarCitaAction::class);
+        $group->post('', CambiarEstadoCitaRCAction::class);
+        $group->patch('/vg/{Id_Cita}/{EstadoV}', CambiarEstadoCitaRCAction::class);
     });
 };

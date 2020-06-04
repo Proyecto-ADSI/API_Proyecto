@@ -10,4 +10,9 @@ interface CitaRepository{
     public function ConsultarUltimaCitaRegistrada();
 
     public function ListarCita();
+
+    public function CambiarEstadoRC(int $Id_Cita, int $Estado);
+
+    public function CambiarEstadoV(int $Id_Cita, int $EstadoV);
+
 }

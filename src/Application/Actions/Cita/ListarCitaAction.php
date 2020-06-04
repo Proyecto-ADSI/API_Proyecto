@@ -10,9 +10,9 @@ declare(strict_types=1);
   {
    protected function action(): Response
    {
-       $Citas = $this->CitaRepository->ListarCita();
+  
+      $Citas = $this->CitaRepository->ListarCita();
 
-       return $this->respondWithData($Citas);
+      return $this->respondWithData($Citas);
    }
-   
   }
