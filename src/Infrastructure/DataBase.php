@@ -4,7 +4,8 @@ namespace App\Infrastructure;
 
 use PDO;
 
-class DataBase {
+class DataBase
+{
 
     private $driver = "mysql";
     private $hostname = "localhost:33065";
@@ -12,19 +13,19 @@ class DataBase {
     private $password = "";
     private $dbname = "callphone_soft_bd";
     private $conection = null;
-    
-    public function getConection(){
+
+    public function getConection()
+    {
         return $this->conection;
     }
 
     function __construct()
     {
-        try{
+        try {
 
-            $strc = "$this->driver:dbname=$this->dbname;host=$this->hostname";
+            $strc = "$this->driver:dbname=$this->dbname;host=$this->hostname;charset=utf8";
             $this->conection = new PDO($strc, $this->username, $this->password);
-        
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return "Error al conectar con la base de datos: " . $e->getMessage();
         }
     }

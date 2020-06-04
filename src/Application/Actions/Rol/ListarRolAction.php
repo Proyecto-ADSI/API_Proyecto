@@ -2,17 +2,15 @@
 
 declare(strict_types=1);
 
-  namespace App\Application\Actions\Rol;
+namespace App\Application\Actions\Rol;
 
-  use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ResponseInterface as Response;
 
-  class ListarRolAction extends RolAction
+class ListarRolAction extends RolAction
+{
+  protected function action(): Response
   {
-   protected function action(): Response
-   {
-       $Rol = $this->RolRepository->ListarRol();
-
-       return $this->respondWithData($Rol);
-   }
-   
+    $Rol = $this->RolRepository->ListarRol();
+    return $this->respondWithData($Rol);
   }
+}

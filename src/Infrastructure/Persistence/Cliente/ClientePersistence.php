@@ -111,7 +111,8 @@ class ClientePersistence implements ClienteRepository
         IFNULL(pc.Id_Plan_Corporativo,'0') Id_Plan_Corporativo, DATE_FORMAT(pc.Fecha_Inicio,'%e/%b/%Y') Fecha_Inicio, DATE_FORMAT(pc.Fecha_Fin,'%e/%b/%Y') Fecha_Fin,
         pc.Clausula_Permanencia, pc.Descripcion, pc.Estado_Plan_Corporativo,
         IFNULL(ds.Id_Documentos,'0') Id_Documentos, ds.Camara_Comercio, ds.Cedula_RL, ds.Soporte_Ingresos, ds.Detalles_Plan_Corporativo, ds.Oferta
-        FROM directorio d JOIN barrios_veredas bv ON(d.Id_Barrios_Veredas = bv.Id_Barrios_Veredas)
+        FROM directorio d 
+        LEFT JOIN barrios_veredas bv ON(d.Id_Barrios_Veredas = bv.Id_Barrios_Veredas)
         LEFT JOIN subtipo_barrio_vereda sbv ON(bv.Id_SubTipo_Barrio_Vereda = sbv.Id_SubTipo_Barrio_Vereda)
         LEFT JOIN municipios m ON(bv.Id_Municipio = m.Id_Municipio)
         LEFT JOIN departamento dep ON(m.Id_Departamento = dep.Id_Departamento)
