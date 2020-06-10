@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use App\Domain\Empleado\EmpleadoRepository;
@@ -20,7 +21,7 @@ use App\Domain\Linea\LineaRepository;
 use App\Domain\Llamada\LlamadaRepository;
 use App\Domain\Operador\OperadorRepository;
 use App\Domain\Plan_Corporativo\Plan_CorporativoRepository;
-use App\Domain\Razones\RazonesRepository;
+use App\Domain\Opciones_Predefinidas\Opciones_PredefinidasRepository;
 use App\Domain\Turnos\TurnosRepository;
 use App\Domain\Rol\RolRepository;
 use App\Domain\Llamada_Programada\Llamada_ProgramadaRepository;
@@ -47,7 +48,7 @@ use App\Infrastructure\Persistence\Linea\LineaPersistence;
 use App\Infrastructure\Persistence\Llamada\LlamadaPersistence;
 use App\Infrastructure\Persistence\Operador\OperadorPersistence;
 use App\Infrastructure\Persistence\Plan_Corporativo\Plan_CorporativoPersistence;
-use App\Infrastructure\Persistence\Razones\RazonesPersistence;
+use App\Infrastructure\Persistence\Opciones_Predefinidas\Opciones_PredefinidasPersistence;
 use App\Infrastructure\Persistence\Turnos\TurnosPersistence;
 use App\Infrastructure\Persistence\Rol\RolPersistence;
 use App\Infrastructure\Persistence\Llamada_Programada\Llamada_ProgramadaPersistence;
@@ -79,13 +80,11 @@ return function (ContainerBuilder $containerBuilder) {
         Doc_SoporteRepository::class => \DI\autowire(Doc_SoportePersistence::class),
         LineaRepository::class => \DI\autowire(LineaPersistence::class),
         CalificacionRepository::class => \DI\autowire(CalificacionPersistence::class),
-        RazonesRepository::class => \DI\autowire(RazonesPersistence::class),
+        Opciones_PredefinidasRepository::class => \DI\autowire(Opciones_PredefinidasPersistence::class),
         LlamadaRepository::class => \DI\autowire(LlamadaPersistence::class),
         CitaRepository::class => \DI\autowire(CitaPersistence::class),
-        Llamada_ProgramadaRepository::class=>\DI\autowire(Llamada_ProgramadaPersistence::class),
-        NotificacionRepository::class=>\DI\autowire(NotificacionPersistence::class),
-        Notificaciones_UsuarioRepository::class=>\DI\autowire(Notificaciones_UsuarioPersistence::class)
+        Llamada_ProgramadaRepository::class => \DI\autowire(Llamada_ProgramadaPersistence::class),
+        NotificacionRepository::class => \DI\autowire(NotificacionPersistence::class),
+        Notificaciones_UsuarioRepository::class => \DI\autowire(Notificaciones_UsuarioPersistence::class)
     ]);
 };
- 
-
