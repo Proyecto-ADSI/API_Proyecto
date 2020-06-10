@@ -67,9 +67,98 @@ class CitaPersistence implements CitaRepository
             $stm = $this->db->prepare($sql);
             $stm->execute();
             return $stm->fetch(PDO::FETCH_ASSOC);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
+
+    public function ListarCita()
+    {
+        $sql = "SELECT c.Id_Cita, c.Id_Llamada, c.Encargado_Cita, c.Representante_Legal, c.Fecha_Cita, c.Id_Barrios_Veredas, c.Lugar_Referencia,c.Id_Operador,c.Factibilidad,c.Id_Coordinador, c.Id_Estado_Cita,c.Direccion AS Direccion_Cita, esc.Estado_Cita, -- CITAS
+        l.Fecha_Llamada,l.Persona_Responde,l.Info_Habeas_Data,l.Id_Estado_Llamada,l.Observacion,esll.Estado_Llamada , -- LLAMADAS
+        d.Id_Cliente,d.NIT_CDV,d.Razon_Social,d.Telefono, 
+        s.SubTipo,b.Nombre_Barrio_Vereda,m.Nombre_Municipio, de.Nombre_Departamento, 
+      
+        o.Nombre_Operador, o.Color 'Color_Operador',
+        v.Id_Visita,v.Tipo_Visita,
+        dV.Id_Datos_Visita ,dV.Fecha_Visita ,dV.Tipo_Venta,dV.Calificacion,dV.Id_Estado_Visita
+        from citas c  
+
+        INNER JOIN llamadas l ON(c.Id_Llamada = l.Id_Llamada) 
+        INNER JOIN directorio d ON (l.Id_Cliente = d.Id_Cliente)
+        INNER JOIN barrios_veredas b ON (b.Id_Barrios_Veredas = c.Id_Barrios_Veredas)
+        INNER JOIN subtipo_barrio_vereda s ON (s.Id_SubTipo_Barrio_Vereda = b.Id_SubTipo_Barrio_Vereda)
+        INNER JOIN municipios m ON (m.Id_Municipio = b.Id_Municipio)
+        INNER JOIN departamento de ON (de.Id_Departamento = m.Id_Departamento)
+        INNER JOIN estados_llamadas esll ON (esll.Id_Estado_Llamada = l.Id_Estado_Llamada)
+        INNER JOIN Operadores o ON(o.Id_Operador = c.Id_Operador)
+        INNER JOIN estados_citas esc ON(esc.Id_Estado_Cita = c.Id_Estado_Cita)
+        LEFT JOIN visitas v ON(v.Id_Cita = c.Id_Cita)
+        LEFT JOIN datos_visita dV ON(dV.Id_Datos_Visita = v.Id_Datos_Visita)";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->execute();
+
+            $error = $stm->errorCode();
+
+            if ($error === '00000') {
+                return $stm->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return $stm->errorInfo();
+            }
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function CambiarEstadoRC(int $Id_Cita, int $Estado)
+    {
+        $sql = "UPDATE citas SET Id_Estado_Cita = ? WHERE Id_Cita = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindParam(1, $Estado);
+            $stm->bindParam(2, $Id_Cita);
+
+            $res = $stm->execute();
+
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                return $res;
+            } else {
+                return $stm->errorInfo();
+            }
+
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+
+    public function CambiarEstadoV(int $Id_Cita, int $EstadoV)
+    {
+        $sql = "UPDATE citas SET Id_Estado_Cita = ? WHERE Id_Cita = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindParam(1, $EstadoV);
+            $stm->bindParam(2, $Id_Cita);
+
+            $res = $stm->execute();
+
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                return $res;
+            } else {
+                return $stm->errorInfo();
+            }
+
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
     
 }

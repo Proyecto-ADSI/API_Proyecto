@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-  namespace App\Application\Actions\Usuario;
+namespace App\Application\Actions\Usuario;
 
-  use Psr\Http\Message\ResponseInterface as Response;
-  class ListarUsuarios extends UsuarioAction
+use Psr\Http\Message\ResponseInterface as Response;
+
+class ListarUsuarios extends UsuarioAction
+{
+  protected function action(): Response
   {
-   protected function action(): Response
-   {
-       $usuario = $this->usuarioRepository->ListarUsuarios();
+    $usuario = $this->usuarioRepository->ListarUsuarios();
 
-       return $this->respondWithData($usuario);
-   }
-   
+    return $this->respondWithData($usuario);
   }
+}

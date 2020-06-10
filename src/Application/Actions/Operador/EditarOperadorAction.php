@@ -16,6 +16,7 @@ class EditarOperadorAction extends OperadorAction
         $datos = new Operador(
             $campos->Id_Operador,
             $campos->Nombre,
+            $campos->Color,
             null,
         );
         $datos = $this->OperadorRepository->EditarOperador($datos);

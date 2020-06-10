@@ -11,14 +11,13 @@ class CargarImagenUsuario extends UsuarioAction
 
     protected function action(): Response
     {
-        $directory = 'D:\Escritorio\Proyecto\app-node\src\public\assets\images\usuarios';
+        $directory = $_SERVER['DOCUMENT_ROOT'] . '\\Images\\Usuarios';
 
         $uploadedFiles = $this->request->getUploadedFiles();
 
         if (empty($uploadedFiles)) {
 
             return $this->respondWithData(["ok" => false]);
-
         } else {
 
             $uploadedFile = $uploadedFiles['Img_Usuario'];
@@ -31,10 +30,10 @@ class CargarImagenUsuario extends UsuarioAction
 
                 $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
 
-               return $this->respondWithData(["ok" => true, "pathArchivo" =>  $filename]);
-            }else{
+                return $this->respondWithData(["ok" => true, "pathArchivo" =>  $filename]);
+            } else {
 
-               return $this->respondWithData(["ok" => false]);
+                return $this->respondWithData(["ok" => false]);
             }
         }
     }

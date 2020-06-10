@@ -88,6 +88,7 @@ use App\Application\Actions\BarriosVeredas\ObtenerBarriosVeredasAction;
 use App\Application\Actions\BarriosVeredas\EditarBarriosVeredasAction;
 use App\Application\Actions\BarriosVeredas\CambiarEstadoBarriosVeredasAction;
 use App\Application\Actions\BarriosVeredas\ConsultarBarriosVeredasMunicipioAction;
+use App\Application\Actions\BarriosVeredas\EliminarBarriosVeredasAction;
 
 // Calificación operador
 use App\Application\Actions\Calificacion\CambiarEstadoCalificacionAction;
@@ -117,14 +118,15 @@ use App\Application\Actions\Operador\EditarOperadorAction;
 use App\Application\Actions\Operador\ListarOperadorAction;
 use App\Application\Actions\Operador\ObtenerOperadorAction;
 use App\Application\Actions\Operador\RegistrarOperadorAction;
+use App\Application\Actions\Operador\EliminarOperadorAction;
 
-// Razones
-use App\Application\Actions\Razones\EditarRazonesAction;
-use App\Application\Actions\Razones\EliminarRazonesAction;
-use App\Application\Actions\Razones\ListarRazonesAction;
-use App\Application\Actions\Razones\ListarRazonesTipoAction;
-use App\Application\Actions\Razones\ObtenerRazonesAction;
-use App\Application\Actions\Razones\RegistrarRazonesAction;
+// Opciones_Predefinidas
+use App\Application\Actions\Opciones_Predefinidas\EditarOpciones_PredefinidasAction;
+use App\Application\Actions\Opciones_Predefinidas\EliminarOpciones_PredefinidasAction;
+use App\Application\Actions\Opciones_Predefinidas\ListarOpciones_PredefinidasAction;
+use App\Application\Actions\Opciones_Predefinidas\ListarOpciones_PredefinidasCategoria;
+use App\Application\Actions\Opciones_Predefinidas\ObtenerOpciones_PredefinidasAction;
+use App\Application\Actions\Opciones_Predefinidas\RegistrarOpciones_PredefinidasAction;
 
 // Cliente
 use App\Application\Actions\Cliente\RegistrarCliente;
@@ -138,6 +140,11 @@ use App\Application\Actions\Cliente\EliminarCliente;
 use App\Application\Actions\Cliente\ImportarClientes;
 use App\Application\Actions\Cliente\CargarDocumentosSoporte;
 use App\Application\Actions\Cliente\ValidarCliente;
+
+// Cita
+use App\Application\Actions\Cita\ListarCitaAction;
+use App\Application\Actions\Cita\CambiarEstadoCitaRCAction;
+use App\Application\Actions\Cita\CambiarEstadoCitaVAction;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -212,7 +219,7 @@ return function (App $app) {
         $group->patch('/EstadoVisita/{Id_NU}', CambiarEstadoVisitaNotificacion::class);
         $group->delete('/{Id_Notificacion}', EliminarNotificaciones::class);
     });
-    
+
     $app->group('/Documento', function (Group $group) {
         $group->post('', DocumentoRegistroAction::class);
         $group->get('', ListarDocumento::class);
@@ -275,6 +282,7 @@ return function (App $app) {
         $group->get('/ConsultarBarriosVeredas/{Id_Municipio}/{Id_SubTipo}', ConsultarBarriosVeredasMunicipioAction::class);
         $group->put('', EditarBarriosVeredasAction::class);
         $group->patch('/{Id_Barrios_Veredas}/{Estado}', CambiarEstadoBarriosVeredasAction::class);
+        $group->delete('/{Id_Barrios_Veredas}', EliminarBarriosVeredasAction::class);
     });
     $app->group('/Turnos', function (Group $group) {
         $group->post('', RegistrarTurnosAction::class);
@@ -293,13 +301,14 @@ return function (App $app) {
         $group->put('', EditarRolAction::class);
         $group->patch('/{Id_Rol}/{Estado}', CambiarEstadoRolAction::class);
     });
-    
+
     $app->group('/Operador', function (Group $group) {
         $group->post('', RegistrarOperadorAction::class);
         $group->get('', ListarOperadorAction::class);
         $group->get('/ObtenerOperador/{Id_Operador}', ObtenerOperadorAction::class);
         $group->put('', EditarOperadorAction::class);
         $group->patch('/{Id_Operador}/{Estado}', CambiarEstadoOperadorAction::class);
+        $group->delete('/{Id_Operador}', EliminarOperadorAction::class);
     });
 
     $app->group('/Calificaciones', function (Group $group) {
@@ -308,15 +317,20 @@ return function (App $app) {
         $group->get('/ObtenerCalificacion/{Id_Calificacion_Operador}', ObtenerCalificacionAction::class);
         $group->put('', EditarCalificacionAction::class);
         $group->patch('/{Id_Calificacion_Operador}/{Estado_Calificacion}', CambiarEstadoCalificacionAction::class);
-        $group->delete('/{Id_Calificacion}',EliminarCalificacionAction::class);
+        $group->delete('/{Id_Calificacion}', EliminarCalificacionAction::class);
     });
 
-    $app->group('/Razones', function (Group $group) {
-        $group->post('', RegistrarRazonesAction::class);
-        $group->get('', ListarRazonesAction::class);
-        $group->get('/{Tipo}', ListarRazonesTipoAction::class);
-        $group->get('/ObtenerRazones/{Id_Razon_Calificacion}', ObtenerRazonesAction::class);
-        $group->put('', EditarRazonesAction::class);
-        $group->delete('/{Id_Razon_Calificacion}',EliminarRazonesAction::class);
+    $app->group('/OpcionesPredefinidas', function (Group $group) {
+        $group->post('', RegistrarOpciones_PredefinidasAction::class);
+        $group->get('', ListarOpciones_PredefinidasAction::class);
+        $group->get('/{Categoria}', ListarOpciones_PredefinidasCategoria::class);
+        $group->get('/ObtenerOpcionesPredefinidas/{Id_OP}', ObtenerOpciones_PredefinidasAction::class);
+        $group->put('', EditarOpciones_PredefinidasAction::class);
+        $group->delete('/{Id_OP}', EliminarOpciones_PredefinidasAction::class);
+    });
+    $app->group('/Cita', function (Group $group) {
+        $group->get('', ListarCitaAction::class);
+        $group->post('', CambiarEstadoCitaRCAction::class);
+        $group->patch('/vg/{Id_Cita}/{EstadoV}', CambiarEstadoCitaRCAction::class);
     });
 };

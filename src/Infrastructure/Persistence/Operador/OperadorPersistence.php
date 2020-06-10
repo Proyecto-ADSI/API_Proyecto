@@ -23,12 +23,13 @@ class OperadorPersistence implements OperadorRepository
 
     public function RegistrarOperador(Operador $Operador)
     {
-        $sql = "INSERT INTO operadores (Nombre_Operador, Estado_Operador) VALUES (?,?)";
+        $sql = "INSERT INTO operadores (Nombre_Operador,Color, Estado_Operador) VALUES (?,?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Operador->__GET("Nombre"));
-            $stm->bindValue(2, $Operador->__GET("Estado"));
+            $stm->bindValue(2, $Operador->__GET("Color"));
+            $stm->bindValue(3, $Operador->__GET("Estado"));
 
             return $stm->execute();
 
@@ -41,7 +42,7 @@ class OperadorPersistence implements OperadorRepository
 
     public function ListarOperador()
     {
-        $sql = "SELECT Id_Operador, Nombre_Operador, Estado_Operador FROM operadores ";
+        $sql = "SELECT Id_Operador, Nombre_Operador, Color ,Estado_Operador FROM operadores ";
 
         try {
 
@@ -70,7 +71,7 @@ class OperadorPersistence implements OperadorRepository
       }
   
       public function ObtenerDatosOperador($Id_Operador){
-        $sql = "SELECT Id_Operador, Nombre_Operador FROM operadores   WHERE Id_Operador = ?";
+        $sql = "SELECT Id_Operador, Nombre_Operador, Color FROM operadores   WHERE Id_Operador = ?";
  
         try {
            $stm = $this->db->prepare($sql);
@@ -85,12 +86,15 @@ class OperadorPersistence implements OperadorRepository
     }
 
     public function EditarOperador(Operador $Operador){
-        $sql = "UPDATE operadores SET Nombre_Operador = ?  WHERE Id_Operador = ?";
+        $sql = "UPDATE operadores SET Nombre_Operador = ? , Color = ? WHERE Id_Operador = ?";
         
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Operador->__GET("Nombre"));
-            $stm->bindValue(2, $Operador->__GET("Id_Operador"));
+            $stm->bindValue(2, $Operador->__GET("Color"));
+            $stm->bindValue(3, $Operador->__GET("Id_Operador"));
+
+           
             
             return $stm->execute();
  
@@ -98,4 +102,49 @@ class OperadorPersistence implements OperadorRepository
             return $e->getMessage();
         }
     }    
+
+    public function ValidarOperadorDa(int $Id_Operador)
+    {
+        $sql = "SELECT Id_Operador FROM datos_basicos_lineas WHERE Id_Operador = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Operador);
+            $stm->execute();
+
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+             return $e->getMessage();
+        }
+    }
+
+    public function ValidarOperadorRe(int $Id_Operador)
+    {
+        $sql = "SELECT Operadores_Id_Operador FROM reportes_operador WHERE Operadores_Id_Operador = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Operador);
+            $stm->execute();
+
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+             return $e->getMessage();
+        }
+    }
+
+    public function EliminarOperador(int $Id_Operador)
+    {
+        $sql ="DELETE FROM operadores WHERE Id_Operador = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1,$Id_Operador);
+
+           return $stm->execute();
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }

@@ -16,4 +16,10 @@ interface OperadorRepository{
     public function ObtenerDatosOperador(int $Id_Operador);
 
     public function EditarOperador(Operador $Operador);
+
+    public function ValidarOperadorDa(int $Id_Operador);
+
+    public function ValidarOperadorRe(int $Id_Operador);
+
+    public function EliminarOperador(int $Id_Operador);
 }

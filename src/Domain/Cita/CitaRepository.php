@@ -8,4 +8,11 @@ interface CitaRepository{
     public function RegistrarCita(Cita $Cita);
 
     public function ConsultarUltimaCitaRegistrada();
+
+    public function ListarCita();
+
+    public function CambiarEstadoRC(int $Id_Cita, int $Estado);
+
+    public function CambiarEstadoV(int $Id_Cita, int $EstadoV);
+
 }
