@@ -6,7 +6,7 @@ declare(strict_types=1);
 
   use Psr\Http\Message\ResponseInterface as Response;
 
-  class ListarCitaAction extends CitaAction
+  class ListarCitasAction extends CitaAction
   {
    protected function action(): Response
    {

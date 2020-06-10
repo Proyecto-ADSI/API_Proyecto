@@ -3,11 +3,9 @@
 declare(strict_types=1);
 
   namespace App\Application\Actions\Cita;
-  use App\Domain\Cita\Cita;
-
   use Psr\Http\Message\ResponseInterface as Response;
 
-  class CambiarEstadoCitaRCAction extends CitaAction
+  class CambiarEstadoCitasMultipleAction extends CitaAction
   {
    protected function action(): Response
    {  
@@ -22,7 +20,6 @@ declare(strict_types=1);
          $Data = $this->CitaRepository->CambiarEstadoRC($Id,$Estado);
       }
 
-      
       return $this->respondWithData($Data);
   }
   }
