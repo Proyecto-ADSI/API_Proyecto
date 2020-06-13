@@ -142,9 +142,10 @@ use App\Application\Actions\Cliente\CargarDocumentosSoporte;
 use App\Application\Actions\Cliente\ValidarCliente;
 
 // Cita
-use App\Application\Actions\Cita\ListarCitaAction;
-use App\Application\Actions\Cita\CambiarEstadoCitaRCAction;
-use App\Application\Actions\Cita\CambiarEstadoCitaVAction;
+use App\Application\Actions\Cita\ListarCitasAction;
+use App\Application\Actions\Cita\CambiarEstadoCitasMultipleAction;
+use App\Application\Actions\Cita\CambiarEstadoCitasAction;
+use App\Application\Actions\Cita\PDFCitasAction;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -328,9 +329,10 @@ return function (App $app) {
         $group->put('', EditarOpciones_PredefinidasAction::class);
         $group->delete('/{Id_OP}', EliminarOpciones_PredefinidasAction::class);
     });
-    $app->group('/Cita', function (Group $group) {
-        $group->get('', ListarCitaAction::class);
-        $group->post('', CambiarEstadoCitaRCAction::class);
-        $group->patch('/vg/{Id_Cita}/{EstadoV}', CambiarEstadoCitaRCAction::class);
+    $app->group('/Citas', function (Group $group) {
+        $group->get('', ListarCitasAction::class);
+        $group->post('/CambioEstado/Multiple', CambiarEstadoCitasMultipleAction::class);
+        $group->put('/CambioEstado', CambiarEstadoCitasAction::class);
+        $group->post('/PDF', PDFCitasAction::class);
     });
 };
