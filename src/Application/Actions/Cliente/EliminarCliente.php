@@ -21,7 +21,6 @@ class EliminarCliente extends ClienteAction
         } else {
 
             $infoDBL = $this->DBLRepository->ListarDBL($Id_Cliente, 3);
-            $this->logger->info("infoDetalleLinea " . json_encode($Id_Cliente));
             $Id_DBL = (int) $infoDBL['Id_DBL'];
             $Id_Plan_C = (int) $infoDBL['Id_Plan_Corporativo'];
             $Id_Documentos = 0;
@@ -31,16 +30,27 @@ class EliminarCliente extends ClienteAction
                 $infoPlan = $this->Plan_CorporativoRepository->ListarPlan_Corporativo($Id_Plan_C);
                 $Id_Documentos = (int) $infoPlan['Id_Documentos'];
             }
-            
-            $infoDetalleLinea = $this->DBLRepository->ConsultarDetalleLineas($Id_DBL);
 
-            if (!empty($infoDetalleLinea)) {
+            $infoDetalleLineaMoviles = $this->DBLRepository->ConsultarDetalleLineas($Id_DBL);
+            $infoDetalleLineaFijas = $this->DBLRepository->ConsultarDetalleLineasFijas($Id_DBL);
+
+            if (!empty($infoDetalleLineaMoviles)) {
 
                 $this->DBLRepository->EliminarDetalleLineas($Id_DBL);
 
-                foreach ($infoDetalleLinea as $linea) {
+                foreach ($infoDetalleLineaMoviles as $linea) {
 
-                    $Id_Linea = (int) $linea['Id_Linea'];
+                    $Id_Linea = (int) $linea['Id_Linea_Movil'];
+
+                    $this->LineaRepository->EliminarLinea($Id_Linea);
+                }
+            }
+
+            if (!empty($infoDetalleLineaFijas)) {
+
+                foreach ($infoDetalleLineaFijas as $linea) {
+
+                    $Id_Linea = (int) $linea['Id_Linea_Fija'];
 
                     $this->LineaRepository->EliminarLinea($Id_Linea);
                 }

@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Domain\Linea;
 
-interface LineaRepository{
+interface LineaRepository
+{
 
     public function RegistrarLinea(Linea $linea);
 

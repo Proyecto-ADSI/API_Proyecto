@@ -1,10 +1,11 @@
-<?php 
+<?php
 
 declare(strict_types=1);
 
 namespace App\Domain\DBL;
 
-interface DBLRepository {
+interface DBLRepository
+{
 
     public function RegistrarDBL(DBL $DBL);
 
@@ -17,12 +18,12 @@ interface DBLRepository {
     public function ELiminarDBL(int $Id_DBL);
 
     public function ConsultarUltimoRegistrado();
-    
+
     public function ConsultarDetalleLineas(int $DBL);
+
+    public function ConsultarDetalleLineasFijas(int $DBL);
 
     public function EliminarDetalleLineas(int $Id_DBL);
 
+    public function EliminarDetalleLineasMoviles(int $Id_DBL);
 }
-
-
-

@@ -24,15 +24,16 @@ class ClientePersistence implements ClienteRepository
 
     public function ListarCliente()
     {
-        $sql = "SELECT d.Id_Cliente, d.NIT_CDV, d.Razon_Social, d.Telefono, d.Encargado, d.Ext_Tel_Contacto, d.Direccion, d.Estado_Cliente,
-        bv.Id_Barrios_Veredas, IFNULL(bv.Nombre_Barrio_Vereda,'No registrado') Nombre_Barrio_Vereda, sbv.Id_SubTipo_Barrio_Vereda, sbv.SubTipo,m.Id_Municipio,
-        IFNULL(m.Nombre_Municipio,'No registrado') Nombre_Municipio, dep.Id_Departamento, IFNULL(dep.Nombre_Departamento,'No registrado') Nombre_Departamento,
-        p.Id_Pais, IFNULL(p.Nombre_Pais,'No registrado') Nombre_Pais, dbl.Id_DBL, dbl.Cantidad_Total_Lineas,
-        dbl.Valor_Total_Mensual, IFNULL(dbl.Razones,',') Razones, IFNULL(o.Id_Operador,'0') Id_Operador, IFNULL(o.Nombre_Operador,'No especificado') Nombre_Operador, o.Color,
-        IFNULL(co.Id_Calificacion_Operador,'0') Id_Calificacion_Operador, IFNULL(co.Calificacion,'No especificado') Calificacion, e.Id_Estado_DBL, e.Estado_DBL,
+        $sql = "SELECT d.Id_Cliente, IFNULL(d.NIT_CDV,'N/A') NIT_CDV, d.Razon_Social, d.Telefono, d.Extension, IFNULL(d.Encargado,'N/A') Encargado,
+        IFNULL(d.Correo,'N/A') Correo, IFNULL(d.Celular,'N/A') Celular, IFNULL(d.Direccion,'N/A') Direccion, d.Estado_Cliente,
+        bv.Id_Barrios_Veredas, IFNULL(bv.Nombre_Barrio_Vereda,'N/A') Nombre_Barrio_Vereda, sbv.Id_SubTipo_Barrio_Vereda, sbv.SubTipo,m.Id_Municipio,
+        IFNULL(m.Nombre_Municipio,'N/A') Nombre_Municipio, dep.Id_Departamento, IFNULL(dep.Nombre_Departamento,'N/A') Nombre_Departamento,
+        p.Id_Pais, IFNULL(p.Nombre_Pais,'N/A') Nombre_Pais, dbl.Id_DBL, dbl.Cantidad_Total_Lineas,
+        dbl.Valor_Total_Mensual, IFNULL(dbl.Razones,',') Razones, IFNULL(o.Id_Operador,'0') Id_Operador, IFNULL(o.Nombre_Operador,'N/A') Nombre_Operador, IFNULL(o.Color,'#323840') Color,
+        IFNULL(co.Id_Calificacion_Operador,'0') Id_Calificacion_Operador, IFNULL(co.Calificacion,'N/A') Calificacion, e.Id_Estado_DBL, e.Estado_DBL,
         CASE WHEN  ISNULL(dbl.Id_Plan_Corporativo) = 0 THEN 'Si' ELSE 'No' END AS Corporativo, IFNULL(pc.Id_Plan_Corporativo,'0') Id_Plan_Corporativo, 
         DATE_FORMAT(pc.Fecha_Inicio,'%e/%b/%Y') Fecha_Inicio, DATE_FORMAT(pc.Fecha_Fin,'%e/%b/%Y') Fecha_Fin,
-        pc.Clausula_Permanencia, pc.Descripcion, pc.Estado_Plan_Corporativo,
+        pc.Clausula_Permanencia, IFNULL(pc.Descripcion,'N/A') Descripcion, pc.Estado_Plan_Corporativo,
         IFNULL(ds.Id_Documentos,'0') Id_Documentos, ds.Camara_Comercio, ds.Cedula_RL, ds.Soporte_Ingresos, ds.Detalles_Plan_Corporativo, ds.Oferta
         FROM directorio d LEFT JOIN barrios_veredas bv ON(d.Id_Barrios_Veredas = bv.Id_Barrios_Veredas)
         LEFT JOIN subtipo_barrio_vereda sbv ON(bv.Id_SubTipo_Barrio_Vereda = sbv.Id_SubTipo_Barrio_Vereda)
@@ -63,26 +64,31 @@ class ClientePersistence implements ClienteRepository
                 $arrayClientes = $stm->fetchAll(PDO::FETCH_ASSOC);
 
                 foreach ($arrayClientes as $cliente) {
-                    $sql = " SELECT d.Id_DBL, l.Id_Linea, IFNULL(l.Linea, '0') Linea, l.Minutos, l.Navegacion, l.Mensajes, l.Redes_Sociales, l.Llamadas_Inter,
-                    l.Roaming, l.Cargo_Basico, l.Grupo FROM Detalle_Lineas d JOIN Lineas l ON(d.Id_Linea = l.Id_Linea) WHERE d.Id_DBL = ?";
+
+                    $arrayServicios_Moviles = [];
+                    $arrayServiciosFijos = [];
+                    $datosCliente = [];
+
+
+                    $sql = " SELECT d.Id_DBL, l.Id_Linea_Movil, IFNULL(l.Linea, '0') Linea, IFNULL(l.Minutos,'N/A') Minutos, 
+                    IFNULL(l.Navegacion,'N/A') Navegacion, IFNULL(l.Mensajes,'N/A') Mensajes, IFNULL(l.Redes_Sociales,',') Redes_Sociales,
+                    IFNULL(l.Minutos_LDI,',') Minutos_LDI, IFNULL(l.Cantidad_LDI,'N/A') Cantidad_LDI,
+                    IFNULL(l.Servicios_Adicionales,',') Servicios_Adicionales, l.Cargo_Basico, l.Grupo 
+                    FROM detalle_lineas d JOIN lineas_moviles l ON(d.Id_Linea_Movil = l.Id_Linea_Movil) 
+                    WHERE d.Id_DBL = ?";
                     try {
                         $stm = $this->db->prepare($sql);
                         $stm->bindValue(1, $cliente['Id_DBL']);
                         $stm->execute();
                         $error = $stm->errorCode();
                         if ($error === '00000') {
-                            $DetalleLineas = $stm->fetchAll(PDO::FETCH_ASSOC);
+                            $Servicios_Moviles = $stm->fetchAll(PDO::FETCH_ASSOC);
 
-                            if (!empty($DetalleLineas)) {
+                            if (!empty($Servicios_Moviles)) {
 
-                                $arrayDetalle = array(
-                                    'Detalle_Lineas' => $DetalleLineas,
+                                $arrayServicios_Moviles = array(
+                                    'Servicios_Moviles' => $Servicios_Moviles,
                                 );
-
-                                $datosCliente = array_merge($cliente, $arrayDetalle);
-                                array_push($infoCliente, $datosCliente);
-                            } else {
-                                array_push($infoCliente, $cliente);
                             }
                         } else {
                             return $stm->errorInfo();
@@ -90,6 +96,41 @@ class ClientePersistence implements ClienteRepository
                     } catch (\Exception $e) {
                         return $e->getMessage();
                     }
+
+                    $sql2 = " SELECT d.Id_DBL, l.Id_Linea_Fija, l.Pagina_Web, l.Correo_Electronico,
+                    l.IP_Fija, l.Dominio, l.Telefonia, l.Television
+                    FROM detalle_lineas d JOIN lineas_fijas l ON(d.Id_Linea_Fija = l.Id_Linea_Fija) 
+                    WHERE d.Id_DBL = ?";
+
+                    try {
+                        $stm = $this->db->prepare($sql2);
+                        $stm->bindValue(1, $cliente['Id_DBL']);
+                        $stm->execute();
+                        $error = $stm->errorCode();
+                        if ($error === '00000') {
+                            $Servicios_Fijos = $stm->fetch(PDO::FETCH_ASSOC);
+
+                            if (!empty($Servicios_Fijos)) {
+
+                                $arrayServiciosFijos = array(
+                                    'Servicios_Fijos' => $Servicios_Fijos,
+                                );
+                            }
+                        } else {
+                            return $stm->errorInfo();
+                        }
+                    } catch (\Exception $e) {
+                        return $e->getMessage();
+                    }
+
+                    $datosCliente =  array_merge($datosCliente, $cliente);
+                    if (!empty($arrayServiciosFijos)) {
+                        $datosCliente =  array_merge($datosCliente, $arrayServiciosFijos);
+                    }
+                    if (!empty($arrayServicios_Moviles)) {
+                        $datosCliente =  array_merge($datosCliente, $arrayServicios_Moviles);
+                    }
+                    array_push($infoCliente, $datosCliente);
                 }
 
                 return $infoCliente;
@@ -103,13 +144,15 @@ class ClientePersistence implements ClienteRepository
 
     public function ObtenerCliente(int $id)
     {
-        $sql = "SELECT d.Id_Cliente, d.NIT_CDV, d.Razon_Social, d.Telefono, d.Encargado, d.Ext_Tel_Contacto, d.Direccion, d.Estado_Cliente,
-        bv.Id_Barrios_Veredas, bv.Nombre_Barrio_Vereda, sbv.Id_SubTipo_Barrio_Vereda, sbv.SubTipo, m.Id_Municipio, m.Nombre_Municipio,
-        dep.Id_Departamento, dep.Nombre_Departamento, p.Id_Pais, p.Nombre_Pais, dbl.Id_DBL, dbl.Cantidad_Total_Lineas, dbl.Valor_Total_Mensual,
-        IFNULL(dbl.Razones,',') Razones, IFNULL(o.Id_Operador,'0') Id_Operador, IFNULL(o.Nombre_Operador,'No especificado') Nombre_Operador, o.Color,
-        IFNULL(co.Id_Calificacion_Operador,'0') Id_Calificacion_Operador, IFNULL(co.Calificacion,'No especificado') Calificacion, e.Id_Estado_DBL, e.Estado_DBL,
+        $sql = "SELECT d.Id_Cliente, IFNULL(d.NIT_CDV,'N/A') NIT_CDV, d.Razon_Social, d.Telefono, d.Extension, IFNULL(d.Encargado,'N/A') Encargado,
+        IFNULL(d.Correo,'N/A') Correo, IFNULL(d.Celular,'N/A') Celular, IFNULL(d.Direccion,'N/A') Direccion, d.Estado_Cliente,
+        bv.Id_Barrios_Veredas, IFNULL(bv.Nombre_Barrio_Vereda,'N/A') Nombre_Barrio_Vereda, sbv.Id_SubTipo_Barrio_Vereda, sbv.SubTipo, m.Id_Municipio, 
+        IFNULL(m.Nombre_Municipio,'N/A') Nombre_Municipio, dep.Id_Departamento, IFNULL(dep.Nombre_Departamento,'N/A') Nombre_Departamento,
+        p.Id_Pais, IFNULL(p.Nombre_Pais,'N/A') Nombre_Pais, dbl.Id_DBL, dbl.Cantidad_Total_Lineas, dbl.Valor_Total_Mensual,
+        IFNULL(dbl.Razones,',') Razones, IFNULL(o.Id_Operador,'0') Id_Operador, IFNULL(o.Nombre_Operador,'N/A') Nombre_Operador, o.Color,
+        IFNULL(co.Id_Calificacion_Operador,'0') Id_Calificacion_Operador, IFNULL(co.Calificacion,'N/A') Calificacion, e.Id_Estado_DBL, e.Estado_DBL,
         IFNULL(pc.Id_Plan_Corporativo,'0') Id_Plan_Corporativo, DATE_FORMAT(pc.Fecha_Inicio,'%e/%b/%Y') Fecha_Inicio, DATE_FORMAT(pc.Fecha_Fin,'%e/%b/%Y') Fecha_Fin,
-        pc.Clausula_Permanencia, pc.Descripcion, pc.Estado_Plan_Corporativo,
+        pc.Clausula_Permanencia, IFNULL(pc.Descripcion,'N/A') Descripcion, pc.Estado_Plan_Corporativo,
         IFNULL(ds.Id_Documentos,'0') Id_Documentos, ds.Camara_Comercio, ds.Cedula_RL, ds.Soporte_Ingresos, ds.Detalles_Plan_Corporativo, ds.Oferta
         FROM directorio d 
         LEFT JOIN barrios_veredas bv ON(d.Id_Barrios_Veredas = bv.Id_Barrios_Veredas)
@@ -137,8 +180,43 @@ class ClientePersistence implements ClienteRepository
 
                 $Info_Cliente = $stm->fetch(PDO::FETCH_ASSOC);
 
-                $sql = " SELECT d.Id_DBL, l.Id_Linea, IFNULL(l.Linea, '0') Linea, l.Minutos, l.Navegacion, l.Mensajes, l.Redes_Sociales, l.Llamadas_Inter,
-                l.Roaming, l.Cargo_Basico, l.Grupo FROM Detalle_Lineas d JOIN Lineas l ON(d.Id_Linea = l.Id_Linea) WHERE d.Id_DBL = ?";
+                // Servicos Fijos
+
+                $sql2 = " SELECT d.Id_DBL, l.Id_Linea_Fija, l.Pagina_Web, l.Correo_Electronico,
+                l.IP_Fija, l.Dominio, l.Telefonia, l.Television
+                FROM detalle_lineas d JOIN lineas_fijas l ON(d.Id_Linea_Fija = l.Id_Linea_Fija) 
+                WHERE d.Id_DBL = ?";
+
+                try {
+                    $stm = $this->db->prepare($sql2);
+                    $stm->bindValue(1, $Info_Cliente['Id_DBL']);
+                    $stm->execute();
+                    $error = $stm->errorCode();
+                    if ($error === '00000') {
+                        $Servicios_Fijos = $stm->fetch(PDO::FETCH_ASSOC);
+
+                        if (!empty($Servicios_Fijos)) {
+
+                            $arrayServiciosFijos = array(
+                                'Servicios_Fijos' => $Servicios_Fijos,
+                            );
+
+                            $Info_Cliente = array_merge($Info_Cliente, $arrayServiciosFijos);
+                        }
+                    } else {
+                        return $stm->errorInfo();
+                    }
+                } catch (\Exception $e) {
+                    return $e->getMessage();
+                }
+
+                // Servicos Móviles
+                $sql = " SELECT d.Id_DBL, l.Id_Linea_Movil, IFNULL(l.Linea, '0') Linea, IFNULL(l.Minutos,'N/A') Minutos, 
+                    IFNULL(l.Navegacion,'N/A') Navegacion, IFNULL(l.Mensajes,'N/A') Mensajes, IFNULL(l.Redes_Sociales,',') Redes_Sociales,
+                    IFNULL(l.Minutos_LDI,',') Minutos_LDI, IFNULL(l.Cantidad_LDI,'N/A') Cantidad_LDI,
+                    IFNULL(l.Servicios_Adicionales,',') Servicios_Adicionales, l.Cargo_Basico, l.Grupo 
+                    FROM detalle_lineas d JOIN lineas_moviles l ON(d.Id_Linea_Movil = l.Id_Linea_Movil) 
+                    WHERE d.Id_DBL = ?";
 
                 try {
                     $stm = $this->db->prepare($sql);
@@ -146,23 +224,24 @@ class ClientePersistence implements ClienteRepository
                     $stm->execute();
                     $error = $stm->errorCode();
                     if ($error === '00000') {
-                        $DetalleLineas = $stm->fetchAll(PDO::FETCH_ASSOC);
+                        $Servicios_Moviles = $stm->fetchAll(PDO::FETCH_ASSOC);
 
-                        if (!empty($DetalleLineas)) {
+                        if (!empty($Servicios_Moviles)) {
 
-                            $arrayDetalle = array(
-                                'Detalle_Lineas' => $DetalleLineas,
+                            $arrayServiciosMoviles = array(
+                                'Servicios_Moviles' => $Servicios_Moviles,
                             );
 
-                            $Info_Cliente = array_merge($Info_Cliente, $arrayDetalle);
+                            $Info_Cliente = array_merge($Info_Cliente, $arrayServiciosMoviles);
                         }
-                        return $Info_Cliente;
                     } else {
                         return $stm->errorInfo();
                     }
                 } catch (\Exception $e) {
                     return $e->getMessage();
                 }
+
+                return $Info_Cliente;
             } else {
                 return $stm->errorInfo();
             }
@@ -173,18 +252,21 @@ class ClientePersistence implements ClienteRepository
 
     public function RegistrarCliente(Cliente $Cliente)
     {
-        $sql = "INSERT INTO directorio(NIT_CDV,Razon_Social, Telefono, Encargado,Ext_Tel_Contacto, Direccion, Id_Barrios_Veredas)
-        VALUES (?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO directorio(NIT_CDV, Razon_Social, Telefono, Extension, Encargado, Correo, Celular, 
+        Direccion, Id_Barrios_Veredas)
+        VALUES (?,?,?,?,?,?,?,?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Cliente->__GET("NIT_CDV"));
             $stm->bindValue(2, $Cliente->__GET("Razon_Social"));
             $stm->bindValue(3, $Cliente->__GET("Telefono"));
-            $stm->bindValue(4, $Cliente->__GET("Encargado"));
-            $stm->bindValue(5, $Cliente->__GET("Ext_Tel_Contacto"));
-            $stm->bindValue(6, $Cliente->__GET("Direccion"));
-            $stm->bindValue(7, $Cliente->__GET("Id_Barrios_Veredas"));
+            $stm->bindValue(4, $Cliente->__GET("Extension"));
+            $stm->bindValue(5, $Cliente->__GET("Encargado"));
+            $stm->bindValue(6, $Cliente->__GET("Correo"));
+            $stm->bindValue(7, $Cliente->__GET("Celular"));
+            $stm->bindValue(8, $Cliente->__GET("Direccion"));
+            $stm->bindValue(9, $Cliente->__GET("Id_Barrios_Veredas"));
 
             $respuesta = $stm->execute();
 
@@ -203,21 +285,22 @@ class ClientePersistence implements ClienteRepository
     public function EditarCliente(Cliente $Cliente)
     {
 
-        $sql = "UPDATE directorio SET NIT_CDV = ?, Razon_Social = ?, Telefono = ?,
-        Encargado = ?, Ext_Tel_Contacto = ?, Direccion = ?, Id_Barrios_Veredas = ?
+        $sql = "UPDATE directorio SET NIT_CDV = ?, Razon_Social = ?, Telefono = ?, Extension = ?,
+        Encargado = ?, Correo = ?, Celular= ?, Direccion = ?, Id_Barrios_Veredas = ?
         WHERE Id_Cliente = ?";
 
         try {
-
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Cliente->__GET("NIT_CDV"));
             $stm->bindValue(2, $Cliente->__GET("Razon_Social"));
             $stm->bindValue(3, $Cliente->__GET("Telefono"));
-            $stm->bindValue(4, $Cliente->__GET("Encargado"));
-            $stm->bindValue(5, $Cliente->__GET("Ext_Tel_Contacto"));
-            $stm->bindValue(6, $Cliente->__GET("Direccion"));
-            $stm->bindValue(7, $Cliente->__GET("Id_Barrios_Veredas"));
-            $stm->bindValue(8, $Cliente->__GET("Id_Cliente"));
+            $stm->bindValue(4, $Cliente->__GET("Extension"));
+            $stm->bindValue(5, $Cliente->__GET("Encargado"));
+            $stm->bindValue(6, $Cliente->__GET("Correo"));
+            $stm->bindValue(7, $Cliente->__GET("Celular"));
+            $stm->bindValue(8, $Cliente->__GET("Direccion"));
+            $stm->bindValue(9, $Cliente->__GET("Id_Barrios_Veredas"));
+            $stm->bindValue(10, $Cliente->__GET("Id_Cliente"));
 
             return $stm->execute();
         } catch (Exception $e) {
@@ -284,7 +367,7 @@ class ClientePersistence implements ClienteRepository
 
         $sql = "SELECT Id_Cliente FROM directorio WHERE Id_Cliente IN
             (SELECT Id_Cliente from llamadas WHERE Id_cliente = ?) OR Id_Cliente IN
-            (SELECT Id_Cliente from visita_interna WHERE Id_cliente = ?)";
+            (SELECT Id_Cliente from empresas_asignadas WHERE Id_cliente = ?)";
 
         try {
             $stm = $this->db->prepare($sql);

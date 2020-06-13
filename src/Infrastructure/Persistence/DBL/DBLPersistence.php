@@ -93,7 +93,7 @@ class DBLPersistence implements DBLRepository
         $sql = "UPDATE datos_basicos_lineas SET  Id_Operador = ?, Id_Plan_Corporativo = ?,
         Cantidad_Total_Lineas = ?, Valor_Total_Mensual = ?, Id_Calificacion_Operador = ?,
         Razones = ? WHERE Id_DBL = ?";
-        
+
         try {
 
             $stm = $this->db->prepare($sql);
@@ -104,7 +104,7 @@ class DBLPersistence implements DBLRepository
             $stm->bindValue(5, $DBL->__GET("Id_Calificacion_Operador"));
             $stm->bindValue(6, $DBL->__GET("Razones"));
             $stm->bindValue(7, $DBL->__GET("Id_DBL"));
-            
+
             return $stm->execute();
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -161,12 +161,8 @@ class DBLPersistence implements DBLRepository
 
     public function ConsultarDetalleLineas(int $Id_DBL)
     {
-
-        $sql = " SELECT d.Id_DBL, l.Id_Linea, IFNULL(l.Linea, '0') Linea, l.Minutos, l.Navegacion, l.Mensajes, l.Redes_Sociales, l.Llamadas_Inter,
-        l.Roaming, l.Cargo_Basico, l.Grupo FROM Detalle_Lineas d JOIN Lineas l ON(d.Id_Linea = l.Id_Linea) WHERE d.Id_DBL = ?";
-
+        $sql = " SELECT l.Id_Linea_Movil FROM detalle_lineas d JOIN lineas_moviles l ON(d.Id_Linea_Movil = l.Id_Linea_Movil) WHERE d.Id_DBL = ?";
         try {
-
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Id_DBL);
 
@@ -180,13 +176,52 @@ class DBLPersistence implements DBLRepository
             }
         } catch (\Exception $e) {
             return $e->getMessage();
-        } 
+        }
     }
 
-    public function EliminarDetalleLineas(int $Id_DBL){
+    public function ConsultarDetalleLineasFijas(int $Id_DBL)
+    {
+        $sql = " SELECT l.Id_Linea_Fija FROM detalle_lineas d JOIN lineas_fijas l ON(d.Id_Linea_Fija = l.Id_Linea_Fija) WHERE d.Id_DBL = ?";
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1, $Id_DBL);
+
+            $stm->execute();
+
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                return $stm->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return $stm->errorInfo();
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    public function EliminarDetalleLineas(int $Id_DBL)
+    {
 
         $sql = "DELETE FROM detalle_lineas WHERE Id_DBL = ?";
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1, $Id_DBL);
+            $stm->execute();
 
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                return true;
+            } else {
+                return $stm->errorInfo();
+            }
+        } catch (\Exception $e) {
+
+            return $e->getMessage();
+        }
+    }
+    public function EliminarDetalleLineasMoviles(int $Id_DBL)
+    {
+
+        $sql = "DELETE FROM detalle_lineas WHERE Id_DBL = ? AND Id_Linea_Movil IS NOT NULL";
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Id_DBL);

@@ -8,9 +8,12 @@ use App\Domain\Cliente\Cliente;
 use App\Domain\DBL\DBL;
 use App\Domain\Doc_Soporte\Doc_Soporte;
 use App\Domain\Linea\Linea;
+use App\Domain\Lineas_Fijas\Lineas_Fijas;
 use App\Domain\Plan_Corporativo\Plan_Corporativo;
 use Psr\Http\Message\ResponseInterface as Response;
-class EditarCliente extends ClienteAction {
+
+class EditarCliente extends ClienteAction
+{
 
     protected function action(): Response
     {
@@ -29,14 +32,14 @@ class EditarCliente extends ClienteAction {
             NULL
         );
 
-        if(isset($campos->Id_Plan_Corporativo)){
+        if (isset($campos->Id_Plan_Corporativo)) {
             $Id_Plan_Corporativo = (int) $campos->Id_Plan_Corporativo;
         }
 
-        if(isset($campos->Id_Documentos)){
+        if (isset($campos->Id_Documentos)) {
             $Id_Documentos = (int) $campos->Id_Documentos;
         }
-        
+
         // Validar si se edita o registra el plan corporativo
         if ($campos->Validacion_PLan_C) {
 
@@ -51,11 +54,11 @@ class EditarCliente extends ClienteAction {
                 NULL
             );
 
-            
-           
+
+
             // Validar si se editan o registran los documentos soporte
             if ($campos->Validacion_Doc_S) {
-                
+
 
                 $Doc_Soporte = new Doc_Soporte(
                     NULL,
@@ -65,44 +68,41 @@ class EditarCliente extends ClienteAction {
                     $campos->Detalles_Plan_Corporativo
                 );
 
-               
-                if($Id_Documentos > 0){
+
+                if ($Id_Documentos > 0) {
                     // Editar documentos
-                    $Doc_Soporte->__set("Id_Documentos",$Id_Documentos);
-                    $Plan_Corporativo->__set("Id_Documentos",$Id_Documentos);
+                    $Doc_Soporte->__set("Id_Documentos", $Id_Documentos);
+                    $Plan_Corporativo->__set("Id_Documentos", $Id_Documentos);
                     $this->Doc_SoporteRepository->EditarDocSoporte($Doc_Soporte);
-                    
-                }else{
+                } else {
 
                     // Registrar ducumentos
                     $this->Doc_SoporteRepository->RegistrarDocSoporte($Doc_Soporte);
                     $InfoIdDoc = $this->Doc_SoporteRepository->ConsultarUltimoRegistrado();
                     $Id_Documentos = (int) $InfoIdDoc['Id_Documentos'];
-                    $Plan_Corporativo->__set("Id_Documentos",$Id_Documentos);
+                    $Plan_Corporativo->__set("Id_Documentos", $Id_Documentos);
                 }
-                
-                if($Id_Plan_Corporativo > 0){
+
+                if ($Id_Plan_Corporativo > 0) {
                     // Editar plan corporativo con documentos.
-                    $Plan_Corporativo->__set("Id_Plan_Corporativo",$Id_Plan_Corporativo);
+                    $Plan_Corporativo->__set("Id_Plan_Corporativo", $Id_Plan_Corporativo);
                     $this->Plan_CorporativoRepository->EditarPlan_Corporativo($Plan_Corporativo);
-                    
-                }else{
+                } else {
                     // Registrar plan corporativo con documentos.
                     $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($Plan_Corporativo);
                     $InfoIdPlan = $this->Plan_CorporativoRepository->ConsultarUltimoRegistrado();
                     $Id_Plan_Corporativo = (int) $InfoIdPlan['Id_Plan_Corporativo'];
                 }
-                
             } else {
 
-                if($Id_Plan_Corporativo > 0){
+                if ($Id_Plan_Corporativo > 0) {
                     // Editar plan corporativo sin documentos.
-                    $Plan_Corporativo->__set("Id_Plan_Corporativo",$Id_Plan_Corporativo);
+                    $Plan_Corporativo->__set("Id_Plan_Corporativo", $Id_Plan_Corporativo);
                     $this->Plan_CorporativoRepository->EditarPlan_Corporativo($Plan_Corporativo);
-                    if(isset($Id_Documentos)){
+                    if (isset($Id_Documentos)) {
                         $this->Doc_SoporteRepository->EliminarDocSoporte($Id_Documentos);
                     }
-                }else{
+                } else {
                     // Registrar plan corporativo sin documentos.
                     $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($Plan_Corporativo);
                     $InfoIdPlan = $this->Plan_CorporativoRepository->ConsultarUltimoRegistrado();
@@ -111,51 +111,79 @@ class EditarCliente extends ClienteAction {
             }
 
             // Editar Datos básicos líneas con plan corporativo
-            $DBL->__set("Id_Plan_Corporativo",$Id_Plan_Corporativo);
+            $DBL->__set("Id_Plan_Corporativo", $Id_Plan_Corporativo);
             $this->DBLRepository->EditarDBL($DBL);
-
-
         } else {
 
             // Editar Datos básicos líneas sin plan corporativo
             $this->DBLRepository->EditarDBL($DBL);
-            $this->Plan_CorporativoRepository->EliminarPlan_Corporativo($Id_Plan_Corporativo);
-            $this->Doc_SoporteRepository->EliminarDocSoporte($Id_Documentos);
+            if (isset($Id_Plan_Corporativo)) {
+                $this->Plan_CorporativoRepository->EliminarPlan_Corporativo($Id_Plan_Corporativo);
+            }
+            if (isset($Id_Documentos)) {
+                $this->Doc_SoporteRepository->EliminarDocSoporte($Id_Documentos);
+            }
         }
 
-        $arrayLineas = $campos->DetalleLineas;
+        // Servicios fijos
+        $serviciosFijos = $campos->ServiciosFijos;
+        if (isset($serviciosFijos)) {
 
-        foreach($arrayLineas as $lineaItem){
-
-            // $linea = null;
-
-            $linea = new Linea(
-                NULL,
-                NULL,
-                $lineaItem->minutos,
-                $lineaItem->navegacion,
-                $lineaItem->mensajes,
-                $lineaItem->redes,
-                $lineaItem->llamadas,
-                $lineaItem->roaming,
-                $lineaItem->cargo,
-                $lineaItem->grupo
+            $lineasFijas = new Lineas_Fijas(
+                $serviciosFijos->id_linea_fija,
+                $serviciosFijos->pagina,
+                $serviciosFijos->correo,
+                $serviciosFijos->ip,
+                $serviciosFijos->dominio,
+                $serviciosFijos->telefonia,
+                $serviciosFijos->television
             );
 
-            if($lineaItem->numero !== "0"){
+            $this->Lineas_FijasRepository->EditarLineas_Fijas($lineasFijas);
+        }
 
-                $linea->__set("Linea",$lineaItem->numero);
+
+        // Servicios móviles
+        $arrayLineas = $campos->ServiciosMoviles;
+        // Validar si tiene líneas móviles ya registradas.
+        $infoDetalleLineaMoviles = $this->DBLRepository->ConsultarDetalleLineas($campos->Id_DBL);
+
+        if (!empty($infoDetalleLineaMoviles)) {
+
+            // Eliminar líneas móviles registradas.
+            $this->DBLRepository->EliminarDetalleLineasMoviles($campos->Id_DBL);
+
+            foreach ($infoDetalleLineaMoviles as $linea) {
+
+                $Id_Linea = (int) $linea['Id_Linea_Movil'];
+
+                $this->LineaRepository->EliminarLinea($Id_Linea);
             }
 
-            if($lineaItem->id > 0){
-                 // Editar
-                $linea->__set("Id_Linea",$lineaItem->id);
-                $this->LineaRepository->EditarLinea($linea);
-            }else{
-                // Agregar
+            // Agregar nuevas lineas a la tabla.
+            foreach ($arrayLineas as $lineaItem) {
+
+                $linea = new Linea(
+                    NULL,
+                    NULL,
+                    $lineaItem->minutos,
+                    $lineaItem->navegacion,
+                    $lineaItem->mensajes,
+                    $lineaItem->redes,
+                    $lineaItem->minutosLDI,
+                    $lineaItem->cantidadLDI,
+                    $lineaItem->serviciosAdicionales,
+                    $lineaItem->cargoBasicoMensual,
+                    $lineaItem->grupo
+                );
+
+                if ($lineaItem->numero !== "0") {
+                    $linea->__set("Linea", $lineaItem->numero);
+                }
+
                 $this->LineaRepository->RegistrarLinea($linea);
                 $infoIdLinea = $this->LineaRepository->ConsultarUltimaLinea();
-                $this->LineaRepository->RegistrarDetalleLinea((int)$infoIdLinea['Id_Linea'], $campos->Id_DBL);
+                $this->LineaRepository->RegistrarDetalleLinea((int) $infoIdLinea['Id_Linea_Movil'], $campos->Id_DBL);
             }
         }
 
@@ -165,17 +193,18 @@ class EditarCliente extends ClienteAction {
             $campos->NIT_CDV,
             $campos->Razon_Social,
             $campos->Telefono,
+            $campos->Extension,
             $campos->Encargado,
-            $campos->Ext_Tel_Contacto,
+            $campos->Correo,
+            $campos->Celular,
             $campos->Direccion,
             $campos->Barrio_Vereda,
             NULL
         );
-        
+
         $respuesta = $this->ClienteRepository->EditarCliente($Cliente);
 
         // Respuesta es TRUE || FALSE
         return $this->respondWithData(["ok" => $respuesta]);
-    }   
-
+    }
 }

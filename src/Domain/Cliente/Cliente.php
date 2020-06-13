@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 declare(strict_types=1);
 
@@ -12,12 +12,14 @@ class Cliente implements JsonSerializable
     private $NIT_CDV;
     private $Razon_Social;
     private $Telefono;
-    private $Encargado;        
-    private $Ext_Tel_Contacto;  
+    private $Extension;
+    private $Encargado;
+    private $Correo;
+    private $Celular;
     private $Direccion;
     private $Id_Barrios_Veredas;
     private $Estado_Cliente;
-    
+
     public function __get($name)
     {
         return $this->$name;
@@ -30,22 +32,25 @@ class Cliente implements JsonSerializable
 
     function __construct(
         ?int $Id_Cliente,
-        string $NIT_CDV, 
+        ?string $NIT_CDV,
         string $Razon_Social,
         string $Telefono,
-        string $Encargado,
-        string $Ext_Tel_Contacto, 
-        string $Direccion, 
-        ?int $Id_Barrios_Veredas, 
+        ?string $Extension,
+        ?string $Encargado,
+        ?string $Correo,
+        ?string $Celular,
+        ?string $Direccion,
+        ?int $Id_Barrios_Veredas,
         ?int $Estado_Cliente
-    )
-    {   
+    ) {
         $this->Id_Cliente = $Id_Cliente;
         $this->NIT_CDV = $NIT_CDV;
         $this->Razon_Social = $Razon_Social;
         $this->Telefono = $Telefono;
         $this->Encargado = $Encargado;
-        $this->Ext_Tel_Contacto = $Ext_Tel_Contacto;
+        $this->Correo = $Correo;
+        $this->Celular = $Celular;
+        $this->Extension = $Extension;
         $this->Direccion = $Direccion;
         $this->Id_Barrios_Veredas = $Id_Barrios_Veredas;
         $this->Estado_Cliente = $Estado_Cliente;
@@ -53,17 +58,18 @@ class Cliente implements JsonSerializable
 
     public function jsonSerialize()
     {
-        return[
+        return [
             "Id_Cliente" => $this->Id_Cliente,
             "NIT_CDV" => $this->NIT_CDV,
             "Razon_Social" => $this->Razon_Social,
             "Telefono" => $this->Telefono,
-            "Encargado"=>$this->Encargado,
-            "Ext_Tel_Contacto"=>$this->Ext_Tel_Contacto,
+            "Encargado" => $this->Encargado,
+            "Correo" => $this->Correo,
+            "Celular" => $this->Celular,
+            "Extension" => $this->Extension,
             "Direccion" => $this->Direccion,
             "Id_Barrios_Veredas" => $this->Id_Barrios_Veredas,
             "Estado_Cliente" => $this->Estado_Cliente,
-        ];    
+        ];
     }
 }
-

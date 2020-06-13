@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Application\Actions\Llamada;
 
@@ -48,6 +48,7 @@ class RegistrarLlamadaNPAction extends LlamadaAction
                     $this->DepartamentoRepository,
                     $this->PaisRepository,
                     $this->LineaRepository,
+                    $this->Lineas_FijasRepository,
                     $this->NotificacionRepository,
                     $this->Notificaciones_UsuarioRepository
                 );
@@ -160,7 +161,7 @@ class RegistrarLlamadaNPAction extends LlamadaAction
                     $this->Notificaciones_UsuarioRepository,
                     $this->NotificacionRepository
                 );
-                
+
                 // Registrar notificacion de cita registrada.
                 $mensaje = "Cita agendada para " . $infoOperador['Nombre_Operador'] . ".";
                 $notificacion = new Notificacion(
@@ -177,7 +178,6 @@ class RegistrarLlamadaNPAction extends LlamadaAction
             }
 
             return $this->respondWithData(["ok" => $respuesta]);
-
         } catch (\Exception $e) {
 
             return $this->respondWithData(["error" => $e->getMessage()]);

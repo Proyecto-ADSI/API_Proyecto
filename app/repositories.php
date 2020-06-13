@@ -18,6 +18,7 @@ use App\Domain\Cliente\ClienteRepository;
 use App\Domain\DBL\DBLRepository;
 use App\Domain\Doc_Soporte\Doc_SoporteRepository;
 use App\Domain\Linea\LineaRepository;
+use App\Domain\Lineas_Fijas\Lineas_FijasRepository;
 use App\Domain\Llamada\LlamadaRepository;
 use App\Domain\Operador\OperadorRepository;
 use App\Domain\Plan_Corporativo\Plan_CorporativoRepository;
@@ -45,6 +46,7 @@ use App\Infrastructure\Persistence\Cliente\ClientePersistence;
 use App\Infrastructure\Persistence\DBL\DBLPersistence;
 use App\Infrastructure\Persistence\Doc_Soporte\Doc_SoportePersistence;
 use App\Infrastructure\Persistence\Linea\LineaPersistence;
+use App\Infrastructure\Persistence\Lineas_Fijas\Lineas_FijasPersistence;
 use App\Infrastructure\Persistence\Llamada\LlamadaPersistence;
 use App\Infrastructure\Persistence\Operador\OperadorPersistence;
 use App\Infrastructure\Persistence\Plan_Corporativo\Plan_CorporativoPersistence;
@@ -79,6 +81,7 @@ return function (ContainerBuilder $containerBuilder) {
         Plan_CorporativoRepository::class => \DI\autowire(Plan_CorporativoPersistence::class),
         Doc_SoporteRepository::class => \DI\autowire(Doc_SoportePersistence::class),
         LineaRepository::class => \DI\autowire(LineaPersistence::class),
+        Lineas_FijasRepository::class => \DI\autowire(Lineas_FijasPersistence::class),
         CalificacionRepository::class => \DI\autowire(CalificacionPersistence::class),
         Opciones_PredefinidasRepository::class => \DI\autowire(Opciones_PredefinidasPersistence::class),
         LlamadaRepository::class => \DI\autowire(LlamadaPersistence::class),

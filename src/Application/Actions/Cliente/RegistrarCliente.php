@@ -13,7 +13,7 @@ use App\Domain\Notificacion\Notificacion;
 use App\Domain\Notificaciones_Usuario\Notificaciones_Usuario;
 
 use App\Application\Actions\Notificaciones\RegistrarNotificaciones;
-
+use App\Domain\Lineas_Fijas\Lineas_Fijas;
 use Psr\Http\Message\ResponseInterface as Response;
 
 class RegistrarCliente extends ClienteAction
@@ -24,13 +24,13 @@ class RegistrarCliente extends ClienteAction
         $campos = $this->getFormData();
 
         $respuesta = $this->RegistrarClientes($campos);
-        
+
         // Respuesta es TRUE || FALSE
         return $this->respondWithData(["ok" => $respuesta]);
-      
     }
 
-    public function RegistrarClientes($campos){
+    public function RegistrarClientes($campos)
+    {
 
         $validacion = NULL;
 
@@ -40,12 +40,14 @@ class RegistrarCliente extends ClienteAction
             $campos->NIT_CDV,
             $campos->Razon_Social,
             $campos->Telefono,
+            $campos->Extension,
             $campos->Encargado,
-            $campos->Ext_Tel_Contacto,
+            $campos->Correo,
+            $campos->Celular,
             $campos->Direccion,
             $campos->Barrio_Vereda,
             NULL
-        );  
+        );
 
         $validacion = $this->ClienteRepository->RegistrarCliente($Cliente);
 
@@ -95,38 +97,57 @@ class RegistrarCliente extends ClienteAction
                 $Id_Documentos = (int) $InfoIdDoc['Id_Documentos'];
 
                 // Registrar plan corporativo
-                $Plan_Corporativo->__set("Id_Documentos",$Id_Documentos);
+                $Plan_Corporativo->__set("Id_Documentos", $Id_Documentos);
                 $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($Plan_Corporativo);
-
             } else {
-                
+
                 $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($Plan_Corporativo);
             }
 
             // Datos básicos líneas con plan corporativo
             $InfoIdPlan = $this->Plan_CorporativoRepository->ConsultarUltimoRegistrado();
-            
+
             $Id_Plan_Corporativo = (int) $InfoIdPlan['Id_Plan_Corporativo'];
-            $DBL->__set("Id_Plan_Corporativo",$Id_Plan_Corporativo);
-            
+            $DBL->__set("Id_Plan_Corporativo", $Id_Plan_Corporativo);
+
             $r = $this->DBLRepository->RegistrarDBL($DBL);
-            
-           $this->logger->info(" Datos: ".json_encode($r));
-           
+
+            $this->logger->info(" Datos: " . json_encode($r));
         } else {
 
             // Datos básicos líneas sin plan corporativo
             $this->DBLRepository->RegistrarDBL($DBL);
         }
-        
+
         //Id_Datos_Basicos_Lineas
         $InfoIdDBL = $this->DBLRepository->ConsultarUltimoRegistrado();
         $Id_DBL = (int) $InfoIdDBL['Id_DBL'];
-        $arrayLineas = $campos->DetalleLineas;
-        
-        if(!empty($arrayLineas)){
-            foreach($arrayLineas as $lineaItem){
-                
+        $arrayLineas = $campos->ServiciosMoviles;
+        $serviciosFijos = $campos->ServiciosFijos;
+        // Registrar servicios fijos
+        if (isset($serviciosFijos)) {
+
+            $lineasFijas = new Lineas_Fijas(
+                NULL,
+                $serviciosFijos->pagina,
+                $serviciosFijos->correo,
+                $serviciosFijos->ip,
+                $serviciosFijos->dominio,
+                $serviciosFijos->telefonia,
+                $serviciosFijos->television
+            );
+
+            $this->Lineas_FijasRepository->RegistrarLineas_Fijas($lineasFijas);
+
+            $infoIdLinea = $this->Lineas_FijasRepository->ConsultarUltimaLineas_Fijas();
+            $IdLineaFija = (int) $infoIdLinea['Id_Linea_Fija'];
+            $this->Lineas_FijasRepository->RegistrarDetalleLineas_Fijas($IdLineaFija, $Id_DBL);
+        }
+
+        // Registrar servicios móviles.
+        if (!empty($arrayLineas)) {
+            foreach ($arrayLineas as $lineaItem) {
+
                 $linea = new Linea(
                     NULL,
                     NULL,
@@ -134,21 +155,22 @@ class RegistrarCliente extends ClienteAction
                     $lineaItem->navegacion,
                     $lineaItem->mensajes,
                     $lineaItem->redes,
-                    $lineaItem->llamadas,
-                    $lineaItem->roaming,
-                    $lineaItem->cargo,
+                    $lineaItem->minutosLDI,
+                    $lineaItem->cantidadLDI,
+                    $lineaItem->serviciosAdicionales,
+                    $lineaItem->cargoBasicoMensual,
                     $lineaItem->grupo
                 );
 
-                if(!empty($lineaItem->numero)){
-                    $linea->__set("Linea",$lineaItem->numero);
+                if (!empty($lineaItem->numero)) {
+                    $linea->__set("Linea", $lineaItem->numero);
                 }
-                
-                $this->LineaRepository->RegistrarLinea($linea);
-    
+
+                $res = $this->LineaRepository->RegistrarLinea($linea);
+
                 $infoIdLinea = $this->LineaRepository->ConsultarUltimaLinea();
-                $Id_Linea = (int)$infoIdLinea['Id_Linea'];
-                $validacion = $this->LineaRepository->RegistrarDetalleLinea($Id_Linea, $Id_DBL );
+                $Id_Linea = (int) $infoIdLinea['Id_Linea_Movil'];
+                $res = $this->LineaRepository->RegistrarDetalleLinea($Id_Linea, $Id_DBL);
             }
         }
 
@@ -162,8 +184,8 @@ class RegistrarCliente extends ClienteAction
             2,
             (int) $infoCliente['Id_Cliente']
         );
-        
-        $usuarios = array(1,2);
+
+        $usuarios = array(1, 2);
 
         $RegistroNotificacion = new RegistrarNotificaciones(
             $this->logger,
@@ -171,7 +193,7 @@ class RegistrarCliente extends ClienteAction
             $this->NotificacionRepository
         );
 
-        $RegistroNotificacion->RegistrarNotificacion($notificacion,$usuarios);
+        $RegistroNotificacion->RegistrarNotificacion($notificacion, $usuarios);
 
         return true;
     }

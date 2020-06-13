@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Actions\Llamada;
@@ -14,6 +15,7 @@ use App\Domain\Departamento\DepartamentoRepository;
 use App\Domain\Plan_Corporativo\Plan_CorporativoRepository;
 use App\Domain\Doc_Soporte\Doc_SoporteRepository;
 use App\Domain\Linea\LineaRepository;
+use App\Domain\Lineas_Fijas\Lineas_FijasRepository;
 use App\Domain\Municipio\MunicipioRepository;
 use App\Domain\Pais\PaisRepository;
 use App\Domain\SubTipo\SubTipoRepository;
@@ -36,6 +38,7 @@ abstract class LlamadaAction extends Action
     protected $DepartamentoRepository;
     protected $PaisRepository;
     protected $LineaRepository;
+    protected $Lineas_FijasRepository;
     protected $Llamada_ProgramadaRepository;
     protected $OperadorRepository;
     protected $NotificacionRepository;
@@ -43,8 +46,8 @@ abstract class LlamadaAction extends Action
 
     public function __construct(
 
-        LoggerInterface $logger, 
-        ClienteRepository $ClienteRepository,  
+        LoggerInterface $logger,
+        ClienteRepository $ClienteRepository,
         DBLRepository $DBLRepository,
         Plan_CorporativoRepository $Plan_CorporativoRepository,
         Doc_SoporteRepository $Doc_SoporteRepository,
@@ -54,14 +57,14 @@ abstract class LlamadaAction extends Action
         DepartamentoRepository $DepartamentoRepository,
         PaisRepository $PaisRepository,
         LineaRepository $LineaRepository,
+        Lineas_FijasRepository $Lineas_FijasRepository,
         LlamadaRepository $LlamadaRepository,
         CitaRepository $CitaRepository,
         Llamada_ProgramadaRepository $Llamada_ProgramadaRepository,
         OperadorRepository $OperadorRepository,
         NotificacionRepository $NotificacionRepository,
         Notificaciones_UsuarioRepository $Notificaciones_UsuarioRepository
-    )
-    {
+    ) {
         parent::__construct($logger);
         $this->ClienteRepository = $ClienteRepository;
         $this->DBLRepository = $DBLRepository;
@@ -73,6 +76,7 @@ abstract class LlamadaAction extends Action
         $this->DepartamentoRepository = $DepartamentoRepository;
         $this->PaisRepository = $PaisRepository;
         $this->LineaRepository = $LineaRepository;
+        $this->Lineas_FijasRepository = $Lineas_FijasRepository;
         $this->LlamadaRepository = $LlamadaRepository;
         $this->CitaRepository = $CitaRepository;
         $this->Llamada_ProgramadaRepository = $Llamada_ProgramadaRepository;
