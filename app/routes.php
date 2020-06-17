@@ -146,6 +146,11 @@ use App\Application\Actions\Cita\ListarCitasAction;
 use App\Application\Actions\Cita\CambiarEstadoCitasMultipleAction;
 use App\Application\Actions\Cita\CambiarEstadoCitasAction;
 use App\Application\Actions\Cita\PDFCitasAction;
+use App\Application\Actions\Cita\ListarCitaSinAsignarAction;
+use App\Application\Actions\Cita\ListarAsesoresInternosAction;
+
+//Novedad
+use App\Application\Actions\Novedades\RegistrarNovedadesAction;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -334,5 +339,11 @@ return function (App $app) {
         $group->post('/CambioEstado/Multiple', CambiarEstadoCitasMultipleAction::class);
         $group->put('/CambioEstado', CambiarEstadoCitasAction::class);
         $group->post('/PDF', PDFCitasAction::class);
+        $group->get('/SinAsignar', ListarCitaSinAsignarAction::class);
+        $group->get('/Asesores/Internos', ListarAsesoresInternosAction::class);
+    });
+
+    $app->group('/Novedades', function (Group $group) {
+        $group->post('', RegistrarNovedadesAction::class);
     });
 };

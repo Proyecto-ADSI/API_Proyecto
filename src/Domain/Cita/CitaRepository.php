@@ -15,4 +15,8 @@ interface CitaRepository{
 
     public function CambiarEstadoV(int $Id_Cita, int $EstadoV);
 
+    public function ListarCitaSinAsignar();
+
+    public function ListarAsesoresInternos();
+
 }
