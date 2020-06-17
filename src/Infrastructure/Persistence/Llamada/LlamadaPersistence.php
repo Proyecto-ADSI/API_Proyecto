@@ -47,10 +47,11 @@ class LlamadaPersistence implements LlamadaRepository
     public function ListarLlamadas()
     {
 
-        $sql = "SELECT d.Razon_Social, d.Telefono, d.NIT_CDV, d.Encargado, d.Ext_Tel_Contacto, IFNULL(d.Direccion,'No registrado') Direccion,
-        IFNULL(bv.Nombre_Barrio_Vereda,'No registrado') Nombre_Barrio_Vereda, IFNULL(sbv.SubTipo,'No registrado') SubTipo, 
-        IFNULL(m.Nombre_Municipio,'No registrado') Nombre_Municipio, IFNULL(dep.Nombre_Departamento,'No registrado') Nombre_Departamento,
-        IFNULL(p.Nombre_Pais,'No registrado') Nombre_Pais, u.Id_Usuario, u.Usuario,
+        $sql = "SELECT d.Razon_Social, d.Telefono, d.Extension,IFNULL(d.NIT_CDV,'N/A') NIT_CDV, IFNULL(d.Encargado,'N/A') Encargado,
+        IFNULL(d.Correo,'N/A') Correo, IFNULL(d.Celular,'N/A') Celular, IFNULL(d.Direccion,'N/A') Direccion,
+        IFNULL(bv.Nombre_Barrio_Vereda,'N/A') Nombre_Barrio_Vereda, IFNULL(sbv.SubTipo,'N/A') SubTipo, 
+        IFNULL(m.Nombre_Municipio,'N/A') Nombre_Municipio, IFNULL(dep.Nombre_Departamento,'N/A') Nombre_Departamento,
+        IFNULL(p.Nombre_Pais,'N/A') Nombre_Pais, u.Id_Usuario, u.Usuario,
         ll.Id_Llamada,ll.Persona_Responde, DATE_FORMAT(ll.Fecha_Llamada,'%e/%b/%Y %h:%i %p') Fecha_Llamada, ll.Duracion_Llamada,
         CASE WHEN  ll.Info_Habeas_Data = 1 THEN 'Si' ELSE 'No' END AS Info_Habeas_Data, ll.Id_Estado_Llamada, e.Estado_Llamada, ll.Observacion
         FROM llamadas ll 

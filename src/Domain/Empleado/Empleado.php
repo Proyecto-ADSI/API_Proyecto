@@ -18,6 +18,7 @@ class Empleado implements JsonSerializable
     private $Celular;
     private $Imagen;
     private $Turno;
+    private $Email_Valido;
 
     public function __get($attr)
     {
@@ -29,8 +30,19 @@ class Empleado implements JsonSerializable
         $this->$name = $value;
     }
 
-    function __construct(?int $Id_Empleado, ?int $Tipo_Documento, ?string $Documento, string $Nombre, ?string $Apellidos, string $Email, ?int $Sexo, ?string $Celular, ?string $Imagen, ?int $Turno)
-    {
+    function __construct(
+        ?int $Id_Empleado,
+        ?int $Tipo_Documento,
+        ?string $Documento,
+        string $Nombre,
+        ?string $Apellidos,
+        string $Email,
+        ?int $Sexo,
+        ?string $Celular,
+        ?string $Imagen,
+        ?int $Turno,
+        ?int $Email_Valido
+    ) {
         $this->Id_Empleado = $Id_Empleado;
         $this->Tipo_Documento = $Tipo_Documento;
         $this->Documento = $Documento;
@@ -41,6 +53,7 @@ class Empleado implements JsonSerializable
         $this->Celular = $Celular;
         $this->Imagen = $Imagen;
         $this->Turno = $Turno;
+        $this->Email_Valido = $Email_Valido;
     }
 
     public function jsonSerialize()
@@ -55,7 +68,8 @@ class Empleado implements JsonSerializable
             "Sexo" => $this->Sexo,
             "Celular" => $this->Celular,
             "Imagen" => $this->Imagen,
-            "Turno" => $this->Turno
+            "Turno" => $this->Turno,
+            "Email_Valido" => $this->Email_Valido
         ];
     }
 }

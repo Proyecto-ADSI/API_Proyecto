@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Cliente;
 
+use App\Application\Actions\Notificaciones\RegistrarNotificaciones;
 use App\Domain\Cliente\Cliente;
 use App\Domain\Cliente\ClienteImportado;
 use App\Domain\DBL\DBL;
+use App\Domain\Notificacion\Notificacion;
 use App\Domain\Plan_Corporativo\Plan_Corporativo;
 use Psr\Http\Message\ResponseInterface as  Response;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -99,7 +101,9 @@ class ImportarClientes extends ClienteAction
                                 $this->arrayCliente[12],
                                 $this->arrayCliente[13],
                                 $this->arrayCliente[14],
-                                $this->arrayCliente[15]
+                                $this->arrayCliente[15],
+                                $this->arrayCliente[16],
+                                $this->arrayCliente[17],
                             );
 
 
@@ -143,6 +147,8 @@ class ImportarClientes extends ClienteAction
                 (string)  $cliente[13],
                 (string)  $cliente[14],
                 (string)  $cliente[15],
+                (string)  $cliente[16],
+                (string)  $cliente[17],
                 NULL
             );
 
@@ -202,7 +208,7 @@ class ImportarClientes extends ClienteAction
                     NULL
                 );
 
-                $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($objPlanCorporativo);
+                $r =  $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($objPlanCorporativo);
             }
 
             // Cliente
@@ -211,13 +217,15 @@ class ImportarClientes extends ClienteAction
                 $clienteImportado->__GET("NIT_CDV"),
                 $clienteImportado->__GET("Razon_Social"),
                 $clienteImportado->__GET("Telefono"),
+                $clienteImportado->__GET("Extension"),
                 $clienteImportado->__GET("Encargado"),
-                $clienteImportado->__GET("Ext_Tel_Contacto"),
+                $clienteImportado->__GET("Correo"),
+                $clienteImportado->__GET("Celular"),
                 $clienteImportado->__GET("Direccion"),
                 $idBarrioVereda,
-                NULL
+                1
             );
-            $this->ClienteRepository->RegistrarCliente($objCliente);
+            $r =  $this->ClienteRepository->RegistrarCliente($objCliente);
             // Datos Básicos Líneas
             $idCLiente = $this->ClienteRepository->ConsultarUltimoRegistrado();
             $idPlanCorporativo = $this->Plan_CorporativoRepository->ConsultarUltimoRegistrado();
@@ -232,17 +240,43 @@ class ImportarClientes extends ClienteAction
                 NULL,
                 NULL
             );
-            $respuesta = $this->DBLRepository->RegistrarDBL($dbl);
-            if ($respuesta === true) {
-                $Importacion = true;
-            }
+            $r = $this->DBLRepository->RegistrarDBL($dbl);
             // ----------------------------------  4) Registrar en la BD CLientes con conflictos (tabla temporal) -------------------------------------------
             // $this->ClienteRepository->ImportarClientes($clienteImportado);     
             // $arrayarrayClientesImportados = $this->ClienteRepository->ListarClienteImportados();
         }
         // ----------------------------------  5) Eliminar archivo. ------------------------------------------------------------
         unlink($rutaArchivo);
-        // ----------------------------------  6) Retornar respuesta al cliente. ------------------------------------------------------------
+        // ----------------------------------  6) Generar notificación. ------------------------------------------------------------
+        // Id_Usuario
+        $Id_Usuario = (int) $this->resolveArg("Id_Usuario");
+        // Cantidad de empresas
+        $Cantidad = count($arrayClientes);
+        // Registrar notificación.
+        $mensaje = $Cantidad . " nuevas empresas importadas.";
+        $notificacion = new Notificacion(
+            NULL,
+            $Id_Usuario,
+            NULL,
+            $mensaje,
+            2,
+            NULL
+        );
+
+        $usuarios = array(1, 2);
+
+        $RegistroNotificacion = new RegistrarNotificaciones(
+            $this->logger,
+            $this->Notificaciones_UsuarioRepository,
+            $this->NotificacionRepository
+        );
+
+        $r = $RegistroNotificacion->RegistrarNotificacion($notificacion, $usuarios);
+
+        if ($r === true) {
+            $Importacion = true;
+        }
+        // ----------------------------------  7) Retornar respuesta al cliente. ------------------------------------------------------------
         if ($Importacion) {
             if (count($arrayClientesError) == 0) {
                 return $this->respondWithData(["Importacion"  => true, "Errores"  => false]);

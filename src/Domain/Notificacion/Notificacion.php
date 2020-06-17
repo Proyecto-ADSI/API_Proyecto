@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Domain\Notificacion;
 
@@ -30,7 +30,7 @@ class Notificacion implements JsonSerializable
         $this->$name = $value;
     }
 
-    public function __construct(?int $Id_Notificacion, int $Id_Usuario, ?string $Fecha, string $Mensaje, int $Id_Categoria_N, int $Id_Registro)
+    public function __construct(?int $Id_Notificacion, int $Id_Usuario, ?string $Fecha, string $Mensaje, int $Id_Categoria_N, ?int $Id_Registro)
     {
         $this->Id_Notificacion = $Id_Notificacion;
         $this->Id_Usuario = $Id_Usuario;

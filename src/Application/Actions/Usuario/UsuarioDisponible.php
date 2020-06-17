@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Application\Actions\Usuario;
 
@@ -14,11 +14,10 @@ class UsuarioDisponible extends UsuarioAction
 
         $respuesta = $this->usuarioRepository->ValidarUsuario($usuario['txtUsuario']);
 
-        if($respuesta){
+        if ($respuesta) {
             return $this->respondWithData(false);
-        }else{  
+        } else {
             return $this->respondWithData(true);
         }
     }
 }
-

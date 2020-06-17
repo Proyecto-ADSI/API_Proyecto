@@ -24,7 +24,8 @@ use App\Application\Actions\Usuario\ObtenerUsuarioRol;
 
 // Empleados
 use App\Application\Actions\Empleado\ListarEmpleados;
-
+use App\Application\Actions\Empleado\EmpleadoDisponible;
+use App\Application\Actions\Empleado\ValidarCorreo;
 // Llamadas
 use App\Application\Actions\Llamada\RegistrarLlamadaNPAction;
 use App\Application\Actions\Llamada\ListarLlamadas;
@@ -146,7 +147,6 @@ use App\Application\Actions\Cita\ListarCitasAction;
 use App\Application\Actions\Cita\CambiarEstadoCitasMultipleAction;
 use App\Application\Actions\Cita\CambiarEstadoCitasAction;
 use App\Application\Actions\Cita\PDFCitasAction;
-
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -192,6 +192,8 @@ return function (App $app) {
 
     $app->group('/Empleados', function (Group $group) {
         $group->get('', ListarEmpleados::class);
+        $group->get('/Validacion/Disponible', EmpleadoDisponible::class);
+        $group->get('/ValidarCorreo/{Id_Usuario}', ValidarCorreo::class);
     });
 
     $app->group('/Cliente', function (Group $group) {
@@ -204,7 +206,7 @@ return function (App $app) {
         $group->get('/ValidarCliente/Disponibilidad', ValidarCliente::class);
         $group->put('', EditarCliente::class);
         $group->delete('/{Id_Cliente_Eliminar}', EliminarCliente::class);
-        $group->post('/ImportarClientes', ImportarClientes::class);
+        $group->post('/RegistrarClientes/ImportarClientes/{Id_Usuario}', ImportarClientes::class);
         $group->post('/SubirDocSoporte', CargarDocumentosSoporte::class);
     });
 

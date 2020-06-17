@@ -1,8 +1,9 @@
-<?php 
+<?php
 
 declare(strict_types=1);
 
 namespace App\Domain\Cliente;
+
 use JsonSerializable;
 
 class ClienteImportado implements JsonSerializable
@@ -11,54 +12,60 @@ class ClienteImportado implements JsonSerializable
     private $NIT_CDV;
     private $Razon_Social;
     private $Telefono;
-    private $Encargado; 
-    private $Ext_Tel_Contacto; 
+    private $Extension;
+    private $Encargado;
+    private $Correo;
+    private $Celular;
     private $Direccion;
     private $Municipio;
     private $Barrio;
     private $Tiene_PC;
     private $Operador_Actual;
-    private $Cantidad_Total_Lineas; 
-    private $Valor_Total_Mensual; 
-    private $Fecha_Inicio; 
-    private $Fecha_Fin; 
-    private $Clausula_Permanencia; 
+    private $Cantidad_Total_Lineas;
+    private $Valor_Total_Mensual;
+    private $Fecha_Inicio;
+    private $Fecha_Fin;
+    private $Clausula_Permanencia;
     private $Descripcion;
-    private $Estado_Cliente_Importado; 
-          
-    
-    public function __GET($attr){
+    private $Estado_Cliente_Importado;
+
+
+    public function __GET($attr)
+    {
         return $this->$attr;
     }
 
     function __construct(
         ?int $Id_Importar_Cliente,
-        $NIT_CDV, 
+        $NIT_CDV,
         $Razon_Social,
         $Telefono,
+        $Extension,
         $Encargado,
-        $Ext_Tel_Contacto,
-        $Direccion, 
-        $Municipio, 
-        $Barrio, 
-        $Tiene_PC, 
-        $Operador_Actual, 
-        $Cantidad_Total_Lineas, 
-        $Valor_Total_Mensual, 
-        $Fecha_Inicio, 
-        $Fecha_Fin, 
-        $Clausula_Permanencia, 
+        $Correo,
+        $Celular,
+        $Direccion,
+        $Municipio,
+        $Barrio,
+        $Tiene_PC,
+        $Operador_Actual,
+        $Cantidad_Total_Lineas,
+        $Valor_Total_Mensual,
+        $Fecha_Inicio,
+        $Fecha_Fin,
+        $Clausula_Permanencia,
         $Descripcion,
         ?int $Estado_Cliente_Importado
-        
-    )
-    {   
+
+    ) {
         $this->Id_Importar_Cliente = $Id_Importar_Cliente;
         $this->NIT_CDV = $NIT_CDV;
         $this->Razon_Social = $Razon_Social;
         $this->Telefono = $Telefono;
+        $this->Extension = $Extension;
         $this->Encargado = $Encargado;
-        $this->Ext_Tel_Contacto = $Ext_Tel_Contacto;
+        $this->Correo = $Correo;
+        $this->Celular = $Celular;
         $this->Direccion = $Direccion;
         $this->Municipio = $Municipio;
         $this->Barrio = $Barrio;
@@ -75,16 +82,18 @@ class ClienteImportado implements JsonSerializable
 
     public function jsonSerialize()
     {
-        return[
+        return [
             "Id_Importar_Cliente" => $this->Id_Importar_Cliente,
             "NIT_CDV" => $this->NIT_CDV,
             "Razon_Social" => $this->Razon_Social,
             "Telefono" => $this->Telefono,
+            "Extension" => $this->Extension,
             "Encargado" => $this->Encargado,
-            "Ext_Tel_Contacto"=>$this->Ext_Tel_Contacto,
-            "Direccion"=>$this->Direccion,
-            "Municipio"=>$this->Municipio,
-            "Barrio"=>$this->Barrio,
+            "Correo" => $this->Correo,
+            "Celular" => $this->Celular,
+            "Direccion" => $this->Direccion,
+            "Municipio" => $this->Municipio,
+            "Barrio" => $this->Barrio,
             "Tiene_PC" => $this->Tiene_PC,
             "Operador_Actual" => $this->Operador_Actual,
             "Cantidad_Total_Lineas" => $this->Cantidad_Total_Lineas,
@@ -94,6 +103,6 @@ class ClienteImportado implements JsonSerializable
             "Clausula_Permanencia" => $this->Clausula_Permanencia,
             "Descripcion" => $this->Descripcion,
             "Estado_Cliente_Importado" => $this->Estado_Cliente_Importado
-        ];    
+        ];
     }
 }

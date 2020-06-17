@@ -21,4 +21,8 @@ interface EmpleadoRepository
     public function EditarEmpleado(Empleado $empleado);
 
     public function EditarEmpleadoAE(Empleado $empleado);
+
+    public function ValidarEmpleado(string $documento);
+
+    public function ValidarCorreo(int $Empleado);
 }

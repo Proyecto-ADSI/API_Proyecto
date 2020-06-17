@@ -34,35 +34,33 @@ class RegistrarLlamadaNPAction extends LlamadaAction
                 $campos->Id_Estado_Llamada
             );
 
-            if ($campos->Validacion_Registro_Cliente) {
-                // Registrar Cliente
-                $objCliente = new RegistrarCliente(
-                    $this->logger,
-                    $this->ClienteRepository,
-                    $this->DBLRepository,
-                    $this->Plan_CorporativoRepository,
-                    $this->Doc_SoporteRepository,
-                    $this->BarriosVeredasRepository,
-                    $this->SubTipoRepository,
-                    $this->MunicipioRepository,
-                    $this->DepartamentoRepository,
-                    $this->PaisRepository,
-                    $this->LineaRepository,
-                    $this->Lineas_FijasRepository,
-                    $this->NotificacionRepository,
-                    $this->Notificaciones_UsuarioRepository
-                );
+            // Registrar Cliente
+            $objCliente = new RegistrarCliente(
+                $this->logger,
+                $this->ClienteRepository,
+                $this->DBLRepository,
+                $this->Plan_CorporativoRepository,
+                $this->Doc_SoporteRepository,
+                $this->BarriosVeredasRepository,
+                $this->SubTipoRepository,
+                $this->MunicipioRepository,
+                $this->DepartamentoRepository,
+                $this->PaisRepository,
+                $this->LineaRepository,
+                $this->Lineas_FijasRepository,
+                $this->NotificacionRepository,
+                $this->Notificaciones_UsuarioRepository
+            );
 
-                $respuesta = $objCliente->RegistrarClientes($campos);
+            $respuesta = $objCliente->RegistrarClientes($campos);
 
-                if ($respuesta !== true) {
-                    return $this->respondWithData(["error" => $respuesta]);
-                }
-
-                $infoCliente = $this->ClienteRepository->ConsultarUltimoRegistrado();
-                $Id_Cliente = (int) $infoCliente['Id_Cliente'];
-                $llamada->__set("Id_Cliente", $Id_Cliente);
+            if ($respuesta !== true) {
+                return $this->respondWithData(["error" => $respuesta]);
             }
+
+            $infoCliente = $this->ClienteRepository->ConsultarUltimoRegistrado();
+            $Id_Cliente = (int) $infoCliente['Id_Cliente'];
+            $llamada->__set("Id_Cliente", $Id_Cliente);
 
             $respuesta = $this->LlamadaRepository->RegistrarLlamada($llamada);
 
@@ -82,7 +80,7 @@ class RegistrarLlamadaNPAction extends LlamadaAction
                     null,
                     $Id_Llamada,
                     $campos->Encargado_Cita,
-                    $campos->Ext_Tel_ContactoEC,
+                    $campos->Celular,
                     $campos->Representante_Legal,
                     $campos->Fecha_Cita,
                     $campos->Duracion_Verificacion,
@@ -109,15 +107,15 @@ class RegistrarLlamadaNPAction extends LlamadaAction
 
                 // Programar llamada sobre cita agendada.
                 // 1 -> sin confirmar
-                if ($campos->Id_Estado_Cita == 1) {
+                // 2 -> sin recordar
+                if ($campos->Id_Estado_Cita == 1 || $campos->Id_Estado_Cita == 2) {
 
                     $llamadaProgramada = new Llamada_Programada(
                         null,
                         null,
                         $Id_Cita,
                         null,
-                        null,
-                        $campos->Fecha_LP,
+                        $campos->Fecha_Programada,
                         null
                     );
 
@@ -130,13 +128,12 @@ class RegistrarLlamadaNPAction extends LlamadaAction
             } else {
                 // Se valida si se programa llamada al cliente
                 // Registrar llamada  programada.
-                //  3 -> llamar nuevamente
-                if ($campos->Id_Estado_Llamada == 3) {
+                //  2 -> llamar nuevamente
+                if ($campos->Id_Estado_Llamada == 2) {
 
                     $llamadaProgramada = new Llamada_Programada(
                         null,
                         $Id_Llamada,
-                        null,
                         null,
                         null,
                         $campos->Fecha_LP,

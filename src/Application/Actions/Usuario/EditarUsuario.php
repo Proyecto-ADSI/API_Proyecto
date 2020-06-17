@@ -24,7 +24,8 @@ class EditarUsuario extends UsuarioAction
                 NULL,
                 NULL,
                 $datos->Imagen,
-                NUll
+                NUll,
+                NUll,
             );
             $this->EmpleadoRepository->EditarEmpleadoAE($empleado);
             $usuario = new Usuario(
@@ -53,6 +54,7 @@ class EditarUsuario extends UsuarioAction
                 $datos->Celular,
                 $datos->Imagen,
                 $datos->Turno,
+                NULL,
             );
             $this->EmpleadoRepository->EditarEmpleado($empleado);
             $usuario = new Usuario(

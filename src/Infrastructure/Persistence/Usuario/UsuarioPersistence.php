@@ -26,8 +26,9 @@ class UsuarioPersistence implements UsuarioRepository
         $sql = "SELECT u.Id_Usuario, u.Usuario, c.Conexion, u.Estado_Usuario, u.Id_Rol, r.Nombre AS Rol, u.Id_Empleado, 
         d.Id_Documento, d.Nombre  AS 'Tipo_Documento', e.Documento, e.Nombre,e.Apellidos,
         CONCAT(e.Nombre,' ',IFNULL(e.Apellidos,'')) AS Nombre_Completo,
-        e.Email AS Correo, s.Nombre AS Sexo, IFNULL(e.Celular,'No registrado') Celular, e.Imagen, t.Nombre AS Turno       
-        FROM usuarios u INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) 
+        e.Email AS Correo, s.Nombre AS Sexo, IFNULL(e.Celular,'No registrado') Celular, e.Imagen, t.Nombre AS Turno, e.Email_Valido       
+        FROM usuarios u 
+        INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado) 
         INNER JOIN roles r ON (u.Id_Rol = r.Id_rol) 
         LEFT JOIN documentos d ON (e.Tipo_Documento = d.Id_Documento) 
         LEFT JOIN sexos s ON (e.Id_Sexo = s.Id_Sexo)
@@ -256,8 +257,6 @@ class UsuarioPersistence implements UsuarioRepository
         }
     }
 
-
-
     public function CambiarEstadoUsuario(int $Id_Usuario, int $Estado)
     {
 
@@ -349,6 +348,21 @@ class UsuarioPersistence implements UsuarioRepository
             }
         } catch (\Exception $e) {
             return "Error al listar usuarios: " . $e;
+        }
+    }
+
+    public function ConsultarUltimoRegistrado()
+    {
+
+        $sql = "SELECT Id_Usuario FROM usuarios ORDER BY 1 DESC LIMIT 1";
+
+        try {
+
+            $stm = $this->db->prepare($sql);
+            $stm->execute();
+            return $stm->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return $e->getMessage();
         }
     }
 }

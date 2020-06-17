@@ -23,16 +23,15 @@ class Llamada_ProgramadaPersistence implements Llamada_ProgramadaRepository
 
     public function RegistrarLlamada_Programada(Llamada_Programada $Llamada_Programada)
     {
-        $sql = "INSERT INTO llamadas_programadas(Id_Llamada, Id_Cita, Id_Visita_Interna, Id_Visita_Externa, Fecha_LP) 
-        VALUES (?,?,?,?,?)";
+        $sql = "INSERT INTO llamadas_programadas(Id_Llamada, Id_Cita, Id_Visita, Fecha_LP) 
+        VALUES (?,?,?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Llamada_Programada->__GET("Id_Llamada"));
             $stm->bindValue(2, $Llamada_Programada->__GET("Id_Cita"));
-            $stm->bindValue(3, $Llamada_Programada->__GET("Id_Visita_Interna"));
-            $stm->bindValue(4, $Llamada_Programada->__GET("Id_Visita_Externa"));
-            $stm->bindValue(5, $Llamada_Programada->__GET("Fecha_LP"));
+            $stm->bindValue(3, $Llamada_Programada->__GET("Id_Visita"));
+            $stm->bindValue(4, $Llamada_Programada->__GET("Fecha_LP"));
 
             $respuesta = $stm->execute();
 
@@ -42,7 +41,6 @@ class Llamada_ProgramadaPersistence implements Llamada_ProgramadaRepository
             } else {
                 return $stm->errorInfo();
             }
-            
         } catch (Exception $e) {
 
             return "Error al registrar " . $e->getMessage();
@@ -65,10 +63,10 @@ class Llamada_ProgramadaPersistence implements Llamada_ProgramadaRepository
     //             return $stm->errorInfo();
     //         }
 
-            
+
     //     } catch (\Exception $e) {
     //         return $e->getMessage();
     //     }
     // }
-    
+
 }

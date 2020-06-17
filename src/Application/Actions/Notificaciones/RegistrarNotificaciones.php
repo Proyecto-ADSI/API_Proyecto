@@ -12,40 +12,40 @@ class RegistrarNotificaciones extends NotificacionesAction
 {
     protected function action(): Response
     {
-        
-        return $this->respondWithData(["ok"=> true]);
-        
+
+        return $this->respondWithData(["ok" => true]);
     }
 
-    public function RegistrarNotificacion(Notificacion $notificacion, array $UsuariosAsignar){
-
-        $this->NotificacionRepository->RegistrarNotificacion($notificacion);
+    public function RegistrarNotificacion(Notificacion $notificacion, array $UsuariosAsignar)
+    {
+        $r = false;
+        $r = $this->NotificacionRepository->RegistrarNotificacion($notificacion);
         $infoNotificacion = $this->NotificacionRepository->ConsultarUltimaNotificacion();
         $IdNotificacion = (int) $infoNotificacion['Id_Notificacion'];
 
         // Asignar notificación a usuarios
         $Usuarios = [];
 
-        foreach($UsuariosAsignar as $rol){
+        foreach ($UsuariosAsignar as $rol) {
             $res = $this->Notificaciones_UsuarioRepository->ConsultarIdUsuarios($rol);
 
-            $Usuarios = array_merge($Usuarios,$res);
+            $Usuarios = array_merge($Usuarios, $res);
         }
 
-        foreach($Usuarios as $usuario){
+        foreach ($Usuarios as $usuario) {
 
             $IdUsuario = (int) $usuario["Id_Usuario"];
 
-            if($IdUsuario != (int) $notificacion->Id_Usuario){
+            if ($IdUsuario != (int) $notificacion->Id_Usuario) {
                 $notificacionUsuario = new Notificaciones_Usuario(
                     NULL,
                     $IdUsuario,
                     $IdNotificacion,
                     Null
                 );
-                $this->Notificaciones_UsuarioRepository->RegistrarNotificacion_Usuario($notificacionUsuario);
-            } 
-        }  
-        return true;
+                $r = $this->Notificaciones_UsuarioRepository->RegistrarNotificacion_Usuario($notificacionUsuario);
+            }
+        }
+        return $r;
     }
 }

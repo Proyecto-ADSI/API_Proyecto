@@ -150,7 +150,8 @@ class ClientePersistence implements ClienteRepository
         IFNULL(m.Nombre_Municipio,'N/A') Nombre_Municipio, dep.Id_Departamento, IFNULL(dep.Nombre_Departamento,'N/A') Nombre_Departamento,
         p.Id_Pais, IFNULL(p.Nombre_Pais,'N/A') Nombre_Pais, dbl.Id_DBL, dbl.Cantidad_Total_Lineas, dbl.Valor_Total_Mensual,
         IFNULL(dbl.Razones,',') Razones, IFNULL(o.Id_Operador,'0') Id_Operador, IFNULL(o.Nombre_Operador,'N/A') Nombre_Operador, o.Color,
-        IFNULL(co.Id_Calificacion_Operador,'0') Id_Calificacion_Operador, IFNULL(co.Calificacion,'N/A') Calificacion, e.Id_Estado_DBL, e.Estado_DBL,
+        CASE WHEN  ISNULL(dbl.Id_Plan_Corporativo) = 0 THEN 'Si' ELSE 'No' END AS Corporativo, IFNULL(co.Id_Calificacion_Operador,'0') Id_Calificacion_Operador, 
+        IFNULL(co.Calificacion,'N/A') Calificacion, e.Id_Estado_DBL, e.Estado_DBL,
         IFNULL(pc.Id_Plan_Corporativo,'0') Id_Plan_Corporativo, DATE_FORMAT(pc.Fecha_Inicio,'%e/%b/%Y') Fecha_Inicio, DATE_FORMAT(pc.Fecha_Fin,'%e/%b/%Y') Fecha_Fin,
         pc.Clausula_Permanencia, IFNULL(pc.Descripcion,'N/A') Descripcion, pc.Estado_Plan_Corporativo,
         IFNULL(ds.Id_Documentos,'0') Id_Documentos, ds.Camara_Comercio, ds.Cedula_RL, ds.Soporte_Ingresos, ds.Detalles_Plan_Corporativo, ds.Oferta
@@ -253,8 +254,8 @@ class ClientePersistence implements ClienteRepository
     public function RegistrarCliente(Cliente $Cliente)
     {
         $sql = "INSERT INTO directorio(NIT_CDV, Razon_Social, Telefono, Extension, Encargado, Correo, Celular, 
-        Direccion, Id_Barrios_Veredas)
-        VALUES (?,?,?,?,?,?,?,?,?)";
+        Direccion, Id_Barrios_Veredas, Estado_Cliente)
+        VALUES (?,?,?,?,?,?,?,?,?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -267,6 +268,7 @@ class ClientePersistence implements ClienteRepository
             $stm->bindValue(7, $Cliente->__GET("Celular"));
             $stm->bindValue(8, $Cliente->__GET("Direccion"));
             $stm->bindValue(9, $Cliente->__GET("Id_Barrios_Veredas"));
+            $stm->bindValue(10, $Cliente->__GET("Estado_Cliente"));
 
             $respuesta = $stm->execute();
 

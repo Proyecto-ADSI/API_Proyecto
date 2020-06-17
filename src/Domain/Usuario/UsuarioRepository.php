@@ -37,4 +37,6 @@ interface UsuarioRepository
     public  function ObtenerUsuarioRol(int $Id_Usuario);
 
     public function CambiarContrasena(int $Id_Usuario, string $Contrasena);
+
+    public function ConsultarUltimoRegistrado();
 }
