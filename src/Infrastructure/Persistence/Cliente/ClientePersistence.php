@@ -28,14 +28,15 @@ class ClientePersistence implements ClienteRepository
         IFNULL(d.Correo,'N/A') Correo, IFNULL(d.Celular,'N/A') Celular, IFNULL(d.Direccion,'N/A') Direccion, d.Estado_Cliente,
         bv.Id_Barrios_Veredas, IFNULL(bv.Nombre_Barrio_Vereda,'N/A') Nombre_Barrio_Vereda, sbv.Id_SubTipo_Barrio_Vereda, sbv.SubTipo,m.Id_Municipio,
         IFNULL(m.Nombre_Municipio,'N/A') Nombre_Municipio, dep.Id_Departamento, IFNULL(dep.Nombre_Departamento,'N/A') Nombre_Departamento,
-        p.Id_Pais, IFNULL(p.Nombre_Pais,'N/A') Nombre_Pais, dbl.Id_DBL, dbl.Cantidad_Total_Lineas,
-        dbl.Valor_Total_Mensual, IFNULL(dbl.Razones,',') Razones, IFNULL(o.Id_Operador,'0') Id_Operador, IFNULL(o.Nombre_Operador,'N/A') Nombre_Operador, IFNULL(o.Color,'#323840') Color,
+        p.Id_Pais, IFNULL(p.Nombre_Pais,'N/A') Nombre_Pais, dbl.Id_DBL, IFNULL(dbl.Cantidad_Total_Lineas,'0') Cantidad_Total_Lineas,
+        IFNULL(dbl.Valor_Total_Mensual,'0') Valor_Total_Mensual, IFNULL(dbl.Razones,',') Razones, IFNULL(o.Id_Operador,'0') Id_Operador, IFNULL(o.Nombre_Operador,'N/A') Nombre_Operador, IFNULL(o.Color,'#323840') Color,
         IFNULL(co.Id_Calificacion_Operador,'0') Id_Calificacion_Operador, IFNULL(co.Calificacion,'N/A') Calificacion, e.Id_Estado_DBL, e.Estado_DBL,
         CASE WHEN  ISNULL(dbl.Id_Plan_Corporativo) = 0 THEN 'Si' ELSE 'No' END AS Corporativo, IFNULL(pc.Id_Plan_Corporativo,'0') Id_Plan_Corporativo, 
         DATE_FORMAT(pc.Fecha_Inicio,'%e/%b/%Y') Fecha_Inicio, DATE_FORMAT(pc.Fecha_Fin,'%e/%b/%Y') Fecha_Fin,
         pc.Clausula_Permanencia, IFNULL(pc.Descripcion,'N/A') Descripcion, pc.Estado_Plan_Corporativo,
         IFNULL(ds.Id_Documentos,'0') Id_Documentos, ds.Camara_Comercio, ds.Cedula_RL, ds.Soporte_Ingresos, ds.Detalles_Plan_Corporativo, ds.Oferta
-        FROM directorio d LEFT JOIN barrios_veredas bv ON(d.Id_Barrios_Veredas = bv.Id_Barrios_Veredas)
+        FROM directorio d 
+        LEFT JOIN barrios_veredas bv ON(d.Id_Barrios_Veredas = bv.Id_Barrios_Veredas)
         LEFT JOIN subtipo_barrio_vereda sbv ON(bv.Id_SubTipo_Barrio_Vereda = sbv.Id_SubTipo_Barrio_Vereda)
         LEFT JOIN municipios m ON(bv.Id_Municipio = m.Id_Municipio)
         LEFT JOIN departamento dep ON(m.Id_Departamento = dep.Id_Departamento)
@@ -46,7 +47,7 @@ class ClientePersistence implements ClienteRepository
         LEFT JOIN estados_dbl e ON(dbl.Id_Estado_DBL = e.Id_Estado_DBL)
         LEFT JOIN plan_corporativo pc ON(dbl.Id_Plan_Corporativo = pc.Id_Plan_Corporativo)
         LEFT JOIN documentos_soporte ds ON(pc.Id_Documentos = ds.Id_Documentos)
-        WHERE dbl.Id_Estado_DBL = ?";
+        WHERE (dbl.Id_Estado_DBL IS NOT NULl AND dbl.Id_Estado_DBL = ?) OR dbl.Id_Estado_DBL IS NULl";
 
         try {
 
@@ -148,7 +149,7 @@ class ClientePersistence implements ClienteRepository
         IFNULL(d.Correo,'N/A') Correo, IFNULL(d.Celular,'N/A') Celular, IFNULL(d.Direccion,'N/A') Direccion, d.Estado_Cliente,
         bv.Id_Barrios_Veredas, IFNULL(bv.Nombre_Barrio_Vereda,'N/A') Nombre_Barrio_Vereda, sbv.Id_SubTipo_Barrio_Vereda, sbv.SubTipo, m.Id_Municipio, 
         IFNULL(m.Nombre_Municipio,'N/A') Nombre_Municipio, dep.Id_Departamento, IFNULL(dep.Nombre_Departamento,'N/A') Nombre_Departamento,
-        p.Id_Pais, IFNULL(p.Nombre_Pais,'N/A') Nombre_Pais, dbl.Id_DBL, dbl.Cantidad_Total_Lineas, dbl.Valor_Total_Mensual,
+        p.Id_Pais, IFNULL(p.Nombre_Pais,'N/A') Nombre_Pais, dbl.Id_DBL, IFNULL(dbl.Cantidad_Total_Lineas,'0') Cantidad_Total_Lineas, IFNULL(dbl.Valor_Total_Mensual,'0') Valor_Total_Mensual,
         IFNULL(dbl.Razones,',') Razones, IFNULL(o.Id_Operador,'0') Id_Operador, IFNULL(o.Nombre_Operador,'N/A') Nombre_Operador, o.Color,
         CASE WHEN  ISNULL(dbl.Id_Plan_Corporativo) = 0 THEN 'Si' ELSE 'No' END AS Corporativo, IFNULL(co.Id_Calificacion_Operador,'0') Id_Calificacion_Operador, 
         IFNULL(co.Calificacion,'N/A') Calificacion, e.Id_Estado_DBL, e.Estado_DBL,
@@ -167,7 +168,7 @@ class ClientePersistence implements ClienteRepository
         LEFT JOIN estados_dbl e ON(dbl.Id_Estado_DBL = e.Id_Estado_DBL)
         LEFT JOIN plan_corporativo pc ON(dbl.Id_Plan_Corporativo = pc.Id_Plan_Corporativo)
         LEFT JOIN documentos_soporte ds ON(pc.Id_Documentos = ds.Id_Documentos)
-        WHERE d.Id_Cliente = ? AND dbl.Id_Estado_DBL = ?";
+        WHERE d.Id_Cliente = ? AND ((dbl.Id_Estado_DBL IS NOT NULl AND dbl.Id_Estado_DBL = ?) OR dbl.Id_Estado_DBL IS NULl)";
 
         try {
 
