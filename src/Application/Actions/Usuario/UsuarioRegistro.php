@@ -20,7 +20,6 @@ class UsuarioRegistro extends UsuarioAction
         $Id_Empleado = NULL;
 
         if ($campos->SeleccionarEmpleado) {
-
             $Id_Empleado = (int) $campos->Id_Empleado;
         } else {
 
@@ -69,11 +68,10 @@ class UsuarioRegistro extends UsuarioAction
         );
 
         $respuesta = $this->usuarioRepository->RegistrarUsuario($usuario);
+        $Info_Usuario = $this->usuarioRepository->ConsultarUltimoRegistrado();
+        $Id_Usuario = (int) $Info_Usuario["Id_Usuario"];
 
-        if (!$campos->SeleccionarEmpleado) {
-
-            $Info_Usuario = $this->usuarioRepository->ConsultarUltimoRegistrado();
-            $Id_Usuario = (int) $Info_Usuario["Id_Usuario"];
+        if ($campos->RegistrarEmpleado) {
 
             // Enviar correo de validación email.
             $mail = new PHPMailer(true);
@@ -118,6 +116,9 @@ class UsuarioRegistro extends UsuarioAction
 
                 return $this->respondWithData(["ok" => false, "Error" => "No se pudo enviar el correo. Mailer Error: {$mail->ErrorInfo}"]);
             }
+        } else {
+
+            $this->usuarioRepository->CambiarEstadoUsuario($Id_Usuario, 1);
         }
 
         return $this->respondWithData(["ok" => $respuesta]);
