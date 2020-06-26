@@ -98,7 +98,6 @@ use App\Application\Actions\Calificacion\EliminarCalificacionAction;
 use App\Application\Actions\Calificacion\ListarCalificacionAction;
 use App\Application\Actions\Calificacion\ObtenerCalificacionAction;
 use App\Application\Actions\Calificacion\RegistrarCalificacionAction;
-
 //Turnos
 use App\Application\Actions\Turnos\ListarTurnosAction;
 use App\Application\Actions\Turnos\RegistrarTurnosAction;
@@ -151,6 +150,7 @@ use App\Application\Actions\Cita\CambiarEstadoCitasAction;
 use App\Application\Actions\Cita\PDFCitasAction;
 use App\Application\Actions\Cita\ListarCitaSinAsignarAction;
 use App\Application\Actions\Cita\ListarAsesoresInternosAction;
+use App\Application\Actions\Cita\AsignarCitasAction;
 
 //Novedad
 use App\Application\Actions\Novedades\RegistrarNovedadesAction;
@@ -167,7 +167,7 @@ return function (App $app) {
     $app->options('/{routes:.+}', function ($request, $response, $args) {
         return $response;
     });
-
+    
     $app->add(function ($request, $handler) {
         $response = $handler->handle($request);
         return $response
@@ -344,10 +344,11 @@ return function (App $app) {
     $app->group('/Citas', function (Group $group) {
         $group->get('', ListarCitasAction::class);
         $group->post('/CambioEstado/Multiple', CambiarEstadoCitasMultipleAction::class);
-        $group->put('/CambioEstado', CambiarEstadoCitasAction::class);
+        $group->patch('/CambioEstado', CambiarEstadoCitasAction::class);
         $group->post('/PDF', PDFCitasAction::class);
         $group->get('/SinAsignar', ListarCitaSinAsignarAction::class);
         $group->get('/Asesores/Internos', ListarAsesoresInternosAction::class);
+        // $group->post('/Asignar', AsignarCitasAction::class);
     });
 
     $app->group('/Novedades', function (Group $group) {

@@ -3,23 +3,75 @@
 declare(strict_types=1);
 
   namespace App\Application\Actions\Cita;
-  use Psr\Http\Message\ResponseInterface as Response;
 
-  class CambiarEstadoCitasMultipleAction extends CitaAction
+use App\Domain\Visitas\Visitas;
+use Psr\Http\Message\ResponseInterface as Response;
+use App\Application\Actions\Cita\PDFCitasAction;
+
+class CambiarEstadoCitasMultipleAction extends CitaAction
   {
    protected function action(): Response
    {  
       $campos = $this->getFormData();
 
-      $Data = null;
+      $DataEstados = null;
+      $PdfCitaExterna = null;
 
+      $Pdf = new PDFCitasAction(
+        $this->logger,
+        $this->ClienteRepository,
+        $this->DBLRepository,
+        $this->Plan_CorporativoRepository,
+        $this->Doc_SoporteRepository,
+        $this->BarriosVeredasRepository,
+        $this->SubTipoRepository,
+        $this->MunicipioRepository,
+        $this->DepartamentoRepository,
+        $this->PaisRepository,
+        $this->LineaRepository,
+        $this->CitaRepository,
+        $this->VisitasRepository
+      );
+      
+      
       foreach($campos as $Cita){
-          $Id = (int) $Cita->Id;
-          $Estado = $Cita->Estado;
 
-         $Data = $this->CitaRepository->CambiarEstadoRC($Id,$Estado);
+        $Id = (int) $Cita->Id;
+        $Estado = $Cita->Estado;
+        $TipoVisita =(int)$Cita->TipoVisita;
+        $Id_Asesor = (int)$Cita->Id_Asesor;
+
+        $datos = new Visitas(
+           NULL,
+           $TipoVisita,
+           $Id_Asesor,
+           $Id,
+           NULL,
+        );
+
+        if (is_numeric($Id) && is_numeric($Estado) && is_numeric($TipoVisita) && is_numeric($Id_Asesor)) {
+
+          $DataEstados = $this->CitaRepository->CambiarEstadoRC($Id,$Estado);
+
+          $AsignarExternas = $this->VisitasRepository->RegistrarVisitas($datos);
+
+        }
+        else{
+          return $this->respondWithData('Algo estuvo mal');
+        }
       }
+      
+      if ($DataEstados && $AsignarExternas) {
 
-      return $this->respondWithData($Data);
+        $PdfCitaExterna = $Pdf->GenerarPdf($campos);
+
+        return $this->respondWithData($PdfCitaExterna);
+
+      }
+      else{
+
+      return $this->respondWithData('Algo estuvo mal');
+      
+    }
   }
   }
