@@ -128,30 +128,32 @@ class ImportarClientes extends ClienteAction
 
         foreach ($arrayClientes as $cliente) {
 
-
-            $clienteImportado = new ClienteImportado(
-                NULL,
-                (string)  $cliente[0],
-                (string)  $cliente[1],
-                (string)  $cliente[2],
-                (string)  $cliente[3],
-                (string)  $cliente[4],
-                (string)  $cliente[5],
-                (string)  $cliente[6],
-                (string)  $cliente[7],
-                (string)  $cliente[8],
-                (string)  $cliente[9],
-                (string)  $cliente[10],
-                (string)  $cliente[11],
-                (string)  $cliente[12],
-                (string)  $cliente[13],
-                (string)  $cliente[14],
-                (string)  $cliente[15],
-                (string)  $cliente[16],
-                (string)  $cliente[17],
-                NULL
-            );
-
+            try {
+                $clienteImportado = new ClienteImportado(
+                    NULL,
+                    (string)  $cliente[0],
+                    (string)  $cliente[1],
+                    (string)  $cliente[2],
+                    (string)  $cliente[3],
+                    (string)  $cliente[4],
+                    (string)  $cliente[5],
+                    (string)  $cliente[6],
+                    (string)  $cliente[7],
+                    (string)  $cliente[8],
+                    (string)  $cliente[9],
+                    (string)  $cliente[10],
+                    (string)  $cliente[11],
+                    (string)  $cliente[12],
+                    (string)  $cliente[13],
+                    (string)  $cliente[14],
+                    (string)  $cliente[15],
+                    (string)  $cliente[16],
+                    (string)  $cliente[17],
+                    NULL
+                );
+            } catch (\Exception $e) {
+                return $this->respondWithData($e);
+            }
 
 
 

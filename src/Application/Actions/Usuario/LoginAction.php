@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Actions\Usuario;
@@ -15,29 +16,27 @@ class LoginAction extends UsuarioAction
         $contrasena = $Campos->Contrasena;
 
         $respuesta = $this->usuarioRepository->login($usuario);
-        
-        if(!$respuesta)
-        {
-            return  $this->respondWithData(["ok"=> false]);
 
-        }else{
+        if (!$respuesta) {
+            return  $this->respondWithData(["ok" => false]);
+        } else {
 
             // Validar si el hash y la contraseña coinciden
-            
-            if(password_verify($contrasena,$respuesta['Contrasena'])){
+
+            if (password_verify($contrasena, $respuesta['Contrasena'])) {
 
                 return $this->respondWithData([
-                    "ok"=>true,
-                    "Id_Usuario"=>$respuesta['Id_Usuario'],
-                    "Usuario"=>$respuesta['Usuario'],
-                    "Id_Rol"=>$respuesta['Id_Rol'],
-                    "Rol"=>$respuesta['Rol'],
-                    "Email"=>$respuesta['Email'],
-                    "Imagen"=>$respuesta['Imagen']
+                    "ok" => true,
+                    "Id_Usuario" => $respuesta['Id_Usuario'],
+                    "Usuario" => $respuesta['Usuario'],
+                    "Nombre" => $respuesta['Nombre'],
+                    "Id_Rol" => $respuesta['Id_Rol'],
+                    "Rol" => $respuesta['Rol'],
+                    "Email" => $respuesta['Email'],
+                    "Imagen" => $respuesta['Imagen']
                 ]);
-                    
-            }else{
-                return  $this->respondWithData(["ok"=> false]);
+            } else {
+                return  $this->respondWithData(["ok" => false]);
             }
         }
     }

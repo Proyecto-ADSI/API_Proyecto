@@ -18,11 +18,9 @@ class DocumentoRegistroAction extends DocumentoAction
             $campos->Nombre,
             $campos->Estado
         );
-        
+
         $datos = $this->DocumentoRepository->RegistrarDocumento($datos);
-        
-        return $this->respondWithData(["ok"=> $datos]);
-        
+
+        return $this->respondWithData(["ok" => $datos]);
     }
 }
-

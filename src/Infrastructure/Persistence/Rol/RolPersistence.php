@@ -52,56 +52,58 @@ class RolPersistence implements RolRepository
             return $e->getMessage();
         }
     }
-    public function CambiarEstado(int $Id_Rol, int $Estado){
+    public function CambiarEstado(int $Id_Rol, int $Estado)
+    {
         $sql = "UPDATE roles SET Estado= ? WHERE Id_Rol = ?";
-   
-        try {
-          $stm = $this->db->prepare($sql);
-          $stm->bindParam(1, $Estado);
-          $stm->bindParam(2, $Id_Rol);
-   
-          return $stm->execute();
 
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-      }
-  
-      public function ObtenerDatosRol($Id_Rol){
-        $sql = "SELECT * FROM roles WHERE Id_Rol = ?";
- 
         try {
-           $stm = $this->db->prepare($sql);
-           $stm->bindParam(1, $Id_Rol);
-           
-           $stm->execute();
-           return $stm->fetch(PDO::FETCH_ASSOC);
+            $stm = $this->db->prepare($sql);
+            $stm->bindParam(1, $Estado);
+            $stm->bindParam(2, $Id_Rol);
+
+            return $stm->execute();
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
 
-    public function EditarRol(Rol $Rol){
+    public function ObtenerDatosRol($Id_Rol)
+    {
+        $sql = "SELECT * FROM roles WHERE Id_Rol = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindParam(1, $Id_Rol);
+
+            $stm->execute();
+            return $stm->fetch(PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function EditarRol(Rol $Rol)
+    {
         $sql = "UPDATE roles SET Nombre = ?  WHERE Id_Rol = ?";
- 
+
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Rol->__GET("Nombre"));
             $stm->bindValue(2, $Rol->__GET("Id_Rol"));
-            
+
             return $stm->execute();
- 
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
 
-    public function RolValUsuario(int $Id_Rol){
+    public function RolValUsuario(int $Id_Rol)
+    {
         $sql = null;
-        if($Id_Rol == 1){
-            $sql = "SELECT Id_Rol, Nombre FROM roles";
-        }else if($Id_Rol == 2){
-            $sql = "SELECT Id_Rol, Nombre FROM roles WHERE Id_Rol NOT IN ('1','2')";
+        if ($Id_Rol == 1) {
+            $sql = "SELECT Id_Rol, Nombre FROM roles WHERE Id_Rol NOT IN ('1','5')";
+        } else if ($Id_Rol == 2) {
+            $sql = "SELECT Id_Rol, Nombre FROM roles WHERE Id_Rol NOT IN ('1','2','5')";
         }
         try {
             $stm = $this->db->prepare($sql);
@@ -111,6 +113,4 @@ class RolPersistence implements RolRepository
             return $e->getMessage();
         }
     }
-
-    
 }

@@ -2,20 +2,19 @@
 
 declare(strict_types=1);
 
-  namespace App\Application\Actions\Operador;
+namespace App\Application\Actions\Operador;
 
-  use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ResponseInterface as Response;
 
-  class ObtenerOperadorAction extends OperadorAction
+class ObtenerOperadorAction extends OperadorAction
+{
+  protected function action(): Response
   {
-   protected function action(): Response
-   {
 
-       $Id_Operador= $this->resolveArg("Id_Operador");
+    $Id_Operador = (int) $this->resolveArg("Id_Operador");
 
-       $Operador = $this->OperadorRepository->ObtenerDatosOperador($Id_Operador);
+    $Operador = $this->OperadorRepository->ObtenerDatosOperador($Id_Operador);
 
-       return $this->respondWithData($Operador);
-   }
-   
+    return $this->respondWithData($Operador);
   }
+}

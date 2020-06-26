@@ -14,19 +14,19 @@ class RegistrarOperadorAction extends OperadorAction
     {
         $campos = $this->getFormData();
 
-        // return $this->respondWithData(["ok"=> $campos]);
-
         $datos = new Operador(
-            0,
+            NULL,
             $campos->Nombre,
             $campos->Color,
+            $campos->Genera_Oferta,
+            $campos->Correo_Operador,
+            $campos->Contrasena_Operador,
+            $campos->Imagen_Operador,
             $campos->Estado,
         );
-        
+
         $datos = $this->OperadorRepository->RegistrarOperador($datos);
-        
-        return $this->respondWithData(["ok"=> $datos]);
-        
+
+        return $this->respondWithData(["ok" => $datos]);
     }
 }
-

@@ -83,7 +83,7 @@ class UsuarioPersistence implements UsuarioRepository
     public function login(string $usuario)
     {
 
-        $sql = "SELECT u.Id_Usuario, u.Usuario, u.Contrasena, r.Id_Rol, r.Nombre Rol, e.Id_Empleado, e.Email, e.Imagen FROM usuarios u 
+        $sql = "SELECT u.Id_Usuario, u.Usuario, u.Contrasena, r.Id_Rol, r.Nombre Rol, e.Id_Empleado, CONCAT(e.Nombre,' ',e.Apellidos) Nombre,  e.Email, e.Imagen FROM usuarios u 
         JOIN roles r ON(u.Id_Rol = r.Id_Rol)
         JOIN empleados e ON(u.Id_Empleado = e.Id_Empleado) 
         WHERE u.Usuario = ? AND u.Estado_Usuario = ?";

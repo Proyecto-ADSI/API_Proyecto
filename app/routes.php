@@ -117,9 +117,11 @@ use App\Application\Actions\Rol\RegistrarRolAction;
 use App\Application\Actions\Operador\CambiarEstadoOperadorAction;
 use App\Application\Actions\Operador\EditarOperadorAction;
 use App\Application\Actions\Operador\ListarOperadorAction;
+use App\Application\Actions\Operador\ListarOperadorOferta;
 use App\Application\Actions\Operador\ObtenerOperadorAction;
 use App\Application\Actions\Operador\RegistrarOperadorAction;
 use App\Application\Actions\Operador\EliminarOperadorAction;
+use App\Application\Actions\Operador\CargarImagenOperador;
 
 // Opciones_Predefinidas
 use App\Application\Actions\Opciones_Predefinidas\EditarOpciones_PredefinidasAction;
@@ -314,10 +316,12 @@ return function (App $app) {
     $app->group('/Operador', function (Group $group) {
         $group->post('', RegistrarOperadorAction::class);
         $group->get('', ListarOperadorAction::class);
-        $group->get('/ObtenerOperador/{Id_Operador}', ObtenerOperadorAction::class);
+        $group->get('/Obtener/{Id_Operador}', ObtenerOperadorAction::class);
+        $group->get('/Oferta', ListarOperadorOferta::class);
         $group->put('', EditarOperadorAction::class);
         $group->patch('/{Id_Operador}/{Estado}', CambiarEstadoOperadorAction::class);
         $group->delete('/{Id_Operador}', EliminarOperadorAction::class);
+        $group->post('/CargarImagenOperador', CargarImagenOperador::class);
     });
 
     $app->group('/Calificaciones', function (Group $group) {

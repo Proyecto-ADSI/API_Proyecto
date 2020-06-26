@@ -1,15 +1,19 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Domain\Operador;
 
 use App\Domain\Operador\Operador;
 
-interface OperadorRepository{
+interface OperadorRepository
+{
 
     public function RegistrarOperador(Operador $Operador);
 
     public function ListarOPerador();
+
+    public function ListarOperadorOferta();
 
     public function CambiarEstado(int $Id_Operador, int $Estado);
 
@@ -17,9 +21,7 @@ interface OperadorRepository{
 
     public function EditarOperador(Operador $Operador);
 
-    public function ValidarOperadorDa(int $Id_Operador);
-
-    public function ValidarOperadorRe(int $Id_Operador);
+    public function ValidarOperadorEliminar(int $Id_Operador);
 
     public function EliminarOperador(int $Id_Operador);
 }
