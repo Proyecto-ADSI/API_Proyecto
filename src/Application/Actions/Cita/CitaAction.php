@@ -15,6 +15,7 @@ use App\Domain\Linea\LineaRepository;
 use App\Domain\Municipio\MunicipioRepository;
 use App\Domain\Pais\PaisRepository;
 use App\Domain\SubTipo\SubTipoRepository;
+use App\Domain\Visitas\VisitasRepository;
 use Psr\Log\LoggerInterface;
 
 abstract class CitaAction extends Action
@@ -31,6 +32,7 @@ abstract class CitaAction extends Action
     protected $PaisRepository;
     protected $LineaRepository;
     protected $CitaRepository;
+    protected $VisitasRepository;
 
 
     public function __construct(
@@ -46,7 +48,8 @@ abstract class CitaAction extends Action
     DepartamentoRepository $DepartamentoRepository,
     PaisRepository $PaisRepository,
     LineaRepository $LineaRepository,
-    CitaRepository $CitaRepository
+    CitaRepository $CitaRepository,
+    VisitasRepository $VisitasRepository
     )
     {
         parent::__construct($logger);
@@ -61,5 +64,6 @@ abstract class CitaAction extends Action
         $this->PaisRepository = $PaisRepository;
         $this->LineaRepository = $LineaRepository;
         $this->CitaRepository = $CitaRepository;
+        $this->VisitasRepository = $VisitasRepository;
     }
 }

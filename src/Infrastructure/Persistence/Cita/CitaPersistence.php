@@ -226,5 +226,5 @@ class CitaPersistence implements CitaRepository
         } catch (\Exception $e) {
             return $e->getMessage();
         }
-    }    
+    } 
 }

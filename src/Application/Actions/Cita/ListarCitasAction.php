@@ -13,6 +13,8 @@ declare(strict_types=1);
   
       $Citas = $this->CitaRepository->ListarCita();
 
+
       return $this->respondWithData($Citas);
+      
    }
   }

@@ -22,4 +22,5 @@ class SessionMiddleware implements Middleware
 
         return $handler->handle($request);
     }
+    
 }
