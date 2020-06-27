@@ -387,9 +387,7 @@ class ClientePersistence implements ClienteRepository
     {
 
         $sql = "SELECT Id_Cliente FROM directorio ORDER BY 1 DESC LIMIT 1";
-
         try {
-
             $stm = $this->db->prepare($sql);
             $stm->execute();
             return $stm->fetch(PDO::FETCH_ASSOC);

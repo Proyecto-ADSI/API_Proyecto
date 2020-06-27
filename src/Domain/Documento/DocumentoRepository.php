@@ -1,11 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Domain\Documento;
 
-interface DocumentoRepository{
+interface DocumentoRepository
+{
 
     public function RegistrarDocumento(Documento $Documento);
+
+    public function ConsultarUltimoRegistrado();
 
     public function ListarDocumento();
 
