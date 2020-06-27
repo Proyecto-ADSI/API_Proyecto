@@ -24,7 +24,7 @@ class DocumentoRegistroAction extends DocumentoAction
         if (empty($Nombre)) {
             $data = [
                 "statusCode:" => 400,
-                "type error:" => "Server_error",
+                "type error:" => "Bad_Request",
                 "Description" => "El nombre esta vacio"
             ];
 
@@ -37,7 +37,7 @@ class DocumentoRegistroAction extends DocumentoAction
         } else if (!is_string($Nombre)) {
             $data = [
                 "statusCode:" => 400,
-                "type error:" => "Server_error",
+                "type error:" => "Bad_Request",
                 "Description" => "No es una cadena"
             ];
 
@@ -50,7 +50,7 @@ class DocumentoRegistroAction extends DocumentoAction
         } else if (strlen($Nombre) > 45) {
             $data = [
                 "statusCode:" => 400,
-                "type error:" => "Server_error",
+                "type error:" => "Bad_Request",
                 "Description" => "Supero el limite de carácteres"
             ];
 
@@ -63,7 +63,7 @@ class DocumentoRegistroAction extends DocumentoAction
         } else if (strlen($Estado2) > 11) {
             $data = [
                 "statusCode:" => 400,
-                "type error:" => "Server_error",
+                "type error:" => "Bad_Request",
                 "Description" => "Supero el limite de carácteres numericos"
             ];
 
@@ -77,7 +77,7 @@ class DocumentoRegistroAction extends DocumentoAction
             
             $data = [
                 "statusCode:" => 400,
-                "type error:" => "Server_error",
+                "type error:" => "Bad_Request",
                 "Description" => "El campo esta nulo"
             ];
 
@@ -90,7 +90,7 @@ class DocumentoRegistroAction extends DocumentoAction
         } else if (!is_int($Estado)) {
             $data = [
                 "statusCode:" => 400,
-                "type error:" => "Server_error",
+                "type error:" => "Bad_Request",
                 "Description" => "No es un numero"
             ];
 

@@ -231,10 +231,10 @@ return function (App $app) {
         $group->delete('/{Id_Notificacion}', EliminarNotificaciones::class);
     });
 
-    $app->group('/Documento', function (Group $group) {
+    $app->group('/Documentos', function (Group $group) {
         $group->post('', DocumentoRegistroAction::class);
         $group->get('', ListarDocumento::class);
-        $group->get('/ObtenerDatosDocumento/{Id_Documentos}', ObtenerDatosAction::class);
+        $group->get('/ObtenerDatosDocumentos/{Id_Documentos}', ObtenerDatosAction::class);
         $group->put('', EditarDocumentoAction::class);
         $group->patch('/{Id_Documentos}/{Estado}', CambiarEstadoAction::class);
         $group->delete('/{Id_Documentos}', EliminarDocumentoAction::class);
