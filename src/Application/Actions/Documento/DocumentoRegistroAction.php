@@ -22,46 +22,85 @@ class DocumentoRegistroAction extends DocumentoAction
         $Estado = $campos->Estado;
 
         if (empty($Nombre)) {
-            return $this->respondWithData([
-                "status code:" => 500,
-                "type error:" => "Server_error",
-                "Description" => "El nombre está vacío"
-            ]);
-        } else if (!is_string($Nombre)) {
             $data = [
-                "statusCode:" => 500,
+                "statusCode:" => 400,
                 "type error:" => "Server_error",
-                "Description" => "No es una cadena"
+                "Description" => "El nombre esta vacio"
             ];
+
             $payload = json_encode($data);
             $this->response->getBody()->write($payload);
             return $this->response
                 ->withHeader('Content-Type', 'application/json')
-                ->withStatus(500);
+                ->withStatus(400);
+
+        } else if (!is_string($Nombre)) {
+            $data = [
+                "statusCode:" => 400,
+                "type error:" => "Server_error",
+                "Description" => "No es una cadena"
+            ];
+
+            $payload = json_encode($data);
+            $this->response->getBody()->write($payload);
+            return $this->response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(400);
+
         } else if (strlen($Nombre) > 45) {
-            return $this->respondWithData([
+            $data = [
+                "statusCode:" => 400,
                 "type error:" => "Server_error",
-                "Description" => "Superó el límite de carácteres"
-            ]);
+                "Description" => "Supero el limite de carácteres"
+            ];
+
+            $payload = json_encode($data);
+            $this->response->getBody()->write($payload);
+            return $this->response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(400);
+
         } else if (strlen($Estado2) > 11) {
-            return $this->respondWithData([
-                "status code:" => 500,
+            $data = [
+                "statusCode:" => 400,
                 "type error:" => "Server_error",
-                "Description" => "Superó el límite de carácteres numéricos"
-            ]);
+                "Description" => "Supero el limite de carácteres numericos"
+            ];
+
+            $payload = json_encode($data);
+            $this->response->getBody()->write($payload);
+            return $this->response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(400);
+
         } else if (is_null($Estado)) {
-            return $this->respondWithData([
-                "status code:" => 500,
+            
+            $data = [
+                "statusCode:" => 400,
                 "type error:" => "Server_error",
-                "Description" => "El campo está nulo"
-            ]);
-        } else if (!is_numeric($Estado)) {
-            return $this->respondWithData([
-                "status code:" => 500,
+                "Description" => "El campo esta nulo"
+            ];
+
+            $payload = json_encode($data);
+            $this->response->getBody()->write($payload);
+            return $this->response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(400);
+
+        } else if (!is_int($Estado)) {
+            $data = [
+                "statusCode:" => 400,
                 "type error:" => "Server_error",
-                "Description" => "No es un numéro"
-            ]);
-        } else if (strlen($Nombre) >= 1  && strlen($Nombre) <= 45 && strlen($Estado2) >= 1 && strlen($Estado2) <= 11)
+                "Description" => "No es un numero"
+            ];
+
+            $payload = json_encode($data);
+            $this->response->getBody()->write($payload);
+            return $this->response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(400);
+        } 
+        else if (strlen($Nombre) >= 1  && strlen($Nombre) <= 45 && strlen($Estado2) >= 1 && strlen($Estado2) <= 11)
 
             $datos = new Documento(
                 0,
@@ -71,6 +110,6 @@ class DocumentoRegistroAction extends DocumentoAction
 
         $datos = $this->DocumentoRepository->RegistrarDocumento($datos);
 
-        return $this->respondWithData(["status code:" => 200, "ok" => $datos]);
+        return $this->respondWithData(["ok" => $datos]);
     }
 }
