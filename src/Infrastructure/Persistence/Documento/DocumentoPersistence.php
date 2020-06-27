@@ -29,7 +29,6 @@ class DocumentoPersistence implements DocumentoRepository
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Documento->__GET("Nombre"));
             $stm->bindValue(2, $Documento->__GET("Estado"));
-
             return $stm->execute();
         } catch (Exception $e) {
 
@@ -37,6 +36,18 @@ class DocumentoPersistence implements DocumentoRepository
         }
     }
 
+    public function ConsultarUltimoRegistrado()
+    {
+
+        $sql = "SELECT Id_Documento FROM documentos ORDER BY 1 DESC LIMIT 1";
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->execute();
+            return $stm->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 
     public function ListarDocumento()
     {
@@ -52,81 +63,80 @@ class DocumentoPersistence implements DocumentoRepository
             return $e->getMessage();
         }
     }
-    public function CambiarEstado(int $Id_Documentos, int $Estado){
+    public function CambiarEstado(int $Id_Documentos, int $Estado)
+    {
         $sql = "UPDATE documentos SET Estado_Documento= ? WHERE Id_Documento = ?";
-   
-        try {
-          $stm = $this->db->prepare($sql);
-          $stm->bindParam(1, $Estado);
-          $stm->bindParam(2, $Id_Documentos);
-   
-          return $stm->execute();
 
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-      }
-  
-      public function ObtenerDatos($Id_Documentos){
-        $sql = "SELECT * FROM documentos WHERE Id_Documento = ?";
- 
         try {
-           $stm = $this->db->prepare($sql);
-           $stm->bindParam(1, $Id_Documentos);
-           
-           $stm->execute();
-           return $stm->fetch(PDO::FETCH_ASSOC);
+            $stm = $this->db->prepare($sql);
+            $stm->bindParam(1, $Estado);
+            $stm->bindParam(2, $Id_Documentos);
+
+            return $stm->execute();
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
 
-    public function EditarDocumento(Documento $Documento){
+    public function ObtenerDatos($Id_Documentos)
+    {
+        $sql = "SELECT * FROM documentos WHERE Id_Documento = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindParam(1, $Id_Documentos);
+
+            $stm->execute();
+            return $stm->fetch(PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function EditarDocumento(Documento $Documento)
+    {
         $sql = "UPDATE documentos SET Nombre = ?  WHERE Id_Documento = ?";
- 
+
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Documento->__GET("Nombre"));
             $stm->bindValue(2, $Documento->__GET("Id_Documento"));
-            
+
             return $stm->execute();
- 
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
 
-    public function EliminarDocumento(int $Id_Documentos){
+    public function EliminarDocumento(int $Id_Documentos)
+    {
 
         $sql = "DELETE FROM documentos WHERE Id_Documento = ?";
 
-        try{
+        try {
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1,$Id_Documentos);
+            $stm->bindValue(1, $Id_Documentos);
 
             return $stm->execute();
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
 
             return $e->getMessage();
         }
     }
 
-    public function ValidarEliminarDocumento(int $Id_Documentos){
+    public function ValidarEliminarDocumento(int $Id_Documentos)
+    {
 
         $sql = "SELECT Tipo_Documento FROM empleados WHERE Tipo_Documento = ?";
 
-        try{
+        try {
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1,$Id_Documentos);
+            $stm->bindValue(1, $Id_Documentos);
             $stm->execute();
             return $stm->fetchAll(PDO::FETCH_ASSOC);
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
 
             return $e->getMessage();
         }
     }
-
-    
 }
