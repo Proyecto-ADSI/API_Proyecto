@@ -36,20 +36,20 @@ class CambiarEstadoCitasMultipleAction extends CitaAction
       
       foreach($campos as $Cita){
 
-        $Id = (int) $Cita->Id;
+        $Id = (int) $Cita->Id_Cita;
         $Estado = $Cita->Estado;
         $TipoVisita =(int)$Cita->TipoVisita;
-        $Id_Asesor = (int)$Cita->Id_Asesor;
+        $Id_Asesor_Externo = (int)$Cita->Id_Asesor_Externoo;
 
         $datos = new Visitas(
            NULL,
            $TipoVisita,
-           $Id_Asesor,
+           $Id_Asesor_Externo,
            $Id,
            NULL,
         );
 
-        if (is_numeric($Id) && is_numeric($Estado) && is_numeric($TipoVisita) && is_numeric($Id_Asesor)) {
+        if (is_numeric($Id) && is_numeric($Estado) && is_numeric($TipoVisita) && is_numeric($Id_Asesor_Externo)) {
 
           $DataEstados = $this->CitaRepository->CambiarEstadoRC($Id,$Estado);
 
@@ -73,5 +73,6 @@ class CambiarEstadoCitasMultipleAction extends CitaAction
       return $this->respondWithData('Algo estuvo mal');
       
     }
+
   }
   }

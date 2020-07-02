@@ -227,4 +227,22 @@ class CitaPersistence implements CitaRepository
             return $e->getMessage();
         }
     } 
+
+    public function ListarAsesoresExternos()
+    {
+        $sql = "SELECT u.Id_Usuario,u.Usuario, r.Nombre 'Rol' from usuarios u 
+        INNER JOIN roles r ON(u.Id_Rol = r.Id_Rol)
+        INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado)
+        WHERE r.Nombre = 'Asesor externo'";
+
+       try {
+
+           $stm = $this->db->prepare($sql);
+           $stm->execute();
+           return $stm->fetchAll(PDO::FETCH_ASSOC);
+           
+       } catch (\Exception $e) {
+           $e->getMessage();
+       }
+    }
 }
