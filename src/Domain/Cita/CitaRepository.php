@@ -19,4 +19,6 @@ interface CitaRepository{
 
     public function ListarAsesoresInternos();
 
+    public function ListarAsesoresExternos();
+
 }

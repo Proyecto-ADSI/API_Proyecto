@@ -150,7 +150,7 @@ use App\Application\Actions\Cita\CambiarEstadoCitasAction;
 use App\Application\Actions\Cita\PDFCitasAction;
 use App\Application\Actions\Cita\ListarCitaSinAsignarAction;
 use App\Application\Actions\Cita\ListarAsesoresInternosAction;
-use App\Application\Actions\Cita\AsignarCitasAction;
+use App\Application\Actions\Cita\ListarAsesoresExternos;
 
 //Novedad
 use App\Application\Actions\Novedades\RegistrarNovedadesAction;
@@ -348,6 +348,7 @@ return function (App $app) {
         $group->post('/PDF', PDFCitasAction::class);
         $group->get('/SinAsignar', ListarCitaSinAsignarAction::class);
         $group->get('/Asesores/Internos', ListarAsesoresInternosAction::class);
+        $group->get('/Asesores/Externos', ListarAsesoresExternos::class);
         // $group->post('/Asignar', AsignarCitasAction::class);
     });
 
