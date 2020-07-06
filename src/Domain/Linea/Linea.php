@@ -14,7 +14,7 @@ class Linea implements JsonSerializable
     private $Minutos;
     private $Navegacion;
     private $Mensajes;
-    private $Redes_Sociales;
+    private $Servicios_Ilimitados;
     private $Minutos_LDI;
     private $Cantidad_LDI;
     private $Servicios_Adicionales;
@@ -37,7 +37,7 @@ class Linea implements JsonSerializable
         ?string $Minutos,
         ?string $Navegacion,
         ?string $Mensajes,
-        ?string $Redes_Sociales,
+        ?string $Servicios_Ilimitados,
         ?string $Minutos_LDI,
         ?string $Cantidad_LDI,
         ?string $Servicios_Adicionales,
@@ -50,7 +50,7 @@ class Linea implements JsonSerializable
         $this->Minutos = $Minutos;
         $this->Navegacion = $Navegacion;
         $this->Mensajes = $Mensajes;
-        $this->Redes_Sociales = $Redes_Sociales;
+        $this->Servicios_Ilimitados = $Servicios_Ilimitados;
         $this->Minutos_LDI = $Minutos_LDI;
         $this->Cantidad_LDI = $Cantidad_LDI;
         $this->Servicios_Adicionales = $Servicios_Adicionales;
@@ -67,7 +67,7 @@ class Linea implements JsonSerializable
             "Minutos" => $this->Minutos,
             "Navegacion" => $this->Navegacion,
             "Mensajes" => $this->Mensajes,
-            "Redes_Sociales" => $this->Redes_Sociales,
+            "Servicios_Ilimitados" => $this->Servicios_Ilimitados,
             "Minutos_LDI" => $this->Minutos_LDI,
             "Cantidad_LDI" => $this->Cantidad_LDI,
             "Servicios_Adicionales" => $this->Servicios_Adicionales,

@@ -24,8 +24,8 @@ class LineaPersistence implements LineaRepository
     public function RegistrarLinea(Linea $linea)
     {
 
-        $sql = "INSERT INTO lineas_moviles(Linea, Minutos, Navegacion, Mensajes, Redes_Sociales, 
-        Minutos_LDI, Cantidad_LDI, Servicios_Adicionales, Cargo_Basico,Grupo)
+        $sql = "INSERT INTO lineas_moviles(Linea, Minutos, Navegacion, Mensajes, 
+        Minutos_LDI, Cantidad_LDI, Servicios_Ilimitados, Servicios_Adicionales, Cargo_Basico,Grupo)
         VALUES (?,?,?,?,?,?,?,?,?,?)";
 
         try {
@@ -34,9 +34,9 @@ class LineaPersistence implements LineaRepository
             $stm->bindValue(2, $linea->__GET("Minutos"));
             $stm->bindValue(3, $linea->__GET("Navegacion"));
             $stm->bindValue(4, $linea->__GET("Mensajes"));
-            $stm->bindValue(5, $linea->__GET("Redes_Sociales"));
-            $stm->bindValue(6, $linea->__GET("Minutos_LDI"));
-            $stm->bindValue(7, $linea->__GET("Cantidad_LDI"));
+            $stm->bindValue(5, $linea->__GET("Minutos_LDI"));
+            $stm->bindValue(6, $linea->__GET("Cantidad_LDI"));
+            $stm->bindValue(7, $linea->__GET("Servicios_Ilimitados"));
             $stm->bindValue(8, $linea->__GET("Servicios_Adicionales"));
             $stm->bindValue(9, $linea->__GET("Cargo_Basico"));
             $stm->bindValue(10, $linea->__GET("Grupo"));
@@ -102,7 +102,7 @@ class LineaPersistence implements LineaRepository
     {
 
         $sql = "UPDATE lineas_moviles SET  Linea = ?, Minutos = ?, Navegacion = ?, 
-        Mensajes = ?, Redes_Sociales = ?, Minutos_LDI = ?, Cantidad_LDI = ?, Servicios_Adicionales = ?, 
+        Mensajes = ?, Servicios_Ilimitados = ?, Minutos_LDI = ?, Cantidad_LDI = ?, Servicios_Adicionales = ?, 
         Cargo_Basico = ?, Grupo = ? WHERE Id_Linea_Movil = ?";
 
         try {
@@ -111,7 +111,7 @@ class LineaPersistence implements LineaRepository
             $stm->bindValue(2, $linea->__GET("Minutos"));
             $stm->bindValue(3, $linea->__GET("Navegacion"));
             $stm->bindValue(4, $linea->__GET("Mensajes"));
-            $stm->bindValue(5, $linea->__GET("Redes_Sociales"));
+            $stm->bindValue(5, $linea->__GET("Servicios_Ilimitados"));
             $stm->bindValue(6, $linea->__GET("Minutos_LDI"));
             $stm->bindValue(7, $linea->__GET("Cantidad_LDI"));
             $stm->bindValue(8, $linea->__GET("Servicios_Adicionales"));

@@ -68,7 +68,7 @@ class RegistrarCliente extends ClienteAction
                 $campos->Valor_Mensual,
                 $campos->Id_Calificacion_Operador,
                 $campos->Razones,
-                NULL
+                $campos->Estado_DBL
             );
 
             // Validar si se registra el plan corporativo
@@ -160,7 +160,7 @@ class RegistrarCliente extends ClienteAction
                         $lineaItem->minutos,
                         $lineaItem->navegacion,
                         $lineaItem->mensajes,
-                        $lineaItem->redes,
+                        $lineaItem->serviciosIlimitados,
                         $lineaItem->minutosLDI,
                         $lineaItem->cantidadLDI,
                         $lineaItem->serviciosAdicionales,

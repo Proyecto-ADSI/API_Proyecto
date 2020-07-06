@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Domain\Atencion_Telefonica\AtencionTelefonicaRepository;
 use App\Domain\Empleado\EmpleadoRepository;
 use App\Domain\User\UserRepository;
 use App\Domain\Usuario\UsuarioRepository;
@@ -29,9 +30,9 @@ use App\Domain\Llamada_Programada\Llamada_ProgramadaRepository;
 use App\Domain\Notificacion\NotificacionRepository;
 use App\Domain\Notificaciones_Usuario\Notificaciones_UsuarioRepository;
 use App\Domain\Novedades\NovedadesRepository;
+use App\Domain\Pre_Oferta\PreOfertaRepository;
 use App\Domain\Visitas\VisitasRepository;
-
-
+use App\Infrastructure\Persistence\Atencion_Telefonica\AtencionTelefonicaPersistence;
 use App\Infrastructure\Persistence\Empleado\EmpleadoPersistence;
 use App\Infrastructure\Persistence\User\InMemoryUserRepository;
 use App\Infrastructure\Persistence\Usuario\UsuarioPersistence;
@@ -59,6 +60,7 @@ use App\Infrastructure\Persistence\Llamada_Programada\Llamada_ProgramadaPersiste
 use App\Infrastructure\Persistence\Notificacion\NotificacionPersistence;
 use App\Infrastructure\Persistence\Notificaciones_Usuario\Notificaciones_UsuarioPersistence;
 use App\Infrastructure\Persistence\Novedades\NovedadesPersistence;
+use App\Infrastructure\Persistence\Pre_Oferta\PreOfertaPersistence;
 use App\Infrastructure\Persistence\Visitas\VisitasPersistence;
 
 
@@ -94,6 +96,8 @@ return function (ContainerBuilder $containerBuilder) {
         NotificacionRepository::class => \DI\autowire(NotificacionPersistence::class),
         Notificaciones_UsuarioRepository::class => \DI\autowire(Notificaciones_UsuarioPersistence::class),
         NovedadesRepository::class => \DI\autowire(NovedadesPersistence::class),
-        VisitasRepository::class=> \DI\autowire(VisitasPersistence::class)
+        VisitasRepository::class => \DI\autowire(VisitasPersistence::class),
+        AtencionTelefonicaRepository::class => \DI\autowire(AtencionTelefonicaPersistence::class),
+        PreOfertaRepository::class => \DI\autowire(PreOfertaPersistence::class),
     ]);
 };

@@ -72,7 +72,7 @@ class ClientePersistence implements ClienteRepository
 
 
                     $sql = " SELECT d.Id_DBL, l.Id_Linea_Movil, IFNULL(l.Linea, '0') Linea, IFNULL(l.Minutos,'N/A') Minutos, 
-                    IFNULL(l.Navegacion,'N/A') Navegacion, IFNULL(l.Mensajes,'N/A') Mensajes, IFNULL(l.Redes_Sociales,',') Redes_Sociales,
+                    IFNULL(l.Navegacion,'N/A') Navegacion, IFNULL(l.Mensajes,'N/A') Mensajes, IFNULL(l.Servicios_Ilimitados,',') Servicios_Ilimitados,
                     IFNULL(l.Minutos_LDI,',') Minutos_LDI, IFNULL(l.Cantidad_LDI,'N/A') Cantidad_LDI,
                     IFNULL(l.Servicios_Adicionales,',') Servicios_Adicionales, l.Cargo_Basico, l.Grupo 
                     FROM detalle_lineas d JOIN lineas_moviles l ON(d.Id_Linea_Movil = l.Id_Linea_Movil) 
@@ -214,7 +214,7 @@ class ClientePersistence implements ClienteRepository
 
                 // Servicos Móviles
                 $sql = " SELECT d.Id_DBL, l.Id_Linea_Movil, IFNULL(l.Linea, '0') Linea, IFNULL(l.Minutos,'N/A') Minutos, 
-                    IFNULL(l.Navegacion,'N/A') Navegacion, IFNULL(l.Mensajes,'N/A') Mensajes, IFNULL(l.Redes_Sociales,',') Redes_Sociales,
+                    IFNULL(l.Navegacion,'N/A') Navegacion, IFNULL(l.Mensajes,'N/A') Mensajes, IFNULL(l.Servicios_Ilimitados,',') Servicios_Ilimitados,
                     IFNULL(l.Minutos_LDI,',') Minutos_LDI, IFNULL(l.Cantidad_LDI,'N/A') Cantidad_LDI,
                     IFNULL(l.Servicios_Adicionales,',') Servicios_Adicionales, l.Cargo_Basico, l.Grupo 
                     FROM detalle_lineas d JOIN lineas_moviles l ON(d.Id_Linea_Movil = l.Id_Linea_Movil) 

@@ -93,7 +93,7 @@ class UsuarioRegistro extends UsuarioAction
 
                 //Correo 
                 $mail->setFrom('proyecto.adsi2019@gmail.com', 'Proyecto SENA');     //Correo que envía el mensaje
-                $mail->addAddress($Email, $NombreEmpleado);                                           // Correo que recibe el mensaje
+                $mail->addAddress($Email, $NombreEmpleado);                        // Correo que recibe el mensaje
 
                 //Crear Token
                 $token = bin2hex(random_bytes(30));
