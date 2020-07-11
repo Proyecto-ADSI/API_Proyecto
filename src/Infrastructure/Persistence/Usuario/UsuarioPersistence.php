@@ -80,6 +80,30 @@ class UsuarioPersistence implements UsuarioRepository
         }
     }
 
+    public function ObtenerCantidadUsuarios(int $Id_Rol, int $Estado)
+    {
+        $sql = "SELECT COUNT(Id_Usuario) Cantidad  FROM usuarios
+        WHERE Id_Rol = ? AND  Estado_Usuario = ?";
+
+        try {
+
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1, $Id_Rol);
+            $stm->bindValue(2, $Estado);
+            $stm->execute();
+
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                return $stm->fetch(PDO::FETCH_ASSOC);
+            } else {
+                $error = $stm->errorInfo();
+                return $error;
+            }
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
     public function login(string $usuario)
     {
 

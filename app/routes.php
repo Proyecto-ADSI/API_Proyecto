@@ -147,11 +147,13 @@ use App\Application\Actions\Cliente\ValidarCliente;
 use App\Application\Actions\Cita\ListarCitasAction;
 use App\Application\Actions\Cita\CambiarEstadoCitasMultipleAction;
 use App\Application\Actions\Cita\CambiarEstadoCitasAction;
+use App\Application\Actions\Cita\HorasDisponiblesAction;
 use App\Application\Actions\Cita\PDFCitasAction;
 use App\Application\Actions\Cita\ListarCitaSinAsignarAction;
 use App\Application\Actions\Cita\ListarAsesoresInternosAction;
 use App\Application\Actions\Cita\ListarAsesoresExternos;
-
+use App\Application\Actions\Llamada\PrecargarLlamada;
+use App\Application\Actions\Llamada\RegistrarLlamadaAction;
 //Novedad
 use App\Application\Actions\Novedades\RegistrarNovedadesAction;
 
@@ -218,9 +220,14 @@ return function (App $app) {
         $group->post('/SubirDocSoporte', CargarDocumentosSoporte::class);
     });
 
+    // $app->group('/Test', function (Group $group) {
+    //     $group->get('', ModificarEXCAction::class);
+    // });
+
     $app->group('/Llamadas', function (Group $group) {
         $group->get('', ListarLlamadas::class);
-        $group->post('/LlamadaNP', RegistrarLlamadaNPAction::class);
+        $group->get('/Precargar/{Id_Usuario}', PrecargarLlamada::class);
+        $group->post('', RegistrarLlamadaAction::class);
     });
 
     $app->group('/Notificaciones', function (Group $group) {
@@ -349,6 +356,7 @@ return function (App $app) {
         $group->get('/SinAsignar', ListarCitaSinAsignarAction::class);
         $group->get('/Asesores/Internos', ListarAsesoresInternosAction::class);
         $group->get('/Asesores/Externos', ListarAsesoresExternos::class);
+        $group->get('/HorasDisponibles/{Operador}/{Fecha}', HorasDisponiblesAction::class);
         // $group->post('/Asignar', AsignarCitasAction::class);
     });
 

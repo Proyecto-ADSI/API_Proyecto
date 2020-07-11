@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Domain\Cita;
 
-interface CitaRepository{
+interface CitaRepository
+{
 
     public function RegistrarCita(Cita $Cita);
 
@@ -21,4 +23,5 @@ interface CitaRepository{
 
     public function ListarAsesoresExternos();
 
+    public function ListarHorasCitas(int $Id_Operador, string $Fecha);
 }

@@ -28,7 +28,7 @@ class DBLPersistence implements DBLRepository
     {
 
         $sql = "INSERT INTO datos_basicos_lineas(Id_Cliente,Id_Operador,Id_Plan_Corporativo, Cantidad_Total_Lineas, 
-        Valor_Total_Mensual, Id_Calificacion_Operador, Razones) VALUES (?,?,?,?,?,?,?)";
+        Valor_Total_Mensual, Id_Calificacion_Operador, Razones, Id_Estado_DBL) VALUES (?,?,?,?,?,?,?,?)";
 
         try {
 
@@ -40,13 +40,11 @@ class DBLPersistence implements DBLRepository
             $stm->bindValue(5, $DBL->__GET("Valor_Total_Mensual"));
             $stm->bindValue(6, $DBL->__GET("Id_Calificacion_Operador"));
             $stm->bindValue(7, $DBL->__GET("Razones"));
+            $stm->bindValue(8, $DBL->__GET("Estado_DBL"));
 
-
-            $stm->execute();
-
-            $error = $stm->errorCode();
-            if ($error === '00000') {
-                return true;
+            $respuesta = $stm->execute();
+            if ($respuesta) {
+                return (int) $this->db->lastInsertId();
             } else {
                 return $stm->errorInfo();
             }

@@ -39,10 +39,8 @@ class PreOfertaPersistence implements PreOfertaRepository
             $stm->bindValue(8, $PreOferta->__GET("Tipo_Pre_Oferta"));
 
             $respuesta = $stm->execute();
-
-            $error = $stm->errorCode();
-            if ($error === '00000') {
-                return $respuesta;
+            if ($respuesta) {
+                return (int) $this->db->lastInsertId();
             } else {
                 return $stm->errorInfo();
             }
@@ -92,9 +90,9 @@ class PreOfertaPersistence implements PreOfertaRepository
             $stm->bindValue(2, $Id_Linea_Movil);
             $respuesta = $stm->execute();
 
-            $error = $stm->errorCode();
-            if ($error === '00000') {
-                return $respuesta;
+            $respuesta = $stm->execute();
+            if ($respuesta) {
+                return (int) $this->db->lastInsertId();
             } else {
                 return $stm->errorInfo();
             }
@@ -193,22 +191,8 @@ class PreOfertaPersistence implements PreOfertaRepository
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Id_DBL);
             $respuesta = $stm->execute();
-            $error = $stm->errorCode();
-            if ($error === '00000') {
-                if ($respuesta) {
-                    $sql2 = "SELECT Id_Corporativo_Anterior FROM corporativos_anteriores ORDER BY 1 DESC LIMIT 1";
-                    try {
-                        $stm = $this->db->prepare($sql2);
-                        $stm->execute();
-                        $res = $stm->fetch(PDO::FETCH_ASSOC);
-                        $Id_Corporativo_Anterior = (int) $res['Id_Corporativo_Anterior'];
-                        return $Id_Corporativo_Anterior;
-                    } catch (Exception $e) {
-                        return $e->getMessage();
-                    }
-                } else {
-                    return $respuesta;
-                }
+            if ($respuesta) {
+                return (int) $this->db->lastInsertId();
             } else {
                 return $stm->errorInfo();
             }
@@ -225,22 +209,8 @@ class PreOfertaPersistence implements PreOfertaRepository
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $Id_DBL);
             $respuesta = $stm->execute();
-            $error = $stm->errorCode();
-            if ($error === '00000') {
-                if ($respuesta) {
-                    $sql2 = "SELECT Id_Corporativo_Actual FROM corporativos_actuales ORDER BY 1 DESC LIMIT 1";
-                    try {
-                        $stm = $this->db->prepare($sql2);
-                        $stm->execute();
-                        $res = $stm->fetch(PDO::FETCH_ASSOC);
-                        $Id_Corporativo_Actual = (int) $res['Id_Corporativo_Actual'];
-                        return $Id_Corporativo_Actual;
-                    } catch (Exception $e) {
-                        return $e->getMessage();
-                    }
-                } else {
-                    return $respuesta;
-                }
+            if ($respuesta) {
+                return (int) $this->db->lastInsertId();
             } else {
                 return $stm->errorInfo();
             }

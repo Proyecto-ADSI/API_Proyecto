@@ -41,11 +41,9 @@ class LineaPersistence implements LineaRepository
             $stm->bindValue(9, $linea->__GET("Cargo_Basico"));
             $stm->bindValue(10, $linea->__GET("Grupo"));
 
-            $stm->execute();
-
-            $error = $stm->errorCode();
-            if ($error === '00000') {
-                return true;
+            $respuesta = $stm->execute();
+            if ($respuesta) {
+                return (int) $this->db->lastInsertId();
             } else {
                 return $stm->errorInfo();
             }

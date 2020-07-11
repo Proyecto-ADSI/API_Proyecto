@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Usuario;
 
+use App\Application\Actions\Configuracion\MetodosSistema;
 use App\Domain\Empleado\Empleado;
 use App\Domain\Usuario\Usuario;
 use Exception;
@@ -117,10 +118,22 @@ class UsuarioRegistro extends UsuarioAction
                 return $this->respondWithData(["ok" => false, "Error" => "No se pudo enviar el correo. Mailer Error: {$mail->ErrorInfo}"]);
             }
         } else {
-
             $this->usuarioRepository->CambiarEstadoUsuario($Id_Usuario, 1);
-        }
 
+            $Id_Rol = (int) $usuario->Id_Rol;
+            if ($Id_Rol == 3) {
+                // Modificar Empresas por contact
+                $metodos = new MetodosSistema(
+                    $this->logger,
+                    $this->configuracionRepository,
+                    $this->usuarioRepository,
+                    $this->ClienteRepository,
+                    $this->AsignacionERepository,
+                );
+                $metodos->ModificarEXC();
+                $metodos->ValidarEmpresasAsignadas();
+            }
+        }
         return $this->respondWithData(["ok" => $respuesta]);
     }
 }

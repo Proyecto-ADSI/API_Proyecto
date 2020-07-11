@@ -43,22 +43,20 @@ class CitaPersistence implements CitaRepository
             $stm->bindValue(12, $Cita->__get("Id_Coordinador"));
             $stm->bindValue(13, $Cita->__get("Id_Estado_Cita"));
 
-            $respuesta =$stm->execute();
-
-            $error = $stm->errorCode();
-            if ($error === '00000') {
-                return $respuesta;
+            $respuesta = $stm->execute();
+            if ($respuesta) {
+                return (int) $this->db->lastInsertId();
             } else {
                 return $stm->errorInfo();
             }
-            
         } catch (Exception $e) {
 
             return "Error al registrar " . $e->getMessage();
         }
     }
 
-    public function ConsultarUltimaCitaRegistrada(){
+    public function ConsultarUltimaCitaRegistrada()
+    {
 
         $sql = "SELECT Id_Cita FROM citas ORDER BY 1 DESC LIMIT 1";
 
@@ -109,7 +107,6 @@ class CitaPersistence implements CitaRepository
             } else {
                 return $stm->errorInfo();
             }
-
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -132,7 +129,6 @@ class CitaPersistence implements CitaRepository
             } else {
                 return $stm->errorInfo();
             }
-
         } catch (\Exception $e) {
             $e->getMessage();
         }
@@ -156,7 +152,6 @@ class CitaPersistence implements CitaRepository
             } else {
                 return $stm->errorInfo();
             }
-
         } catch (\Exception $e) {
             $e->getMessage();
         }
@@ -197,7 +192,6 @@ class CitaPersistence implements CitaRepository
             } else {
                 return $stm->errorInfo();
             }
-
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -211,7 +205,7 @@ class CitaPersistence implements CitaRepository
          WHERE r.Nombre = 'Asesor interno'";
 
         try {
-            
+
             $stm = $this->db->prepare($sql);
             $stm->execute();
 
@@ -222,11 +216,10 @@ class CitaPersistence implements CitaRepository
             } else {
                 return $stm->errorInfo();
             }
-
         } catch (\Exception $e) {
             return $e->getMessage();
         }
-    } 
+    }
 
     public function ListarAsesoresExternos()
     {
@@ -235,14 +228,30 @@ class CitaPersistence implements CitaRepository
         INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado)
         WHERE r.Nombre = 'Asesor externo'";
 
-       try {
+        try {
 
-           $stm = $this->db->prepare($sql);
-           $stm->execute();
-           return $stm->fetchAll(PDO::FETCH_ASSOC);
-           
-       } catch (\Exception $e) {
-           $e->getMessage();
-       }
+            $stm = $this->db->prepare($sql);
+            $stm->execute();
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function ListarHorasCitas(int $Id_Operador, string $Fecha)
+    {
+        $sql = "SELECT DATE_FORMAT(Fecha_Cita,'%H:%i:%s') Hora FROM citas 
+        WHERE Id_Operador = ? 
+        AND Fecha_Cita like ? 
+        AND Id_Estado_Cita NOT IN(9,12,14,15,17)";
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindParam(1, $Id_Operador);
+            $stm->bindParam(2, $Fecha);
+            $stm->execute();
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
     }
 }

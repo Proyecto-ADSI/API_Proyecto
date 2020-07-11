@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Application\Actions\Llamada;
 
 use App\Application\Actions\Action;
+use App\Domain\AsignacionEmpresas\AsignacionERepository;
 use App\Domain\Atencion_Telefonica\AtencionTelefonicaRepository;
 use App\Domain\Llamada\LlamadaRepository;
 use App\Domain\Llamada_Programada\Llamada_ProgramadaRepository;
 use App\Domain\Cita\CitaRepository;
 use App\Domain\BarriosVeredas\BarriosVeredasRepository;
 use App\Domain\Cliente\ClienteRepository;
+use App\Domain\Configuracion\ConfiguracionRepository;
 use App\Domain\DBL\DBLRepository;
 use App\Domain\Departamento\DepartamentoRepository;
 use App\Domain\Plan_Corporativo\Plan_CorporativoRepository;
@@ -24,6 +26,7 @@ use App\Domain\Operador\OperadorRepository;
 use App\Domain\Notificacion\NotificacionRepository;
 use App\Domain\Notificaciones_Usuario\Notificaciones_UsuarioRepository;
 use App\Domain\Pre_Oferta\PreOfertaRepository;
+use App\Domain\Usuario\UsuarioRepository;
 use Psr\Log\LoggerInterface;
 
 abstract class LlamadaAction extends Action
@@ -47,6 +50,10 @@ abstract class LlamadaAction extends Action
     protected $Notificaciones_UsuarioRepository;
     protected $Atencion_TelefonicaRepository;
     protected $Pre_Oferta_Repository;
+    protected $configuracionRepository;
+    protected $UsuarioRepository;
+    protected $AsignacionERepository;
+    protected $usuarioRepository;
 
     public function __construct(
 
@@ -69,7 +76,11 @@ abstract class LlamadaAction extends Action
         NotificacionRepository $NotificacionRepository,
         Notificaciones_UsuarioRepository $Notificaciones_UsuarioRepository,
         AtencionTelefonicaRepository $Atencion_TelefonicaRepository,
-        PreOfertaRepository $Pre_Oferta_Repository
+        PreOfertaRepository $Pre_Oferta_Repository,
+        ConfiguracionRepository $configuracionRepository,
+        UsuarioRepository $UsuarioRepository,
+        AsignacionERepository $AsignacionERepository,
+        UsuarioRepository $usuarioRepository
     ) {
         parent::__construct($logger);
         $this->ClienteRepository = $ClienteRepository;
@@ -91,5 +102,9 @@ abstract class LlamadaAction extends Action
         $this->Notificaciones_UsuarioRepository = $Notificaciones_UsuarioRepository;
         $this->Atencion_TelefonicaRepository = $Atencion_TelefonicaRepository;
         $this->Pre_Oferta_Repository = $Pre_Oferta_Repository;
+        $this->configuracionRepository = $configuracionRepository;
+        $this->UsuarioRepository = $UsuarioRepository;
+        $this->AsignacionERepository = $AsignacionERepository;
+        $this->usuarioRepository = $usuarioRepository;
     }
 }

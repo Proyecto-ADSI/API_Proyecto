@@ -35,11 +35,9 @@ class Lineas_FijasPersistence implements Lineas_FijasRepository
             $stm->bindValue(5, $Lineas_Fijas->__GET("Telefonia"));
             $stm->bindValue(6, $Lineas_Fijas->__GET("Television"));
 
-            $stm->execute();
-
-            $error = $stm->errorCode();
-            if ($error === '00000') {
-                return true;
+            $respuesta = $stm->execute();
+            if ($respuesta) {
+                return (int) $this->db->lastInsertId();
             } else {
                 return $stm->errorInfo();
             }

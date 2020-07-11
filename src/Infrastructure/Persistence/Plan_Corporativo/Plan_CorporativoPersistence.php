@@ -21,7 +21,6 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
 
     public function RegistrarPlan_Corporativo(Plan_Corporativo $Plan_Corporativo)
     {
-
         $sql = "INSERT INTO plan_corporativo(Id_Documentos,Fecha_Inicio,Fecha_Fin, Clausula_Permanencia, Descripcion)
         VALUES(?,?,?,?,?)";
 
@@ -33,11 +32,9 @@ class Plan_CorporativoPersistence implements Plan_CorporativoRepository
             $stm->bindValue(4, $Plan_Corporativo->__GET("Clausula_Permanencia"));
             $stm->bindValue(5, $Plan_Corporativo->__GET("Descripcion"));
 
-            $stm->execute();
-
-            $error = $stm->errorCode();
-            if ($error === '00000') {
-                return true;
+            $respuesta = $stm->execute();
+            if ($respuesta) {
+                return (int) $this->db->lastInsertId();
             } else {
                 return $stm->errorInfo();
             }

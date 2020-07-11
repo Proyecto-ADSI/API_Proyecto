@@ -272,15 +272,12 @@ class ClientePersistence implements ClienteRepository
             $stm->bindValue(10, $Cliente->__GET("Estado_Cliente"));
 
             $respuesta = $stm->execute();
-
-            $error = $stm->errorCode();
-            if ($error === '00000') {
-                return $respuesta;
+            if ($respuesta) {
+                return (int) $this->db->lastInsertId();
             } else {
                 return $stm->errorInfo();
             }
         } catch (Exception $e) {
-
             return "Error al registrar " . $e->getMessage();
         }
     }

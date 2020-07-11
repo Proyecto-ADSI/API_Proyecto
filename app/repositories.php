@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Domain\AsignacionEmpresas\AsignacionERepository;
 use App\Domain\Atencion_Telefonica\AtencionTelefonicaRepository;
 use App\Domain\Empleado\EmpleadoRepository;
 use App\Domain\User\UserRepository;
@@ -16,6 +17,7 @@ use App\Domain\BarriosVeredas\BarriosVeredasRepository;
 use App\Domain\Calificacion\CalificacionRepository;
 use App\Domain\Cita\CitaRepository;
 use App\Domain\Cliente\ClienteRepository;
+use App\Domain\Configuracion\ConfiguracionRepository;
 use App\Domain\DBL\DBLRepository;
 use App\Domain\Doc_Soporte\Doc_SoporteRepository;
 use App\Domain\Linea\LineaRepository;
@@ -32,6 +34,7 @@ use App\Domain\Notificaciones_Usuario\Notificaciones_UsuarioRepository;
 use App\Domain\Novedades\NovedadesRepository;
 use App\Domain\Pre_Oferta\PreOfertaRepository;
 use App\Domain\Visitas\VisitasRepository;
+use App\Infrastructure\Persistence\AsignacionEmpresas\AsignacionEPersistence;
 use App\Infrastructure\Persistence\Atencion_Telefonica\AtencionTelefonicaPersistence;
 use App\Infrastructure\Persistence\Empleado\EmpleadoPersistence;
 use App\Infrastructure\Persistence\User\InMemoryUserRepository;
@@ -46,6 +49,8 @@ use App\Infrastructure\Persistence\BarriosVeredas\BarriosVeredasPersistence;
 use App\Infrastructure\Persistence\Calificacion\CalificacionPersistence;
 use App\Infrastructure\Persistence\Cita\CitaPersistence;
 use App\Infrastructure\Persistence\Cliente\ClientePersistence;
+
+use App\Infrastructure\Persistence\Configuracion\ConfiguracionPersistence;
 use App\Infrastructure\Persistence\DBL\DBLPersistence;
 use App\Infrastructure\Persistence\Doc_Soporte\Doc_SoportePersistence;
 use App\Infrastructure\Persistence\Linea\LineaPersistence;
@@ -99,5 +104,7 @@ return function (ContainerBuilder $containerBuilder) {
         VisitasRepository::class => \DI\autowire(VisitasPersistence::class),
         AtencionTelefonicaRepository::class => \DI\autowire(AtencionTelefonicaPersistence::class),
         PreOfertaRepository::class => \DI\autowire(PreOfertaPersistence::class),
+        ConfiguracionRepository::class => \DI\autowire(ConfiguracionPersistence::class),
+        AsignacionERepository::class => \DI\autowire(AsignacionEPersistence::class),
     ]);
 };

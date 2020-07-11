@@ -37,7 +37,12 @@ class LlamadaPersistence implements LlamadaRepository
             $stm->bindValue(6, $Llamada->__GET("Observacion"));
             $stm->bindValue(7, $Llamada->__GET("Id_Estado_Llamada"));
 
-            return $stm->execute();
+            $respuesta = $stm->execute();
+            if ($respuesta) {
+                return (int) $this->db->lastInsertId();
+            } else {
+                return $stm->errorInfo();
+            }
         } catch (Exception $e) {
 
             return "Error al registrar " . $e->getMessage();

@@ -32,8 +32,12 @@ class AtencionTelefonicaPersistence implements AtencionTelefonicaRepository
             $stm->bindValue(2, $AtencionTelefonica->__GET("Medio_Envio"));
             $stm->bindValue(3, $AtencionTelefonica->__GET("Tiempo_Post_Llamada"));
             $stm->bindValue(4, $AtencionTelefonica->__GET("Respuesta_Cliente"));
-
-            return $stm->execute();
+            $respuesta = $stm->execute();
+            if ($respuesta) {
+                return (int) $this->db->lastInsertId();
+            } else {
+                return $stm->errorInfo();
+            }
         } catch (Exception $e) {
 
             return $e->getMessage();
