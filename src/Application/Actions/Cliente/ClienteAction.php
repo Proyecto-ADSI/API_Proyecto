@@ -19,6 +19,7 @@ use App\Domain\Pais\PaisRepository;
 use App\Domain\SubTipo\SubTipoRepository;
 use App\Domain\Notificacion\NotificacionRepository;
 use App\Domain\Notificaciones_Usuario\Notificaciones_UsuarioRepository;
+use App\Domain\Usuario\UsuarioRepository;
 use Psr\Log\LoggerInterface;
 
 abstract class ClienteAction extends Action
@@ -38,6 +39,7 @@ abstract class ClienteAction extends Action
     protected $NotificacionRepository;
     protected $Notificaciones_UsuarioRepository;
     protected $AsignacionERepository;
+    protected $UsuarioRepository;
 
     public function __construct(
         LoggerInterface $logger,
@@ -54,7 +56,8 @@ abstract class ClienteAction extends Action
         Lineas_FijasRepository $Lineas_FijasRepository,
         NotificacionRepository $NotificacionRepository,
         Notificaciones_UsuarioRepository $Notificaciones_UsuarioRepository,
-        AsignacionERepository $AsignacionERepository
+        AsignacionERepository $AsignacionERepository,
+        UsuarioRepository $UsuarioRepository
     ) {
         parent::__construct($logger);
         $this->ClienteRepository = $ClienteRepository;
@@ -71,5 +74,7 @@ abstract class ClienteAction extends Action
         $this->NotificacionRepository = $NotificacionRepository;
         $this->Notificaciones_UsuarioRepository = $Notificaciones_UsuarioRepository;
         $this->AsignacionERepository = $AsignacionERepository;
+        $this->UsuarioRepository = $UsuarioRepository;
+
     }
 }

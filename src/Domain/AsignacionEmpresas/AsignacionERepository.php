@@ -10,6 +10,8 @@ interface AsignacionERepository
 
     public function ValidarEmpresaAsignadaContact(int $Id_Usuario, int $Id_Cliente);
 
+    public function ListarEmpresasContact(int $Id_Usuario);
+
     public function ObtenerCantidadEmpresasContact();
 
     public function ObtenerCantidadEmpresasRe_Asignables();

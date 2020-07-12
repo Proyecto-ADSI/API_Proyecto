@@ -63,6 +63,24 @@ class AsignacionEPersistence implements AsignacionERepository
         }
     }
 
+    public function ListarEmpresasContact(int $Id_Usuario){
+        $sql = "SELECT Id_Cliente FROM empresas_asignadas WHERE Id_Usuario = ?";
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1, $Id_Usuario);
+            $stm->execute();
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                return $stm->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                $error = $stm->errorInfo();
+                return $error;
+            }
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
     public function ObtenerCantidadEmpresasContact()
     {
         $sql = "SELECT Id_Usuario, COUNT(Id_Usuario) Cantidad  FROM empresas_asignadas GROUP BY Id_Usuario ORDER BY 1";

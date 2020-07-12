@@ -152,6 +152,8 @@ use App\Application\Actions\Cita\PDFCitasAction;
 use App\Application\Actions\Cita\ListarCitaSinAsignarAction;
 use App\Application\Actions\Cita\ListarAsesoresInternosAction;
 use App\Application\Actions\Cita\ListarAsesoresExternos;
+use App\Application\Actions\Cliente\ListarAsignacionAction;
+use App\Application\Actions\Cliente\ObtenerEmpresasAsignadas;
 use App\Application\Actions\Llamada\PrecargarLlamada;
 use App\Application\Actions\Llamada\RegistrarLlamadaAction;
 //Novedad
@@ -218,11 +220,13 @@ return function (App $app) {
         $group->delete('/{Id_Cliente_Eliminar}', EliminarCliente::class);
         $group->post('/RegistrarClientes/ImportarClientes/{Id_Usuario}', ImportarClientes::class);
         $group->post('/SubirDocSoporte', CargarDocumentosSoporte::class);
+        
     });
 
-    // $app->group('/Test', function (Group $group) {
-    //     $group->get('', ModificarEXCAction::class);
-    // });
+    $app->group('/Asignacion', function (Group $group) {
+        $group->get('', ListarAsignacionAction::class);
+        $group->get('/ObtenerEmpresas/{Id_Usuario}', ObtenerEmpresasAsignadas::class);
+    });
 
     $app->group('/Llamadas', function (Group $group) {
         $group->get('', ListarLlamadas::class);

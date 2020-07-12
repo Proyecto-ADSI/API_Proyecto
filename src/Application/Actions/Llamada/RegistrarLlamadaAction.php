@@ -56,7 +56,8 @@ class RegistrarLlamadaAction extends LlamadaAction
             $this->Lineas_FijasRepository,
             $this->NotificacionRepository,
             $this->Notificaciones_UsuarioRepository,
-            $this->AsignacionERepository
+            $this->AsignacionERepository,
+            $this->usuarioRepository
         );
         $Id_Cliente = null;
         if ($campos->Validacion_Cliente) {
