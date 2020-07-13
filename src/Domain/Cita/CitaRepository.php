@@ -21,11 +21,8 @@ interface CitaRepository
 
     public function ListarAsesoresExternos();
 
-<<<<<<< HEAD
     public function EditarCita(int $Id_Cita, string $Encargado, string $Ext_Tel, int $Representante, string $Fecha_Cita, string $Direccion, int $Id_Barrios_Vereda, string $Lugar_Referencia, int $Id_Operador);
 
-}
-=======
     public function ListarHorasCitas(int $Id_Operador, string $Fecha);
+
 }
->>>>>>> 82945ee349896b51e8be57847f6ac94221831e5f
