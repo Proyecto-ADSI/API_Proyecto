@@ -35,7 +35,6 @@ class BarriosVeredasPersistence implements BarriosVeredasRepository
             $stm->bindValue(5, $BarriosVeredas->__GET("Estado"));
 
             return $stm->execute();
-
         } catch (Exception $e) {
 
             return $e->getMessage();
@@ -56,49 +55,50 @@ class BarriosVeredasPersistence implements BarriosVeredasRepository
             $stm->execute();
 
             return $stm->fetchAll(PDO::FETCH_ASSOC);
-
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
-    public function CambiarEstado(int $Id_Barrios_Veredas, int $Estado){
-        $sql = "UPDATE barrios_veredas SET Estado= ? WHERE Id_Barrios_Veredas = ?";
-   
-        try {
-          $stm = $this->db->prepare($sql);
-          $stm->bindParam(1, $Estado);
-          $stm->bindParam(2, $Id_Barrios_Veredas);
-   
-          return $stm->execute();
 
+    public function CambiarEstado(int $Id_Barrios_Veredas, int $Estado)
+    {
+        $sql = "UPDATE barrios_veredas SET Estado= ? WHERE Id_Barrios_Veredas = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindParam(1, $Estado);
+            $stm->bindParam(2, $Id_Barrios_Veredas);
+
+            return $stm->execute();
         } catch (\Exception $e) {
             return $e->getMessage();
         }
-      }
-  
-      public function ObtenerDatosBarriosVeredas(int $Id_Barrios_Veredas){
+    }
+
+    public function ObtenerDatosBarriosVeredas(int $Id_Barrios_Veredas)
+    {
         $sql = "SELECT b.Id_Barrios_Veredas, b.Codigo , b.Nombre_Barrio_Vereda, m.Id_Municipio, m.Nombre_Municipio,
         s.Id_SubTipo_Barrio_Vereda, s.SubTipo FROM barrios_veredas b                                           
         INNER JOIN municipios m ON (b.Id_Municipio = m.Id_Municipio)                                         
         INNER JOIN subtipo_barrio_vereda s ON (b.Id_SubTipo_Barrio_Vereda = s.Id_SubTipo_Barrio_Vereda)
         WHERE Id_Barrios_Veredas = ?";
- 
-        try {
-           $stm = $this->db->prepare($sql);
-           $stm->bindParam(1, $Id_Barrios_Veredas);
-           
-           $stm->execute();
-           return $stm->fetch(PDO::FETCH_ASSOC);
 
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindParam(1, $Id_Barrios_Veredas);
+
+            $stm->execute();
+            return $stm->fetch(PDO::FETCH_ASSOC);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
 
-    public function EditarBarriosVeredas(BarriosVeredas $BarriosVeredas){
+    public function EditarBarriosVeredas(BarriosVeredas $BarriosVeredas)
+    {
         $sql = "UPDATE barrios_veredas SET Codigo = ?, Nombre_Barrio_Vereda = ?, 
         Id_Municipio = ?, Id_SubTipo_Barrio_Vereda = ? WHERE Id_Barrios_Veredas = ?";
-        
+
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindValue(1, $BarriosVeredas->__GET("Codigo"));
@@ -106,9 +106,8 @@ class BarriosVeredasPersistence implements BarriosVeredasRepository
             $stm->bindValue(3, $BarriosVeredas->__GET("Id_Municipio"));
             $stm->bindValue(4, $BarriosVeredas->__GET("Id_SubTipo_Barrio_Vereda"));
             $stm->bindValue(5, $BarriosVeredas->__GET("Id_Barrios_Veredas"));
-            
+
             return $stm->execute();
- 
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -122,13 +121,12 @@ class BarriosVeredasPersistence implements BarriosVeredasRepository
         try {
 
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1,$Id_Barrios_Veredas);
+            $stm->bindValue(1, $Id_Barrios_Veredas);
             $stm->execute();
 
             return $stm->fetchAll(PDO::FETCH_ASSOC);
-
         } catch (Exception $e) {
-        return $e->getMessage();
+            return $e->getMessage();
         }
     }
 
@@ -138,19 +136,18 @@ class BarriosVeredasPersistence implements BarriosVeredasRepository
 
         try {
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1,$Id_Barrios_Veredas);
+            $stm->bindValue(1, $Id_Barrios_Veredas);
 
-            
+
             return $stm->execute();
-
-
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
-    
 
-    public function ConsultarBarriosVeredasMunicipio(int $Id_Municipio, int $Id_SubTipo){
+
+    public function ConsultarBarriosVeredasMunicipio(int $Id_Municipio, int $Id_SubTipo)
+    {
 
         $sql = "SELECT Id_Barrios_Veredas, Nombre_Barrio_Vereda FROM barrios_veredas 
         WHERE Id_Municipio = ? AND Id_SubTipo_Barrio_Vereda  = ? ";
@@ -158,15 +155,13 @@ class BarriosVeredasPersistence implements BarriosVeredasRepository
         try {
 
             $stm = $this->db->prepare($sql);
-            $stm->bindValue(1,$Id_Municipio);
-            $stm->bindValue(2,$Id_SubTipo);
-            $stm->execute();    
-            
+            $stm->bindValue(1, $Id_Municipio);
+            $stm->bindValue(2, $Id_SubTipo);
+            $stm->execute();
+
             return $stm->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             return $e->getMessage();
         }
-
     }
-    
 }

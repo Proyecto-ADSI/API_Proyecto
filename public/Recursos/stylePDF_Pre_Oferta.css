@@ -1,0 +1,303 @@
+.cardPropuesta {
+  width: 100%;
+  padding: 20px 20px;
+}
+
+.cardPropuesta .tituloPropuesta {
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+
+.cardPropuesta .colum1Titulo {
+  min-width: 250px;
+  padding-left: 20px;
+}
+
+.fila2 {
+  background-color: #f2f4f8;
+}
+
+.cardPropuesta .columna1 {
+  /* text-align: center; */
+  font-weight: bold;
+  padding-left: 20px;
+}
+
+/* .cardPropuesta .columna2 {
+    text-align: center;
+  } */
+
+.cardPropuesta .tdPadre {
+  position: relative;
+}
+
+.cardPropuesta .divHijo {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  margin: auto;
+}
+
+.SubTituloOferta {
+  font-weight: bold;
+}
+
+.imgOperador {
+  height: 150px;
+  text-align: center;
+}
+
+.imgOperador img {
+  height: 100%;
+}
+
+.colPadre {
+  position: relative;
+}
+
+#filaAclaraciones_Notas {
+  margin-bottom: 50px;
+}
+.sectionAclaraciones {
+  border-radius: 80px;
+  background-color: #a82d2d;
+  color: #fff;
+  padding: 20px 50px;
+  margin-left: 5%;
+}
+
+.sectionAclaraciones h2 {
+  color: #fff;
+}
+
+.sectionAclaraciones ul li {
+  text-align: justify;
+  margin-top: 15px;
+}
+
+.sectionNotas {
+  padding: 20px 50px;
+}
+
+.sectionNotas ul li {
+  margin-bottom: 10px;
+}
+
+.sectionIndicaciones {
+  border-radius: 80px;
+  border: #379b79 solid 8px;
+  padding: 40px 20px 5px 20px;
+  margin-left: 5%;
+}
+
+.sectionContacto {
+  padding: 40px;
+  margin-left: 5%;
+  /* box-shadow: 14px 10px 35px 8px rgba(0, 0, 0, 0.5); */
+  border-radius: 80px;
+}
+
+/* .sectionContacto .centarContenido {
+  text-align: center;
+  padding-top: 30px;
+} */
+
+.infoAsesor1 {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.infoAsesor1 span {
+  font-size: 20px;
+  font-weight: bold;
+  margin-right: 80px;
+}
+.CardServicios {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  /* transform: translate(-50%, -50%); */
+  /* background: #495057; */
+  overflow: hidden;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+}
+
+.CardServicios .poster {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.CardServicios .poster::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* background: linear-gradient(0deg, #379b79 10%, transparent); */
+  transition: 0.5s;
+  z-index: 1;
+}
+
+.CardServicios .poster .icon {
+  width: 100%;
+  height: 100%;
+  font-size: 9rem;
+  /* text-align: center; */
+}
+
+.CardServicios .poster .icon i {
+  position: absolute;
+  top: 0;
+  left: 25%;
+}
+.CardServicios .details {
+  position: absolute;
+  padding: 20px;
+  height: 100%;
+  width: 100%;
+  bottom: -65%;
+  left: 0;
+  box-sizing: border-box;
+  transition: 0.5s;
+  z-index: 2;
+}
+
+.CardServicios:hover .details {
+  bottom: 0;
+  background-color: #495057;
+  color: #fff;
+}
+.CardServicios .details.show {
+  bottom: 0;
+  background-color: #495057;
+  color: #fff;
+}
+
+.CardServicios .details.show .info {
+  display: block;
+}
+
+.CardServicios .details .titulo {
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.CardServicios .details .titulo label {
+  font-size: 2rem !important;
+  transition: none;
+}
+
+.CardServicios:hover .details .titulo label {
+  transition: none;
+}
+.CardServicios .details .info {
+  display: none;
+  margin-top: 10px;
+}
+.CardServicios:hover .details .info {
+  display: block;
+  /* transition: 0.5s; */
+}
+
+.CardServicios .details .info h4 {
+  color: #fff;
+  font-weight: bold;
+}
+.CardServicios .details .info .mensaje_consulta {
+  font-size: 10px;
+  color: #99abb4;
+}
+
+.icono_mark {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 5%;
+  color: #00897b;
+  font-size: 2rem;
+}
+.icono_mark.show {
+  display: block;
+}
+
+#Pseudo_tabOfertaE {
+  cursor: pointer;
+}
+#Pseudo_tabOfertaP {
+  cursor: pointer;
+}
+
+/* Comparativo */
+
+.cardComparativo {
+  border: 2px solid #495057 !important;
+  border-radius: 10px !important;
+}
+
+.textHeaderComparativo {
+  width: 100%;
+  text-align: center;
+}
+
+.txtHeader {
+  width: 25%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 36px;
+}
+
+.cardAjuste {
+  width: 100%;
+  margin: 0 5% 5% 5%;
+}
+
+.titulo_comparativo {
+  background-color: #495057;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* .cardAjuste {
+  border: 2px solid !important;
+  border-radius: 10px !important;
+} */
+
+.titulo_ajuste {
+  font-weight: bold;
+  text-align: center;
+  color: #fff;
+}
+
+/* Ajustes PDF */
+.font-weight-bold {
+  font-weight: bold !important;
+}
+
+.cardPropuesta2 {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.labelItem {
+  color: #fff;
+  font-weight: bold;
+  /* line-height: 13px;
+  border-radius: 4px; */
+  /* font-size: 75%; */
+}
+
+.fa {
+  font-family: fontawesome !important;
+}

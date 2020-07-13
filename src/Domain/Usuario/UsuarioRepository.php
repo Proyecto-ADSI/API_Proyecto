@@ -10,6 +10,8 @@ interface UsuarioRepository
 
     public  function ObtenerUsuario(int $Id_Usuario);
 
+    public function ObtenerCantidadUsuarios(int $Id_Rol, int $Estado);
+
     public function login(string $usuario);
 
     public function RegistrarUsuario(Usuario $login);

@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Application\Actions\Cliente;
 
 use App\Application\Actions\Action;
+use App\Domain\AsignacionEmpresas\AsignacionERepository;
 use App\Domain\BarriosVeredas\BarriosVeredasRepository;
 use App\Domain\Cliente\ClienteRepository;
+use App\Domain\Configuracion\ConfiguracionRepository;
 use App\Domain\DBL\DBLRepository;
 use App\Domain\Departamento\DepartamentoRepository;
 use App\Domain\Plan_Corporativo\Plan_CorporativoRepository;
@@ -18,6 +20,7 @@ use App\Domain\Pais\PaisRepository;
 use App\Domain\SubTipo\SubTipoRepository;
 use App\Domain\Notificacion\NotificacionRepository;
 use App\Domain\Notificaciones_Usuario\Notificaciones_UsuarioRepository;
+use App\Domain\Usuario\UsuarioRepository;
 use Psr\Log\LoggerInterface;
 
 abstract class ClienteAction extends Action
@@ -36,6 +39,9 @@ abstract class ClienteAction extends Action
     protected $Lineas_FijasRepository;
     protected $NotificacionRepository;
     protected $Notificaciones_UsuarioRepository;
+    protected $AsignacionERepository;
+    protected $UsuarioRepository;
+    protected $ConfiguracionRepository;
 
     public function __construct(
         LoggerInterface $logger,
@@ -51,7 +57,10 @@ abstract class ClienteAction extends Action
         LineaRepository $LineaRepository,
         Lineas_FijasRepository $Lineas_FijasRepository,
         NotificacionRepository $NotificacionRepository,
-        Notificaciones_UsuarioRepository $Notificaciones_UsuarioRepository
+        Notificaciones_UsuarioRepository $Notificaciones_UsuarioRepository,
+        AsignacionERepository $AsignacionERepository,
+        UsuarioRepository $UsuarioRepository,
+        ConfiguracionRepository $ConfiguracionRepository
     ) {
         parent::__construct($logger);
         $this->ClienteRepository = $ClienteRepository;
@@ -67,5 +76,9 @@ abstract class ClienteAction extends Action
         $this->Lineas_FijasRepository = $Lineas_FijasRepository;
         $this->NotificacionRepository = $NotificacionRepository;
         $this->Notificaciones_UsuarioRepository = $Notificaciones_UsuarioRepository;
+        $this->AsignacionERepository = $AsignacionERepository;
+        $this->UsuarioRepository = $UsuarioRepository;
+        $this->ConfiguracionRepository = $ConfiguracionRepository;
+
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Domain\Cliente;
 
-interface ClienteRepository{
+interface ClienteRepository
+{
 
     public function ListarCliente();
 
@@ -30,6 +32,6 @@ interface ClienteRepository{
     public function ValidarUbicacionCliente(?string $Municipio, ?string $Lugar);
 
     public function ValidarOperadorCliente(string $operador);
-    
+
     public function ValidarCliente(string $texto);
 }

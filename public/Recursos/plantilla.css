@@ -1,0 +1,478 @@
+/*******************
+Table-Layout
+******************/
+.table thead th,
+.table th {
+  border: 0px;
+}
+/*******************
+Paddings
+*******************/
+html body .p-0 {
+  padding: 0px;
+}
+
+html body .p-10 {
+  padding: 10px;
+}
+
+html body .p-20 {
+  padding: 20px;
+}
+
+html body .p-30 {
+  padding: 30px;
+}
+
+html body .p-l-0 {
+  padding-left: 0px;
+}
+
+html body .p-l-10 {
+  padding-left: 10px;
+}
+
+html body .p-l-20 {
+  padding-left: 20px;
+}
+
+html body .p-r-0 {
+  padding-right: 0px;
+}
+
+html body .p-r-10 {
+  padding-right: 10px;
+}
+
+html body .p-r-20 {
+  padding-right: 20px;
+}
+
+html body .p-r-30 {
+  padding-right: 30px;
+}
+
+html body .p-r-40 {
+  padding-right: 40px;
+}
+
+html body .p-t-0 {
+  padding-top: 0px;
+}
+
+html body .p-t-10 {
+  padding-top: 10px;
+}
+
+html body .p-t-20 {
+  padding-top: 20px;
+}
+
+html body .p-t-30 {
+  padding-top: 30px;
+}
+
+html body .p-b-0 {
+  padding-bottom: 0px;
+}
+
+html body .p-b-5 {
+  padding-bottom: 5px;
+}
+
+html body .p-b-10 {
+  padding-bottom: 10px;
+}
+
+html body .p-b-20 {
+  padding-bottom: 20px;
+}
+
+html body .p-b-30 {
+  padding-bottom: 30px;
+}
+
+html body .p-b-40 {
+  padding-bottom: 40px;
+}
+
+/*******************
+  Margin
+  *******************/
+html body .m-0 {
+  margin: 0px;
+}
+
+html body .m-l-5 {
+  margin-left: 5px;
+}
+
+html body .m-l-10 {
+  margin-left: 10px;
+}
+
+html body .m-l-15 {
+  margin-left: 15px;
+}
+
+html body .m-l-20 {
+  margin-left: 20px;
+}
+
+html body .m-l-30 {
+  margin-left: 30px;
+}
+
+html body .m-l-40 {
+  margin-left: 40px;
+}
+
+html body .m-r-5 {
+  margin-right: 5px;
+}
+
+html body .m-r-10 {
+  margin-right: 10px;
+}
+
+html body .m-r-15 {
+  margin-right: 15px;
+}
+
+html body .m-r-20 {
+  margin-right: 20px;
+}
+
+html body .m-r-30 {
+  margin-right: 30px;
+}
+
+html body .m-r-40 {
+  margin-right: 40px;
+}
+
+html body .m-t-0 {
+  margin-top: 0px;
+}
+
+html body .m-t-5 {
+  margin-top: 5px;
+}
+
+html body .m-t-10 {
+  margin-top: 10px;
+}
+
+html body .m-t-15 {
+  margin-top: 15px;
+}
+
+html body .m-t-20 {
+  margin-top: 20px;
+}
+
+html body .m-t-30 {
+  margin-top: 30px;
+}
+
+html body .m-t-40 {
+  margin-top: 40px;
+}
+
+html body .m-b-0 {
+  margin-bottom: 0px;
+}
+
+html body .m-b-5 {
+  margin-bottom: 5px;
+}
+
+html body .m-b-10 {
+  margin-bottom: 10px;
+}
+
+html body .m-b-15 {
+  margin-bottom: 15px;
+}
+
+html body .m-b-20 {
+  margin-bottom: 20px;
+}
+
+html body .m-b-30 {
+  margin-bottom: 30px;
+}
+
+html body .m-b-40 {
+  margin-bottom: 40px;
+}
+
+/*******************
+font weight
+*******************/
+html body .font-bold {
+  font-weight: 700;
+}
+
+html body .font-normal {
+  font-weight: normal;
+}
+
+html body .font-light {
+  font-weight: 300;
+}
+
+html body .font-medium {
+  font-weight: 500;
+}
+
+html body .font-16 {
+  font-size: 16px;
+}
+
+html body .font-14 {
+  font-size: 14px;
+}
+
+html body .font-10 {
+  font-size: 10px;
+}
+
+html body .font-18 {
+  font-size: 18px;
+}
+
+html body .font-20 {
+  font-size: 20px;
+}
+/*******************
+Text Colors
+*******************/
+.text-white {
+  color: #ffffff !important;
+}
+
+.text-danger {
+  color: #ef5350 !important;
+}
+
+.text-muted {
+  color: #99abb4 !important;
+}
+
+.text-warning {
+  color: #ffb22b !important;
+}
+
+.text-success {
+  color: #26dad2 !important;
+}
+
+.text-info {
+  color: #1976d2 !important;
+}
+
+.text-inverse {
+  color: #2f3d4a !important;
+}
+
+html body .text-blue {
+  color: #02bec9;
+}
+
+html body .text-purple {
+  color: #7460ee;
+}
+
+html body .text-primary {
+  color: #5c4ac7;
+}
+
+html body .text-megna {
+  color: #00897b;
+}
+
+html body .text-dark {
+  color: #67757c;
+}
+
+html body .text-themecolor {
+  color: #1976d2;
+}
+
+/*******************
+  Background Colors
+  *******************/
+.bg-primary {
+  background-color: #5c4ac7 !important;
+}
+
+.bg-success {
+  background-color: #26dad2 !important;
+}
+
+.bg-info {
+  background-color: #1976d2 !important;
+}
+
+.bg-warning {
+  background-color: #ffb22b !important;
+}
+
+.bg-danger {
+  background-color: #ef5350 !important;
+}
+
+html body .bg-megna {
+  background-color: #00897b;
+}
+
+html body .bg-theme {
+  background-color: #1976d2;
+}
+
+html body .bg-inverse {
+  background-color: #2f3d4a;
+}
+
+html body .bg-purple {
+  background-color: #7460ee;
+}
+
+html body .bg-light-part {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+html body .bg-light-primary {
+  background-color: #f1effd;
+}
+
+html body .bg-light-success {
+  background-color: #e8fdeb;
+}
+
+html body .bg-light-info {
+  background-color: #cfecfe;
+}
+
+html body .bg-light-extra {
+  background-color: #ebf3f5;
+}
+
+html body .bg-light-warning {
+  background-color: #fff8ec;
+}
+
+html body .bg-light-danger {
+  background-color: #f9e7eb;
+}
+
+html body .bg-light-inverse {
+  background-color: #f6f6f6;
+}
+
+html body .bg-light {
+  background-color: #f2f4f8;
+}
+
+html body .bg-white {
+  background-color: #ffffff;
+}
+/*******************
+Labels
+*******************/
+.label {
+  padding: 3px 10px;
+  line-height: 13px;
+  color: #ffffff;
+  font-weight: 400;
+  border-radius: 4px;
+  font-size: 75%;
+}
+
+.label-rounded {
+  border-radius: 60px;
+}
+
+.label-custom {
+  background-color: #00897b;
+}
+
+.label-success {
+  background-color: #26dad2;
+}
+
+.label-info {
+  background-color: #1976d2;
+}
+
+.label-warning {
+  background-color: #ffb22b;
+}
+
+.label-danger {
+  background-color: #ef5350;
+}
+
+.label-megna {
+  background-color: #00897b;
+}
+
+.label-primary {
+  background-color: #5c4ac7;
+}
+
+.label-purple {
+  background-color: #7460ee;
+}
+
+.label-red {
+  background-color: #fb3a3a;
+}
+
+.label-inverse {
+  background-color: #2f3d4a;
+}
+
+.label-default {
+  background-color: #f2f4f8;
+}
+
+.label-white {
+  background-color: #ffffff;
+}
+
+.label-light-success {
+  background-color: #e8fdeb;
+  color: #26dad2;
+}
+
+.label-light-info {
+  background-color: #cfecfe;
+  color: #1976d2;
+}
+
+.label-light-warning {
+  background-color: #fff8ec;
+  color: #ffb22b;
+}
+
+.label-light-danger {
+  background-color: #f9e7eb;
+  color: #ef5350;
+}
+
+.label-light-megna {
+  background-color: #e0f2f4;
+  color: #00897b;
+}
+
+.label-light-primary {
+  background-color: #f1effd;
+  color: #5c4ac7;
+}
+
+.label-light-inverse {
+  background-color: #f6f6f6;
+  color: #2f3d4a;
+}

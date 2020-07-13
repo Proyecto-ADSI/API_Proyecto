@@ -72,7 +72,7 @@ class ClientePersistence implements ClienteRepository
 
 
                     $sql = " SELECT d.Id_DBL, l.Id_Linea_Movil, IFNULL(l.Linea, '0') Linea, IFNULL(l.Minutos,'N/A') Minutos, 
-                    IFNULL(l.Navegacion,'N/A') Navegacion, IFNULL(l.Mensajes,'N/A') Mensajes, IFNULL(l.Redes_Sociales,',') Redes_Sociales,
+                    IFNULL(l.Navegacion,'N/A') Navegacion, IFNULL(l.Mensajes,'N/A') Mensajes, IFNULL(l.Servicios_Ilimitados,',') Servicios_Ilimitados,
                     IFNULL(l.Minutos_LDI,',') Minutos_LDI, IFNULL(l.Cantidad_LDI,'N/A') Cantidad_LDI,
                     IFNULL(l.Servicios_Adicionales,',') Servicios_Adicionales, l.Cargo_Basico, l.Grupo 
                     FROM detalle_lineas d JOIN lineas_moviles l ON(d.Id_Linea_Movil = l.Id_Linea_Movil) 
@@ -152,7 +152,7 @@ class ClientePersistence implements ClienteRepository
         p.Id_Pais, IFNULL(p.Nombre_Pais,'N/A') Nombre_Pais, dbl.Id_DBL, IFNULL(dbl.Cantidad_Total_Lineas,'0') Cantidad_Total_Lineas, IFNULL(dbl.Valor_Total_Mensual,'0') Valor_Total_Mensual,
         IFNULL(dbl.Razones,',') Razones, IFNULL(o.Id_Operador,'0') Id_Operador, IFNULL(o.Nombre_Operador,'N/A') Nombre_Operador, o.Color,
         CASE WHEN  ISNULL(dbl.Id_Plan_Corporativo) = 0 THEN 'Si' ELSE 'No' END AS Corporativo, IFNULL(co.Id_Calificacion_Operador,'0') Id_Calificacion_Operador, 
-        IFNULL(co.Calificacion,'N/A') Calificacion, e.Id_Estado_DBL, e.Estado_DBL,
+        IFNULL(co.Calificacion,'N/A') Calificacion, e.Id_Estado_DBL, e.Estado_DBL, DATE_FORMAT(d.Fecha_Control,'%e/%b/%Y %h:%i:%s') Fecha_Control,
         IFNULL(pc.Id_Plan_Corporativo,'0') Id_Plan_Corporativo, DATE_FORMAT(pc.Fecha_Inicio,'%e/%b/%Y') Fecha_Inicio, DATE_FORMAT(pc.Fecha_Fin,'%e/%b/%Y') Fecha_Fin,
         pc.Clausula_Permanencia, IFNULL(pc.Descripcion,'N/A') Descripcion, pc.Estado_Plan_Corporativo,
         IFNULL(ds.Id_Documentos,'0') Id_Documentos, ds.Camara_Comercio, ds.Cedula_RL, ds.Soporte_Ingresos, ds.Detalles_Plan_Corporativo, ds.Oferta
@@ -183,7 +183,6 @@ class ClientePersistence implements ClienteRepository
                 $Info_Cliente = $stm->fetch(PDO::FETCH_ASSOC);
 
                 // Servicos Fijos
-
                 $sql2 = " SELECT d.Id_DBL, l.Id_Linea_Fija, l.Pagina_Web, l.Correo_Electronico,
                 l.IP_Fija, l.Dominio, l.Telefonia, l.Television
                 FROM detalle_lineas d JOIN lineas_fijas l ON(d.Id_Linea_Fija = l.Id_Linea_Fija) 
@@ -214,7 +213,7 @@ class ClientePersistence implements ClienteRepository
 
                 // Servicos Móviles
                 $sql = " SELECT d.Id_DBL, l.Id_Linea_Movil, IFNULL(l.Linea, '0') Linea, IFNULL(l.Minutos,'N/A') Minutos, 
-                    IFNULL(l.Navegacion,'N/A') Navegacion, IFNULL(l.Mensajes,'N/A') Mensajes, IFNULL(l.Redes_Sociales,',') Redes_Sociales,
+                    IFNULL(l.Navegacion,'N/A') Navegacion, IFNULL(l.Mensajes,'N/A') Mensajes, IFNULL(l.Servicios_Ilimitados,',') Servicios_Ilimitados,
                     IFNULL(l.Minutos_LDI,',') Minutos_LDI, IFNULL(l.Cantidad_LDI,'N/A') Cantidad_LDI,
                     IFNULL(l.Servicios_Adicionales,',') Servicios_Adicionales, l.Cargo_Basico, l.Grupo 
                     FROM detalle_lineas d JOIN lineas_moviles l ON(d.Id_Linea_Movil = l.Id_Linea_Movil) 
@@ -242,7 +241,6 @@ class ClientePersistence implements ClienteRepository
                 } catch (\Exception $e) {
                     return $e->getMessage();
                 }
-
                 return $Info_Cliente;
             } else {
                 return $stm->errorInfo();
@@ -272,15 +270,12 @@ class ClientePersistence implements ClienteRepository
             $stm->bindValue(10, $Cliente->__GET("Estado_Cliente"));
 
             $respuesta = $stm->execute();
-
-            $error = $stm->errorCode();
-            if ($error === '00000') {
-                return $respuesta;
+            if ($respuesta) {
+                return (int) $this->db->lastInsertId();
             } else {
                 return $stm->errorInfo();
             }
         } catch (Exception $e) {
-
             return "Error al registrar " . $e->getMessage();
         }
     }

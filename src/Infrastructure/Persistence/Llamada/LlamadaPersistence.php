@@ -37,7 +37,12 @@ class LlamadaPersistence implements LlamadaRepository
             $stm->bindValue(6, $Llamada->__GET("Observacion"));
             $stm->bindValue(7, $Llamada->__GET("Id_Estado_Llamada"));
 
-            return $stm->execute();
+            $respuesta = $stm->execute();
+            if ($respuesta) {
+                return (int) $this->db->lastInsertId();
+            } else {
+                return $stm->errorInfo();
+            }
         } catch (Exception $e) {
 
             return "Error al registrar " . $e->getMessage();
@@ -52,8 +57,9 @@ class LlamadaPersistence implements LlamadaRepository
         IFNULL(bv.Nombre_Barrio_Vereda,'N/A') Nombre_Barrio_Vereda, IFNULL(sbv.SubTipo,'N/A') SubTipo, 
         IFNULL(m.Nombre_Municipio,'N/A') Nombre_Municipio, IFNULL(dep.Nombre_Departamento,'N/A') Nombre_Departamento,
         IFNULL(p.Nombre_Pais,'N/A') Nombre_Pais, u.Id_Usuario, u.Usuario,
-        ll.Id_Llamada,ll.Persona_Responde, DATE_FORMAT(ll.Fecha_Llamada,'%e/%b/%Y %h:%i %p') Fecha_Llamada, ll.Duracion_Llamada,
-        CASE WHEN  ll.Info_Habeas_Data = 1 THEN 'Si' ELSE 'No' END AS Info_Habeas_Data, ll.Id_Estado_Llamada, e.Estado_Llamada, ll.Observacion
+        ll.Id_Llamada,ll.Persona_Responde, DATE_FORMAT(ll.Fecha_Llamada,'%e/%b/%Y %h:%i %p') Fecha_Llamada, ll.Duracion_Llamada, 
+        UNIX_TIMESTAMP(ll.Fecha_Llamada) Fecha_Filtro, CASE WHEN  ll.Info_Habeas_Data = 1 THEN 'Si' ELSE 'No' END AS Info_Habeas_Data,
+        ll.Id_Estado_Llamada, e.Estado_Llamada, ll.Observacion
         FROM llamadas ll 
         JOIN directorio d ON(ll.Id_Cliente = d.Id_Cliente)
         LEFT JOIN barrios_veredas bv ON(d.Id_Barrios_Veredas = bv.Id_Barrios_Veredas)

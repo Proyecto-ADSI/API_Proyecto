@@ -11,6 +11,8 @@ interface DBLRepository
 
     public function ListarDBL(int $Id_Cliente, int $Estado_DBL);
 
+    public function ObtenerDBL(int $Id_DBL);
+    
     public function EditarDBL(DBL $DBL);
 
     public function CambiarEstadoDBL(int $Id_DBL, int $Estado);

@@ -7,6 +7,8 @@ declare(strict_types=1);
 // use App\Application\Actions\User\ViewUserAction;
 
 // Usuario
+
+use App\Application\Actions\Atencion_Telefonica\ListarAtencionTelAction;
 use App\Application\Actions\Usuario\ListarUsuarios;
 use App\Application\Actions\Usuario\ObtenerUsuario;
 use App\Application\Actions\Usuario\EnviarCorreo;
@@ -147,6 +149,7 @@ use App\Application\Actions\Cliente\ValidarCliente;
 use App\Application\Actions\Cita\ListarCitasAction;
 use App\Application\Actions\Cita\CambiarEstadoCitasMultipleAction;
 use App\Application\Actions\Cita\CambiarEstadoCitasAction;
+use App\Application\Actions\Cita\HorasDisponiblesAction;
 use App\Application\Actions\Cita\PDFCitasAction;
 use App\Application\Actions\Cita\ListarCitaSinAsignarAction;
 use App\Application\Actions\Cita\ListarAsesoresInternosAction;
@@ -155,10 +158,13 @@ use App\Application\Actions\Cita\EditarCitaAction;
 use App\Application\Actions\Cita\ListarVisitasAction;
 use App\Application\Actions\Cita\CambiarEstadoCitasMultipleIntAction;
 use App\Application\Actions\Cita\AsignarCitasInterAction;
-
+use App\Application\Actions\Cliente\ListarAsignacionAction;
+use App\Application\Actions\Cliente\ObtenerEmpresasAsignadas;
+use App\Application\Actions\Llamada\PrecargarLlamada;
+use App\Application\Actions\Llamada\RegistrarLlamadaAction;
 //Novedad
 use App\Application\Actions\Novedades\RegistrarNovedadesAction;
-
+use App\Application\Actions\Pre_Oferta\ListarPre_OfertasAction;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -171,7 +177,7 @@ return function (App $app) {
     $app->options('/{routes:.+}', function ($request, $response, $args) {
         return $response;
     });
-    
+
     $app->add(function ($request, $handler) {
         $response = $handler->handle($request);
         return $response
@@ -220,12 +226,28 @@ return function (App $app) {
         $group->delete('/{Id_Cliente_Eliminar}', EliminarCliente::class);
         $group->post('/RegistrarClientes/ImportarClientes/{Id_Usuario}', ImportarClientes::class);
         $group->post('/SubirDocSoporte', CargarDocumentosSoporte::class);
+        
+    });
+
+    $app->group('/Asignacion', function (Group $group) {
+        $group->get('', ListarAsignacionAction::class);
+        $group->get('/ObtenerEmpresas/{Id_Usuario}', ObtenerEmpresasAsignadas::class);
     });
 
     $app->group('/Llamadas', function (Group $group) {
         $group->get('', ListarLlamadas::class);
-        $group->post('/LlamadaNP', RegistrarLlamadaNPAction::class);
+        $group->get('/Precargar/{Id_Usuario}', PrecargarLlamada::class);
+        $group->post('', RegistrarLlamadaAction::class);
     });
+
+    $app->group('/AtencionTel', function (Group $group) {
+        $group->get('', ListarAtencionTelAction::class);
+    });
+
+    $app->group('/PreOfertas', function (Group $group) {
+        $group->get('', ListarPre_OfertasAction::class);
+    });
+
 
     $app->group('/Notificaciones', function (Group $group) {
         $group->get('/{Id_Usuario}', ListarNotificaciones::class);
@@ -355,9 +377,13 @@ return function (App $app) {
         $group->get('/SinAsignar', ListarCitaSinAsignarAction::class);
         $group->get('/Asesores/Internos', ListarAsesoresInternosAction::class);
         $group->get('/Asesores/Externos', ListarAsesoresExternos::class);
+        $group->get('/HorasDisponibles/{Operador}/{Fecha}', HorasDisponiblesAction::class);
+        $group->post('/Asignar', AsignarCitasAction::class);
         $group->get('/Visitas', ListarVisitasAction::class);
         $group->patch('/Editar', EditarCitaAction::class);
     });
+
+    
 
     $app->group('/Novedades', function (Group $group) {
         $group->post('', RegistrarNovedadesAction::class);
