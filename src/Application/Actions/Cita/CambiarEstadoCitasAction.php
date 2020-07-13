@@ -14,8 +14,8 @@ class CambiarEstadoCitasAction extends CitaAction
          $campos = $this->getFormData();
 
          $Id_Cita = (int) $campos->Id_Cita;
-         $Estadovg = $campos->Estadovg;
-         $Datavg = $this->CitaRepository->CambiarEstadoV($Id_Cita,$Estadovg);
+         $Estadovg = $campos->Estado;
+         $Datavg = $this->CitaRepository->CambiarEstadoRC($Id_Cita,$Estadovg);
 
         return $this->respondWithData($Datavg);
 

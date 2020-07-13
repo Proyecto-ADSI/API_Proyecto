@@ -40,4 +40,80 @@ class VisitasPersistence implements VisitasRepository
         }
     }
 
+    public function ListarVisitas()
+    {
+        $sql = "SELECT v.Id_Visita,v.Id_Cita,v.Tipo_Visita,u.Usuario,e.Nombre,r.Nombre 'Rol',e.Imagen,e.Email,d.Razon_Social,d.NIT_CDV,d.Encargado,OP.Nombre_Operador 'Operador_Actual',IFNULL(OP.Correo_Operador,'N/A')'Correo_OP_Actual',OP.Color 'Color_OP_Actual',OP.Imagen_Operador 'Imagen_OP_Actual',IFNULL(d.Correo,'N/A') 'Correo_Empresa',bb.Nombre_Barrio_Vereda 'Barrio_Empresa',d.Telefono,IFNULL(d.Celular,'N/A') 'Celular_Empresa',c.Encargado_Cita,c.Ext_Tel_Contacto_Cita,c.Fecha_Cita,c.Direccion,b.Nombre_Barrio_Vereda,c.Lugar_Referencia,o.Nombre_Operador 'Operador_Cita',o.Imagen_Operador 'Imagen_OP_Cita',o.Color,IFNULL(o.Correo_Operador,'N/A')'Correo_Operador',c.Id_Estado_Cita,IFNULL(dv.Observacion,'N/A') 'Observacion' FROM visitas v
+        INNER JOIN citas c ON (v.Id_Cita = c.Id_Cita)
+        INNER JOIN barrios_veredas b ON (c.Id_Barrios_Veredas = b.Id_Barrios_Veredas)
+        INNER JOIN operadores o ON (c.Id_Operador = o.Id_Operador)
+        INNER JOIN llamadas ll ON (c.Id_Llamada = ll.Id_Llamada)
+        INNER JOIN directorio d ON (ll.Id_Cliente = d.Id_Cliente)
+        INNER JOIN barrios_veredas bb ON (d.Id_Barrios_Veredas = bb.Id_Barrios_Veredas)
+        INNER JOIN usuarios u ON (v.Id_Asesor = u.Id_Usuario)
+        INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado)
+        INNER JOIN roles r ON (u.Id_Rol = r.Id_Rol)
+        LEFT JOIN datos_visita dv ON(v.Id_Datos_Visita = dv.Id_Datos_Visita)
+        INNER JOIN datos_basicos_lineas dbl ON (d.Id_Cliente = dbl.Id_Cliente)
+        INNER JOIN operadores OP ON (dbl.Id_Operador = OP.Id_Operador)";
+
+        try {
+            $stm = $this->db->prepare($sql);
+
+            $stm->execute();
+
+            $err = $stm->errorCode();
+
+            if ($err === '00000') {
+                return $stm->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return $stm->errorInfo();
+            }
+
+
+        } catch (\PDOException $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function ListarOperadoresVisitas()
+    {
+        $sql = "SELECT o.Nombre_Operador 'Operador_Cita',o.Color FROM visitas v
+        INNER JOIN citas c ON (v.Id_Cita = c.Id_Cita)
+        INNER JOIN operadores o ON (c.Id_Operador = o.Id_Operador) GROUP BY o.Nombre_Operador";
+
+        try {
+            $stm = $this->db->prepare($sql);
+
+            $stm->execute();
+
+            $err = $stm->errorCode();
+
+            if ($err === '00000') {
+                return $stm->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return $stm->errorInfo();
+            }
+
+
+        } catch (\PDOException $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function ListarTiempoFin()
+    {
+        $sql = "SELECT Duracion_Cita FROM configuracion_sistema";
+
+      try {
+        $stm = $this->db->prepare($sql);
+        $stm->execute();
+
+        return $stm->fetch(PDO::FETCH_ASSOC);
+
+      } catch (\PDOException $e) {
+           $e->getMessage();
+      }
+
+    }
+
 }

@@ -80,9 +80,9 @@ class CitaPersistence implements CitaRepository
         s.SubTipo,b.Nombre_Barrio_Vereda,m.Nombre_Municipio, de.Nombre_Departamento, 
       
         o.Nombre_Operador, o.Color 'Color_Operador',
-        v.Id_Visita,v.Tipo_Visita,
-        dV.Id_Datos_Visita ,dV.Fecha_Visita ,dV.Tipo_Venta,dV.Calificacion,dV.Id_Estado_Visita,
-        Nv.Descripcion_Novedad, Nv.Fecha_Novedad
+        v.Id_Visita,v.Tipo_Visita,IFNULL(e.Nombre,'N/A')'Nombre_Asesor',
+        IFNULL(dV.Id_Datos_Visita,'N/A') 'Id_Datos_Visita',IFNULL(dV.Fecha_Visita,'N/A')'Fecha_Visita',IFNULL(dV.Tipo_Venta,'N/A')'Tipo_Venta',IFNULL(dV.Calificacion,'N/A')'Calificacion',IFNULL(dV.Id_Estado_Visita,'N/A')'Estados_Visita',
+        IFNULL(Nv.Id_Novedad,'N/A')'Id_Novedad', IFNULL(Nv.Descripcion_Novedad,'N/A')'Descripcion_Novedad', IFNULL(Nv.Fecha_Novedad,'N/A')'Fecha_Novedad', IFNULL(Nv.Estado_Novedad,'N/A') 'Estado_Novedad'
         from citas c  
 
         INNER JOIN llamadas l ON(c.Id_Llamada = l.Id_Llamada) 
@@ -95,6 +95,8 @@ class CitaPersistence implements CitaRepository
         INNER JOIN Operadores o ON(o.Id_Operador = c.Id_Operador)
         INNER JOIN estados_citas esc ON(esc.Id_Estado_Cita = c.Id_Estado_Cita)
         LEFT JOIN visitas v ON(v.Id_Cita = c.Id_Cita)
+        LEFT JOIN usuarios u ON (v.Id_Asesor = u.Id_Usuario)
+        LEFT JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado)
         LEFT JOIN datos_visita dV ON(dV.Id_Datos_Visita = v.Id_Datos_Visita)
         LEFT JOIN novedades Nv ON (Nv.Id_Cita = c.Id_Cita)";
 
@@ -122,30 +124,6 @@ class CitaPersistence implements CitaRepository
         try {
             $stm = $this->db->prepare($sql);
             $stm->bindParam(1, $Estado);
-            $stm->bindParam(2, $Id_Cita);
-
-            $res = $stm->execute();
-
-            $error = $stm->errorCode();
-            if ($error === '00000') {
-                return $res;
-            } else {
-                return $stm->errorInfo();
-            }
-
-        } catch (\Exception $e) {
-            $e->getMessage();
-        }
-    }
-
-
-    public function CambiarEstadoV(int $Id_Cita, int $EstadoV)
-    {
-        $sql = "UPDATE citas SET Id_Estado_Cita = ? WHERE Id_Cita = ?";
-
-        try {
-            $stm = $this->db->prepare($sql);
-            $stm->bindParam(1, $EstadoV);
             $stm->bindParam(2, $Id_Cita);
 
             $res = $stm->execute();
@@ -230,7 +208,7 @@ class CitaPersistence implements CitaRepository
 
     public function ListarAsesoresExternos()
     {
-        $sql = "SELECT u.Id_Usuario,u.Usuario, r.Nombre 'Rol' from usuarios u 
+        $sql = "SELECT u.Id_Usuario,u.Usuario, r.Nombre 'Rol',e.Imagen,e.Email from usuarios u 
         INNER JOIN roles r ON(u.Id_Rol = r.Id_Rol)
         INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado)
         WHERE r.Nombre = 'Asesor externo'";
@@ -240,9 +218,41 @@ class CitaPersistence implements CitaRepository
            $stm = $this->db->prepare($sql);
            $stm->execute();
            return $stm->fetchAll(PDO::FETCH_ASSOC);
-           
+
        } catch (\Exception $e) {
            $e->getMessage();
        }
+    }
+
+    public function EditarCita(int $Id_Cita, string $Encargado, string $Ext_Tel, int $Representante, string $Fecha_Cita, string $Direccion, int $Id_Barrios_Vereda, string $Lugar_Referencia, int $Id_Operador)
+    {
+        $sql = "UPDATE citas SET Encargado_Cita = ?, Ext_Tel_Contacto_Cita = ?, 
+         Representante_Legal = ?,  Fecha_Cita = ?,  Direccion = ?,  Id_Barrios_Veredas = ?,  Lugar_Referencia = ?, Id_Operador = ? WHERE Id_Cita = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindParam(1,$Encargado, PDO::PARAM_STR);
+            $stm->bindParam(2,$Ext_Tel, PDO::PARAM_STR);
+            $stm->bindParam(3,$Representante, PDO::PARAM_INT);
+            $stm->bindParam(4,$Fecha_Cita, PDO::PARAM_STR);
+            $stm->bindParam(5,$Direccion, PDO::PARAM_STR);
+            $stm->bindParam(6,$Id_Barrios_Vereda, PDO::PARAM_INT);
+            $stm->bindParam(7,$Lugar_Referencia, PDO::PARAM_STR);
+            $stm->bindParam(8,$Id_Operador, PDO::PARAM_INT);
+            $stm->bindParam(9,$Id_Cita, PDO::PARAM_INT);
+
+            
+            $respuesta =$stm->execute();
+
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                return $respuesta;
+            } else {
+                return $stm->errorInfo();
+            }
+
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
     }
 }

@@ -13,6 +13,11 @@ declare(strict_types=1);
   
       $Citas = $this->CitaRepository->ListarCita();
 
+      // foreach ($Citas as $Ids) {
+      //    $Idss = (int)$Ids['Id_Cita'];
+
+      //    $Citasss = $this->CitaRepository->ListarCita($Idss);
+      // }
 
       return $this->respondWithData($Citas);
       

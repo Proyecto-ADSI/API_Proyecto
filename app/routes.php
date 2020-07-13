@@ -151,6 +151,10 @@ use App\Application\Actions\Cita\PDFCitasAction;
 use App\Application\Actions\Cita\ListarCitaSinAsignarAction;
 use App\Application\Actions\Cita\ListarAsesoresInternosAction;
 use App\Application\Actions\Cita\ListarAsesoresExternos;
+use App\Application\Actions\Cita\EditarCitaAction;
+use App\Application\Actions\Cita\ListarVisitasAction;
+use App\Application\Actions\Cita\CambiarEstadoCitasMultipleIntAction;
+use App\Application\Actions\Cita\AsignarCitasInterAction;
 
 //Novedad
 use App\Application\Actions\Novedades\RegistrarNovedadesAction;
@@ -344,12 +348,15 @@ return function (App $app) {
     $app->group('/Citas', function (Group $group) {
         $group->get('', ListarCitasAction::class);
         $group->post('/CambioEstado/Multiple', CambiarEstadoCitasMultipleAction::class);
+        $group->patch('/Interna/Estado/Multiple', CambiarEstadoCitasMultipleIntAction::class);
         $group->patch('/CambioEstado', CambiarEstadoCitasAction::class);
+        $group->post('/Asignar/Internas', AsignarCitasInterAction::class);
         $group->post('/PDF', PDFCitasAction::class);
         $group->get('/SinAsignar', ListarCitaSinAsignarAction::class);
         $group->get('/Asesores/Internos', ListarAsesoresInternosAction::class);
         $group->get('/Asesores/Externos', ListarAsesoresExternos::class);
-        // $group->post('/Asignar', AsignarCitasAction::class);
+        $group->get('/Visitas', ListarVisitasAction::class);
+        $group->patch('/Editar', EditarCitaAction::class);
     });
 
     $app->group('/Novedades', function (Group $group) {

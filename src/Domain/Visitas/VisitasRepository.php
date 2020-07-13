@@ -7,4 +7,10 @@ interface VisitasRepository {
 
     public function RegistrarVisitas(Visitas $Visitas);
 
+    public function ListarVisitas();
+
+    public function ListarTiempoFin();
+
+    public function ListarOperadoresVisitas();
+
 }
