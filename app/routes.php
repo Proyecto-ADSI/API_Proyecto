@@ -160,7 +160,7 @@ use App\Application\Actions\Llamada\PrecargarLlamada;
 use App\Application\Actions\Llamada\RegistrarLlamadaAction;
 //Novedad
 use App\Application\Actions\Novedades\RegistrarNovedadesAction;
-
+use App\Application\Actions\Pre_Oferta\ListarPre_OfertasAction;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -239,6 +239,11 @@ return function (App $app) {
     $app->group('/AtencionTel', function (Group $group) {
         $group->get('', ListarAtencionTelAction::class);
     });
+
+    $app->group('/PreOfertas', function (Group $group) {
+        $group->get('', ListarPre_OfertasAction::class);
+    });
+
 
     $app->group('/Notificaciones', function (Group $group) {
         $group->get('/{Id_Usuario}', ListarNotificaciones::class);

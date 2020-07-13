@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Domain\AsignacionEmpresas;
 
 interface AsignacionERepository
-{
+{   
+    public function ValidarSiEmpresaAsignada(int $Id_Cliente);
+
     public function ValidarEmpresasAsignadas(int $Id_Usuario);
 
     public function ValidarEmpresaAsignadaContact(int $Id_Usuario, int $Id_Cliente);

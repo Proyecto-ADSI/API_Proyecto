@@ -11,5 +11,5 @@ interface AtencionTelefonicaRepository
 
     public function ListarAtencionTelefonica();
 
-    public function ConsultarUltimoRegistrado();
+    public function ObtenerInfoAtencionTelefonica(int $Id_AT);
 }

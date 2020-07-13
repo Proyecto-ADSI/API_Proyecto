@@ -19,6 +19,26 @@ class AsignacionEPersistence implements AsignacionERepository
         $this->db = $database->getConection();
     }
 
+    public function ValidarSiEmpresaAsignada(int $Id_Cliente)
+    {
+        $sql = "SELECT COUNT(Id_Cliente) Asignada FROM empresas_asignadas WHERE Id_Cliente = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindValue(1, $Id_Cliente);
+            $stm->execute();
+            
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                return $stm->fetch(PDO::FETCH_ASSOC);
+            } else {
+                $error = $stm->errorInfo();
+                return $error;
+            }
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
 
     public function ValidarEmpresasAsignadas(int $Id_Usuario)
     {
@@ -63,7 +83,8 @@ class AsignacionEPersistence implements AsignacionERepository
         }
     }
 
-    public function ListarEmpresasContact(int $Id_Usuario){
+    public function ListarEmpresasContact(int $Id_Usuario)
+    {
         $sql = "SELECT Id_Cliente FROM empresas_asignadas WHERE Id_Usuario = ?";
         try {
             $stm = $this->db->prepare($sql);

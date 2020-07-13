@@ -9,7 +9,7 @@ interface PreOfertaRepository
 
     public function RegistrarPreOferta(PreOferta $AT);
 
-    public function ListarPreOferta();
+    public function ListarPreOfertas();
 
     public function ConsultarUltimoRegistrado();
 
@@ -28,4 +28,12 @@ interface PreOfertaRepository
     public function RegistrarDBLActual(int $Id_DBL);
 
     public function RegistrarDBLAnterior(int $Id_DBL);
+
+    public function ObtenerPreOfertaEstandar(int $Id_Pre_Oferta);
+    
+    public function ObtenerPreOfertaPersonalizada(int $Id_Pre_Oferta);
+
+    public function ObtenerAclaraciones(int $Id_Pre_Oferta);
+
+    public function ObtenerNotas(int $Id_Pre_Oferta);
 }

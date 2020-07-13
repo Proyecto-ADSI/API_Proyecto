@@ -183,7 +183,6 @@ class ClientePersistence implements ClienteRepository
                 $Info_Cliente = $stm->fetch(PDO::FETCH_ASSOC);
 
                 // Servicos Fijos
-
                 $sql2 = " SELECT d.Id_DBL, l.Id_Linea_Fija, l.Pagina_Web, l.Correo_Electronico,
                 l.IP_Fija, l.Dominio, l.Telefonia, l.Television
                 FROM detalle_lineas d JOIN lineas_fijas l ON(d.Id_Linea_Fija = l.Id_Linea_Fija) 
@@ -242,7 +241,6 @@ class ClientePersistence implements ClienteRepository
                 } catch (\Exception $e) {
                     return $e->getMessage();
                 }
-
                 return $Info_Cliente;
             } else {
                 return $stm->errorInfo();

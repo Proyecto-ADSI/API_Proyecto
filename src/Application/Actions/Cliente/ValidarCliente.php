@@ -24,16 +24,26 @@ class ValidarCliente extends ClienteAction
             if ($Estado_Cliente == 1) {
                 return $this->respondWithData(["ok" => false, "llamar" => true, "cliente" => $cliente]);
             } else if ($Estado_Cliente == 0) {
-                // Validar si está asignado al usuario que origina validación.
-                $res  = $this->AsignacionERepository->ValidarEmpresaAsignadaContact($Id_Usuario, $Id_Cliente);
+
+                // Validar si empresa está asignada
+                $res = $this->AsignacionERepository->ValidarSiEmpresaAsignada($Id_Cliente);
                 $Asignada = (int) $res['Asignada'];
-                if ($Asignada == 1) {
-                    return $this->respondWithData(["ok" => false, "llamar" => true, "cliente" => $cliente]);
-                } else {
-                    $razones = "Cliente asignado a otro usuario";
+                if ($Asignada > 0) {
+                    // Validar si está asignado al usuario que origina validación.
+                    $res  = $this->AsignacionERepository->ValidarEmpresaAsignadaContact($Id_Usuario, $Id_Cliente);
+                    $Asignada = (int) $res['Asignada'];
+                    if ($Asignada == 1) {
+                        return $this->respondWithData(["ok" => false, "llamar" => true, "cliente" => $cliente]);
+                    } else {
+                        $razones = "Cliente asignado a otro usuario";
+                        return $this->respondWithData(["ok" => false, "llamar" => false, "cliente" => $cliente, "razones" => $razones]);
+                    }
+                }else{
+                    $razones = "Cliente con proceso activo";
                     return $this->respondWithData(["ok" => false, "llamar" => false, "cliente" => $cliente, "razones" => $razones]);
                 }
-            } else {
+            }
+            else {
                 $razones = "No es una empresa.";
                 return $this->respondWithData(["ok" => false, "llamar" => false, "cliente" => $cliente, "razones" => $razones]);
             }
