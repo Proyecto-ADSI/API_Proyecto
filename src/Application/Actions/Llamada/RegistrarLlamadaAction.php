@@ -57,7 +57,8 @@ class RegistrarLlamadaAction extends LlamadaAction
             $this->NotificacionRepository,
             $this->Notificaciones_UsuarioRepository,
             $this->AsignacionERepository,
-            $this->usuarioRepository
+            $this->usuarioRepository,
+            $this->configuracionRepository
         );
         $Id_Cliente = null;
         if ($campos->Validacion_Cliente) {
@@ -160,6 +161,7 @@ class RegistrarLlamadaAction extends LlamadaAction
                 $Id_Llamada,
                 $campos->Medio_Envio,
                 $campos->Tiempo_Post_Llamada,
+                $campos->Id_Operador_Oferta,
                 NULL
             );
             $res = $this->Atencion_TelefonicaRepository->RegistrarAtencionTelefonica($AT);
@@ -173,7 +175,6 @@ class RegistrarLlamadaAction extends LlamadaAction
                 NULL,
                 NULL,
                 $campos->Estado_Pre_Oferta,
-                $campos->Id_Operador_Oferta,
                 $campos->Nombre_Cliente,
                 $campos->Mensaje_Superior,
                 $campos->Tipo_Oferta

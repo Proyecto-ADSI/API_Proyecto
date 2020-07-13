@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Cliente;
 
+use App\Application\Actions\Configuracion\MetodosSistema;
 use App\Domain\Cliente\Cliente;
 use App\Domain\DBL\DBL;
 use App\Domain\Doc_Soporte\Doc_Soporte;
@@ -31,10 +32,22 @@ class RegistrarCliente extends ClienteAction
                 $Id_Cliente = $res;
                 $this->RegistrarDBL($campos, $Id_Cliente);
             }
+
+            // Actualizar Empresas X Contact en BD
+            $metodos = new MetodosSistema(
+                $this->logger,
+                $this->ConfiguracionRepository,
+                $this->UsuarioRepository,
+                $this->ClienteRepository,
+                $this->AsignacionERepository,
+            );
+            $metodos->ModificarEXC();
+            $metodos->ValidarEmpresasAsignadas();
+
             return $this->respondWithData(["ok" => true]);
         }
     }
-
+    
     public function RegistrarClientes($campos)
     {
         // Registrar Cliente

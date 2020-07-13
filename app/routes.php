@@ -7,6 +7,8 @@ declare(strict_types=1);
 // use App\Application\Actions\User\ViewUserAction;
 
 // Usuario
+
+use App\Application\Actions\Atencion_Telefonica\ListarAtencionTelAction;
 use App\Application\Actions\Usuario\ListarUsuarios;
 use App\Application\Actions\Usuario\ObtenerUsuario;
 use App\Application\Actions\Usuario\EnviarCorreo;
@@ -232,6 +234,10 @@ return function (App $app) {
         $group->get('', ListarLlamadas::class);
         $group->get('/Precargar/{Id_Usuario}', PrecargarLlamada::class);
         $group->post('', RegistrarLlamadaAction::class);
+    });
+
+    $app->group('/AtencionTel', function (Group $group) {
+        $group->get('', ListarAtencionTelAction::class);
     });
 
     $app->group('/Notificaciones', function (Group $group) {

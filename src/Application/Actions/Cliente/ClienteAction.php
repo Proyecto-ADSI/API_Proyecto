@@ -8,6 +8,7 @@ use App\Application\Actions\Action;
 use App\Domain\AsignacionEmpresas\AsignacionERepository;
 use App\Domain\BarriosVeredas\BarriosVeredasRepository;
 use App\Domain\Cliente\ClienteRepository;
+use App\Domain\Configuracion\ConfiguracionRepository;
 use App\Domain\DBL\DBLRepository;
 use App\Domain\Departamento\DepartamentoRepository;
 use App\Domain\Plan_Corporativo\Plan_CorporativoRepository;
@@ -40,6 +41,7 @@ abstract class ClienteAction extends Action
     protected $Notificaciones_UsuarioRepository;
     protected $AsignacionERepository;
     protected $UsuarioRepository;
+    protected $ConfiguracionRepository;
 
     public function __construct(
         LoggerInterface $logger,
@@ -57,7 +59,8 @@ abstract class ClienteAction extends Action
         NotificacionRepository $NotificacionRepository,
         Notificaciones_UsuarioRepository $Notificaciones_UsuarioRepository,
         AsignacionERepository $AsignacionERepository,
-        UsuarioRepository $UsuarioRepository
+        UsuarioRepository $UsuarioRepository,
+        ConfiguracionRepository $ConfiguracionRepository
     ) {
         parent::__construct($logger);
         $this->ClienteRepository = $ClienteRepository;
@@ -75,6 +78,7 @@ abstract class ClienteAction extends Action
         $this->Notificaciones_UsuarioRepository = $Notificaciones_UsuarioRepository;
         $this->AsignacionERepository = $AsignacionERepository;
         $this->UsuarioRepository = $UsuarioRepository;
+        $this->ConfiguracionRepository = $ConfiguracionRepository;
 
     }
 }

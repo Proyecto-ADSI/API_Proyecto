@@ -24,8 +24,8 @@ class PreOfertaPersistence implements PreOfertaRepository
 
     public function RegistrarPreOferta(PreOferta $PreOferta)
     {
-        $sql = "INSERT INTO pre_ofertas (Id_AT, Id_Visita,Id_Usuario,Id_Estado_PO,Id_Operador,Nombre_Cliente,Mensaje_Superior,Tipo_Pre_Oferta)
-        VALUES (?,?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO pre_ofertas (Id_AT, Id_Visita,Id_Usuario,Id_Estado_PO,Nombre_Cliente,Mensaje_Superior,Tipo_Pre_Oferta)
+        VALUES (?,?,?,?,?,?,?)";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -33,10 +33,9 @@ class PreOfertaPersistence implements PreOfertaRepository
             $stm->bindValue(2, $PreOferta->__GET("Id_Visita"));
             $stm->bindValue(3, $PreOferta->__GET("Id_Usuario"));
             $stm->bindValue(4, $PreOferta->__GET("Id_Estado_PO"));
-            $stm->bindValue(5, $PreOferta->__GET("Id_Operador"));
-            $stm->bindValue(6, $PreOferta->__GET("Nombre_Cliente"));
-            $stm->bindValue(7, $PreOferta->__GET("Mensaje_Superior"));
-            $stm->bindValue(8, $PreOferta->__GET("Tipo_Pre_Oferta"));
+            $stm->bindValue(5, $PreOferta->__GET("Nombre_Cliente"));
+            $stm->bindValue(6, $PreOferta->__GET("Mensaje_Superior"));
+            $stm->bindValue(7, $PreOferta->__GET("Tipo_Pre_Oferta"));
 
             $respuesta = $stm->execute();
             if ($respuesta) {
