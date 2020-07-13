@@ -48,7 +48,8 @@ class AtencionTelefonicaPersistence implements AtencionTelefonicaRepository
 
     public function ListarAtencionTelefonica()
     {
-        $sql = "SELECT a.Id_AT, a.Medio_Envio, a.Tiempo_Post_Llamada, IFNULL(a.Respuesta_Cliente,'N/A') Respuesta_Cliente,
+        $sql = "SELECT a.Id_AT, a.Medio_Envio, a.Tiempo_Post_Llamada, o.Id_Operador, o.Nombre_Operador, o.Color,
+        IFNULL(a.Respuesta_Cliente,'N/A') Respuesta_Cliente,
         d.Razon_Social, d.Telefono, d.Extension,IFNULL(d.NIT_CDV,'N/A') NIT_CDV, 
         IFNULL(d.Encargado,'N/A') Encargado,
         IFNULL(d.Correo,'N/A') Correo, IFNULL(d.Celular,'N/A') Celular, IFNULL(d.Direccion,'N/A') Direccion,
@@ -59,6 +60,7 @@ class AtencionTelefonicaPersistence implements AtencionTelefonicaRepository
         UNIX_TIMESTAMP(ll.Fecha_Llamada) Fecha_Filtro, CASE WHEN  ll.Info_Habeas_Data = 1 THEN 'Si' ELSE 'No' END AS Info_Habeas_Data,
         ll.Id_Estado_Llamada, e.Estado_Llamada, ll.Observacion
         FROM atencion_telefonica a 
+        JOIN operadores o ON(a.Id_Operador = o.Id_Operador)
         JOIN llamadas ll ON(a.Id_Llamada = ll.Id_Llamada)
         JOIN directorio d ON(ll.Id_Cliente = d.Id_Cliente)
         LEFT JOIN barrios_veredas bv ON(d.Id_Barrios_Veredas = bv.Id_Barrios_Veredas)
