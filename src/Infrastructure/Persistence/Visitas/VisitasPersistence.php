@@ -42,7 +42,13 @@ class VisitasPersistence implements VisitasRepository
 
     public function ListarVisitas()
     {
-        $sql = "SELECT v.Id_Visita,v.Id_Cita,v.Tipo_Visita,u.Usuario,e.Nombre,r.Nombre 'Rol',e.Imagen,e.Email,d.Razon_Social,d.NIT_CDV,d.Encargado,OP.Nombre_Operador 'Operador_Actual',IFNULL(OP.Correo_Operador,'N/A')'Correo_OP_Actual',OP.Color 'Color_OP_Actual',OP.Imagen_Operador 'Imagen_OP_Actual',IFNULL(d.Correo,'N/A') 'Correo_Empresa',bb.Nombre_Barrio_Vereda 'Barrio_Empresa',d.Telefono,IFNULL(d.Celular,'N/A') 'Celular_Empresa',c.Encargado_Cita,c.Ext_Tel_Contacto_Cita,c.Fecha_Cita,c.Direccion,b.Nombre_Barrio_Vereda,c.Lugar_Referencia,o.Nombre_Operador 'Operador_Cita',o.Imagen_Operador 'Imagen_OP_Cita',o.Color,IFNULL(o.Correo_Operador,'N/A')'Correo_Operador',c.Id_Estado_Cita,IFNULL(dv.Observacion,'N/A') 'Observacion' FROM visitas v
+        $sql = "SELECT v.Id_Visita,v.Id_Cita,v.Tipo_Visita,u.Usuario,e.Nombre,r.Nombre 'Rol',e.Imagen,e.Email,d.Razon_Social,d.NIT_CDV,
+        d.Encargado,OP.Nombre_Operador 'Operador_Actual',IFNULL(OP.Correo_Operador,'N/A')'Correo_OP_Actual',OP.Color 'Color_OP_Actual',
+        OP.Imagen_Operador 'Imagen_OP_Actual',IFNULL(d.Correo,'N/A') 'Correo_Empresa',bb.Nombre_Barrio_Vereda 'Barrio_Empresa',
+        d.Telefono,IFNULL(d.Celular,'N/A') 'Celular_Empresa',c.Encargado_Cita,c.Ext_Tel_Contacto_Cita,c.Fecha_Cita, c.Fecha_Cita AS Fecha_Fin_Cita,
+        c.Direccion,b.Nombre_Barrio_Vereda,c.Lugar_Referencia,o.Nombre_Operador 'Operador_Cita',o.Imagen_Operador 'Imagen_OP_Cita',o.Color,
+        IFNULL(o.Correo_Operador,'N/A')'Correo_Operador',c.Id_Estado_Cita,IFNULL(dv.Observacion,'N/A') 'Observacion' 
+        FROM visitas v
         INNER JOIN citas c ON (v.Id_Cita = c.Id_Cita)
         INNER JOIN barrios_veredas b ON (c.Id_Barrios_Veredas = b.Id_Barrios_Veredas)
         INNER JOIN operadores o ON (c.Id_Operador = o.Id_Operador)

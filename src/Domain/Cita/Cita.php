@@ -39,7 +39,7 @@ class Cita implements JsonSerializable
         ?int $Id_Cita,
         int $Id_Llamada, 
         string $Encargado_Cita,
-        string $Ext_Tel_Contacto_Cita,
+        ?string $Ext_Tel_Contacto_Cita,
         int $Representante_Legal,
         string $Fecha_Cita,
         string $Duracion_Verificacion,

@@ -53,7 +53,7 @@ class PreOfertaPersistence implements PreOfertaRepository
     {
         $sql = "SELECT po.Id_Pre_Oferta, CASE WHEN  ISNULL(po.Id_AT) = 0 THEN 'Atención telefónica' ELSE 'Visita' END AS Origen,
         po.Id_AT, po.Id_Visita, po.Id_Estado_PO, epo.Nombre_Estado_PO, 
-        IFNULL(u.Id_Usuario,'0') Id_Usuario_GPO, IFNULL(u.Usuario,'N/A') Usuario_GPO, Nombre_Cliente, Mensaje_Superior, Tipo_Pre_Oferta
+        IFNULL(u.Id_Usuario,'0') Id_Usuario_Gestion_PO, IFNULL(u.Usuario,'N/A') Usuario_Gestion_PO, Nombre_Cliente, Mensaje_Superior, Tipo_Pre_Oferta
         FROM pre_ofertas po JOIN estados_pre_oferta epo ON(epo.Id_Estado_PO = po.Id_Estado_PO)
         LEFT JOIN usuarios u ON(po.Id_Usuario = u.Id_Usuario)";
         try {
@@ -286,12 +286,14 @@ class PreOfertaPersistence implements PreOfertaRepository
 
     public function ObtenerPreOfertaPersonalizada(int $Id_Pre_Oferta)
     {
-        $sql = "SELECT pop.Id_POP, pop.Id_Pre_Oferta, pop.Id_Corporativo_Anterior, pop.Id_Corporativo_Actual, 
+        $sql = "SELECT pop.Id_POP, pop.Id_Pre_Oferta, cant.Id_DBL DBL_Anterior, cact.Id_DBL DBL_Actual, 
         pop.Basico_Neto_Operador1, pop.Basico_Neto_Operador2, pop.Valor_Neto_Operador1, pop.Valor_Bruto_Operador2, 
         pop.Bono_Activacion, pop.Valor_Neto_Operador2, pop.Total_Ahorro, pop.Reduccion_Anual, pop.Valor_Mes_Promedio, 
         pop.Ahorro_Mensual_Promedio
         FROM pre_ofertas po 
         JOIN pre_oferta_personalizada pop ON(pop.Id_Pre_Oferta = po.Id_Pre_Oferta)
+        JOIN corporativos_anteriores cant ON(cant.Id_DBL = pop.Id_Corporativo_Anterior)
+        JOIN corporativos_actuales - ON(cant.Id_DBL = pop.Id_Corporativo_Actual)
         WHERE pop.Id_Pre_Oferta = ?";
         try {
             $stm = $this->db->prepare($sql);
@@ -302,8 +304,6 @@ class PreOfertaPersistence implements PreOfertaRepository
             return $e->getMessage();
         }
     }
-
-
 
     public function ObtenerAclaraciones(int $Id_Pre_Oferta){
         $sql = "SELECT Aclaracion FROM aclaraciones WHERE Id_Pre_Oferta = ?";
