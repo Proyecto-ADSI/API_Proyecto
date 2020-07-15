@@ -30,7 +30,8 @@ class CambiarEstadoCitasMultipleAction extends CitaAction
         $this->PaisRepository,
         $this->LineaRepository,
         $this->CitaRepository,
-        $this->VisitasRepository
+        $this->VisitasRepository,
+        $this->ConfiguracionRepository
       );
       
       

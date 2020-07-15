@@ -79,7 +79,7 @@ class CitaPersistence implements CitaRepository
       
         o.Nombre_Operador, o.Color 'Color_Operador',
         v.Id_Visita,v.Tipo_Visita,IFNULL(e.Nombre,'N/A')'Nombre_Asesor',
-        IFNULL(dV.Id_Datos_Visita,'N/A') 'Id_Datos_Visita',IFNULL(dV.Fecha_Visita,'N/A')'Fecha_Visita',IFNULL(dV.Tipo_Venta,'N/A')'Tipo_Venta',IFNULL(dV.Calificacion,'N/A')'Calificacion',IFNULL(dV.Id_Estado_Visita,'N/A')'Estados_Visita',
+        IFNULL(dV.Id_Datos_Visita,'N/A') 'Id_Datos_Visita',IFNULL(dV.Fecha_Visita,'N/A')'Fecha_Visita',IFNULL(dV.Tipo_Venta,'N/A')'Tipo_Venta',IFNULL(dV.Calificacion,'N/A')'Calificacion',IFNULL(v.Id_Estado_Visita,'N/A')'Estados_Visita',
         IFNULL(Nv.Id_Novedad,'N/A')'Id_Novedad', IFNULL(Nv.Descripcion_Novedad,'N/A')'Descripcion_Novedad', IFNULL(Nv.Fecha_Novedad,'N/A')'Fecha_Novedad', IFNULL(Nv.Estado_Novedad,'N/A') 'Estado_Novedad'
         from citas c  
 
@@ -144,8 +144,8 @@ class CitaPersistence implements CitaRepository
         s.SubTipo,b.Nombre_Barrio_Vereda,m.Nombre_Municipio, de.Nombre_Departamento, 
       
         o.Nombre_Operador, o.Color 'Color_Operador',
-        v.Id_Visita,v.Tipo_Visita,
-        dV.Id_Datos_Visita ,dV.Fecha_Visita ,dV.Tipo_Venta,dV.Calificacion,dV.Id_Estado_Visita
+        v.Id_Visita,v.Tipo_Visita,v.Id_Estado_Visita,
+        dV.Id_Datos_Visita ,dV.Fecha_Visita ,dV.Tipo_Venta,dV.Calificacion
         from citas c  
 
         INNER JOIN llamadas l ON(c.Id_Llamada = l.Id_Llamada) 
