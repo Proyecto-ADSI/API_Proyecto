@@ -162,6 +162,7 @@ use App\Application\Actions\Cliente\ListarAsignacionAction;
 use App\Application\Actions\Cliente\ObtenerEmpresasAsignadas;
 use App\Application\Actions\Llamada\PrecargarLlamada;
 use App\Application\Actions\Llamada\RegistrarLlamadaAction;
+use App\Application\Actions\Municipio\ListarMunicipiosFiltro;
 //Novedad
 use App\Application\Actions\Novedades\RegistrarNovedadesAction;
 use App\Application\Actions\Oferta\ListarOfertasAction;
@@ -300,6 +301,7 @@ return function (App $app) {
         $group->get('', ListarMunicipioAction::class);
         $group->get('/ObtenerMunicipio/{Id_Municipio}', ObtenerDatosMunicipioAction::class);
         $group->get('/ConsultarMunicipio/{Id_Departamento}', ConsultarMunicipiosDepartamentoAction::class);
+        $group->get('/Filtro/{Municipio}', ListarMunicipiosFiltro::class);
         $group->put('', EditarMunicipioAction::class);
         $group->patch('/{Id_Municipio}/{Estado}', CambiarEstadoMunicipioAction::class);
         $group->delete('/{Id_Municipio}', EliminarMunicipioAction::class);
@@ -345,7 +347,7 @@ return function (App $app) {
         $group->get('', ListarOperadorAction::class);
         $group->get('/Obtener/{Id_Operador}', ObtenerOperadorAction::class);
         $group->get('/Oferta', ListarOperadorOferta::class);
-        $group->get('/Filtro', ListarOperadoresFiltro::class);
+        $group->get('/Filtro/{Operador}', ListarOperadoresFiltro::class);
         $group->put('', EditarOperadorAction::class);
         $group->patch('/{Id_Operador}/{Estado}', CambiarEstadoOperadorAction::class);
         $group->delete('/{Id_Operador}', EliminarOperadorAction::class);

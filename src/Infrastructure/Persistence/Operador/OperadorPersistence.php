@@ -84,13 +84,16 @@ class OperadorPersistence implements OperadorRepository
     }
 
     public function ListarOperadoresFiltro(string $texto){
-        $sql = "SELECT Id_Operador, Nombre_Operador FROM operadores ";
+        $sql = "SELECT Id_Operador id, Nombre_Operador text FROM operadores WHERE Nombre_Operador LIKE '%" . $texto ."%'";
 
         try {
             $stm = $this->db->prepare($sql);
-            $stm->execute();
-            
-            return $stm->fetchAll(PDO::FETCH_ASSOC);
+            $res =  $stm->execute();
+            if($res){
+                return $stm->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+                return $stm->errorInfo();
+            }
         } catch (Exception $e) {
             return $e->getMessage();
         }

@@ -54,11 +54,8 @@ class EditarCliente extends ClienteAction
                 NULL
             );
 
-
-
             // Validar si se editan o registran los documentos soporte
             if ($campos->Validacion_Doc_S) {
-
 
                 $Doc_Soporte = new Doc_Soporte(
                     NULL,
@@ -68,7 +65,6 @@ class EditarCliente extends ClienteAction
                     $campos->Detalles_Plan_Corporativo
                 );
 
-
                 if ($Id_Documentos > 0) {
                     // Editar documentos
                     $Doc_Soporte->__set("Id_Documentos", $Id_Documentos);
@@ -77,9 +73,7 @@ class EditarCliente extends ClienteAction
                 } else {
 
                     // Registrar ducumentos
-                    $this->Doc_SoporteRepository->RegistrarDocSoporte($Doc_Soporte);
-                    $InfoIdDoc = $this->Doc_SoporteRepository->ConsultarUltimoRegistrado();
-                    $Id_Documentos = (int) $InfoIdDoc['Id_Documentos'];
+                    $Id_Documentos = $this->Doc_SoporteRepository->RegistrarDocSoporte($Doc_Soporte);
                     $Plan_Corporativo->__set("Id_Documentos", $Id_Documentos);
                 }
 
@@ -89,9 +83,7 @@ class EditarCliente extends ClienteAction
                     $this->Plan_CorporativoRepository->EditarPlan_Corporativo($Plan_Corporativo);
                 } else {
                     // Registrar plan corporativo con documentos.
-                    $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($Plan_Corporativo);
-                    $InfoIdPlan = $this->Plan_CorporativoRepository->ConsultarUltimoRegistrado();
-                    $Id_Plan_Corporativo = (int) $InfoIdPlan['Id_Plan_Corporativo'];
+                    $Id_Plan_Corporativo = $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($Plan_Corporativo);
                 }
             } else {
 
@@ -104,9 +96,7 @@ class EditarCliente extends ClienteAction
                     }
                 } else {
                     // Registrar plan corporativo sin documentos.
-                    $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($Plan_Corporativo);
-                    $InfoIdPlan = $this->Plan_CorporativoRepository->ConsultarUltimoRegistrado();
-                    $Id_Plan_Corporativo = (int) $InfoIdPlan['Id_Plan_Corporativo'];
+                    $Id_Plan_Corporativo = $this->Plan_CorporativoRepository->RegistrarPlan_Corporativo($Plan_Corporativo);
                 }
             }
 
@@ -169,7 +159,7 @@ class EditarCliente extends ClienteAction
                     $lineaItem->minutos,
                     $lineaItem->navegacion,
                     $lineaItem->mensajes,
-                    $lineaItem->redes,
+                    $lineaItem->serviciosIlimitados,
                     $lineaItem->minutosLDI,
                     $lineaItem->cantidadLDI,
                     $lineaItem->serviciosAdicionales,
@@ -181,9 +171,8 @@ class EditarCliente extends ClienteAction
                     $linea->__set("Linea", $lineaItem->numero);
                 }
 
-                $this->LineaRepository->RegistrarLinea($linea);
-                $infoIdLinea = $this->LineaRepository->ConsultarUltimaLinea();
-                $this->LineaRepository->RegistrarDetalleLinea((int) $infoIdLinea['Id_Linea_Movil'], $campos->Id_DBL);
+                $Id_Linea = $this->LineaRepository->RegistrarLinea($linea);
+                $this->LineaRepository->RegistrarDetalleLinea($Id_Linea, $campos->Id_DBL);
             }
         }
 

@@ -10,12 +10,9 @@ class ListarOperadoresFiltro extends OperadorAction
 {
     protected function action(): Response
     {   
-        $parametros = $this->request->getQueryParams();
-
-        $texto = $parametros['texto'];
-
+        $texto = $this->resolveArg("Operador");
         $Operador = $this->OperadorRepository->ListarOperadoresFiltro($texto);
-        
+
         return $this->respondWithData($Operador);   
     }
 }

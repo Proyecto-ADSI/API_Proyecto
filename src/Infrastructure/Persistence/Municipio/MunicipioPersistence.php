@@ -39,7 +39,6 @@ class MunicipioPersistence implements MunicipioRepository
         }
     }
 
-
     public function ListarMunicipio()
     {
         $sql = "SELECT m.Id_Municipio, m.Nombre_Municipio,m.Estado ,d.Id_Departamento,d.Nombre_Departamento 
@@ -60,6 +59,22 @@ class MunicipioPersistence implements MunicipioRepository
 
         } catch (Exception $e) {
             return "Error al listar" . $e->getMessage();
+        }
+    }
+
+    public function ListarMunicipiosFiltro(string $texto){
+        $sql = "SELECT Id_Municipio id, Nombre_Municipio text FROM municipios WHERE Nombre_Municipio LIKE '%" . $texto ."%'";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $res =  $stm->execute();
+            if($res){
+                return $stm->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+                return $stm->errorInfo();
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
         }
     }
 
@@ -157,12 +172,5 @@ class MunicipioPersistence implements MunicipioRepository
             return $e->getMessage();
         }
 
-    }
-
-
-    
-
-
-
-    
+    } 
 }

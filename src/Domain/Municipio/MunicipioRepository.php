@@ -9,6 +9,8 @@ interface MunicipioRepository{
 
     public function ListarMunicipio();
 
+    public function ListarMunicipiosFiltro(string $texto);
+
     public function CambiarEstado(int $Id_Municipios, int $Estado);
 
     public function ObtenerDatosMunicipio(int $Id_Municipios);
