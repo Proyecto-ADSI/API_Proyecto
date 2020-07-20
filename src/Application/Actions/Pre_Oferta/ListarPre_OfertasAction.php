@@ -38,10 +38,10 @@ class ListarPre_OfertasAction extends Pre_OfertaAction
                     array_push($arrayRespuesta, $info);
                 } else {
                     $res = $this->Pre_OfertaRepository->ObtenerPreOfertaPersonalizada($Id_Pre_Oferta);
-                    $Id_Corp_Anterior = (int) $res['Id_Corporativo_Anterior'];
-                    $Id_Corp_Actual = (int) $res['Id_Corporativo_Actual'];
-                    $DBLCliente = $this->DBLRepository->ObtenerDBL($Id_Corp_Anterior);
-                    $DBLOferta = $this->DBLRepository->ObtenerDBL($Id_Corp_Actual);
+                    $Id_DBL_Anterior = (int) $res['DBL_Anterior'];
+                    $Id_DBL_Actual = (int) $res['DBL_Actual'];
+                    $DBLCliente = $this->DBLRepository->ObtenerDBL($Id_DBL_Anterior);
+                    $DBLOferta = $this->DBLRepository->ObtenerDBL($Id_DBL_Actual);
                     // Obtener info de textos
                     $aclaraciones = $this->Pre_OfertaRepository->ObtenerAclaraciones($Id_Pre_Oferta);
                     $notas = $this->Pre_OfertaRepository->ObtenerNotas($Id_Pre_Oferta);

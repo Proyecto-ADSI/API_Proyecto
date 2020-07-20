@@ -17,9 +17,10 @@ class AsignarCitasInterAction extends CitaAction
       foreach($campos as $Cita){
 
         $Id = (int) $Cita->Id_Cita;
-        $Estado = $Cita->Estado;
+        $Estado = $Cita->Estado_Cita;
         $TipoVisita =(int)$Cita->TipoVisita;
         $Id_Asesor_Interno = (int)$Cita->Id_Asesor_Interno;
+        $Id_Estado_Visita = (int)$Cita->Id_Estado_Visitaa;
 
         $datos = new Visitas(
            NULL,
@@ -27,6 +28,7 @@ class AsignarCitasInterAction extends CitaAction
            $Id_Asesor_Interno,
            $Id,
            NULL,
+           $Id_Estado_Visita
         );
 
         if (is_numeric($Id) && is_numeric($Estado) && is_numeric($TipoVisita) && is_numeric($Id_Asesor_Interno)) {

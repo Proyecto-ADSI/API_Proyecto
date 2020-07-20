@@ -55,10 +55,10 @@ class AtencionTelefonicaPersistence implements AtencionTelefonicaRepository
         IFNULL(d.Correo,'N/A') Correo, IFNULL(d.Celular,'N/A') Celular, IFNULL(d.Direccion,'N/A') Direccion,
         IFNULL(bv.Nombre_Barrio_Vereda,'N/A') Nombre_Barrio_Vereda, IFNULL(sbv.SubTipo,'N/A') SubTipo, 
         IFNULL(m.Nombre_Municipio,'N/A') Nombre_Municipio, IFNULL(dep.Nombre_Departamento,'N/A') Nombre_Departamento,
-        IFNULL(p.Nombre_Pais,'N/A') Nombre_Pais, u.Id_Usuario, u.Usuario,
+        IFNULL(p.Nombre_Pais,'N/A') Nombre_Pais, u.Id_Usuario, u.Usuario, e.Imagen, r.Nombre Rol,
         ll.Id_Llamada,ll.Persona_Responde, DATE_FORMAT(ll.Fecha_Llamada,'%e/%b/%Y %h:%i %p') Fecha_Llamada, ll.Duracion_Llamada, 
         UNIX_TIMESTAMP(ll.Fecha_Llamada) Fecha_Filtro, CASE WHEN  ll.Info_Habeas_Data = 1 THEN 'Si' ELSE 'No' END AS Info_Habeas_Data,
-        ll.Id_Estado_Llamada, e.Estado_Llamada, ll.Observacion
+        ll.Id_Estado_Llamada, ell.Estado_Llamada, ll.Observacion
         FROM atencion_telefonica a 
         JOIN operadores o ON(a.Id_Operador = o.Id_Operador)
         JOIN llamadas ll ON(a.Id_Llamada = ll.Id_Llamada)
@@ -69,7 +69,9 @@ class AtencionTelefonicaPersistence implements AtencionTelefonicaRepository
         LEFT JOIN departamento dep ON(m.Id_Departamento = dep.Id_Departamento)
         LEFT JOIN pais p ON(dep.Id_Pais = p.Id_Pais)
         JOIN usuarios u ON(ll.Id_Usuario = u.Id_Usuario)
-        JOIN estados_llamadas e ON(ll.Id_Estado_Llamada = e.Id_Estado_Llamada)
+        JOIN empleados e ON(u.Id_Empleado = e.Id_Empleado)
+        JOIN roles r ON(r.Id_Rol = u.Id_Rol)
+        JOIN estados_llamadas ell ON(ll.Id_Estado_Llamada = ell.Id_Estado_Llamada)
         ";
 
         try {

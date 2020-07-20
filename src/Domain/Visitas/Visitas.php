@@ -18,17 +18,20 @@ class Visitas implements JsonSerializable
 
     private $Id_Datos_Visita;
 
+    private $Id_Estado_Visita;
+
     public function __GET($attr){
         return $this->$attr;
     }
 
-    function __construct(?int $Id_Visita, int $Tipo_Visita,int $Id_Asesor,int $Id_Cita,?int $Id_Datos_Visita)
+    function __construct(?int $Id_Visita, int $Tipo_Visita,int $Id_Asesor,int $Id_Cita,?int $Id_Datos_Visita, int $Id_Estado_Visita)
     {   
         $this->Id_Visita = $Id_Visita;
         $this->Tipo_Visita = $Tipo_Visita;
         $this->Id_Asesor = $Id_Asesor;
         $this->Id_Cita = $Id_Cita;
         $this->Id_Datos_Visita = $Id_Datos_Visita;
+        $this->Id_Estado_Visita = $Id_Estado_Visita;
     }
 
     public function jsonSerialize()
@@ -38,7 +41,8 @@ class Visitas implements JsonSerializable
             "Tipo_Visita" => $this->Tipo_Visita,
             "Id_Asesor" => $this->Id_Asesor,
             "Id-Cita" =>$this->Id_Cita,
-            "Id_Datos_Visita"=>$this->Id_Datos_Visita
+            "Id_Datos_Visita"=>$this->Id_Datos_Visita,
+            "Id_Estado_Visita"=>$this->Id_Estado_Visita
         ];    
     }
 }
