@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\General;
 
-class HTMLPreOferta
+class HTMLOferta
 {
-    public function GenerarHTMLPre_Oferta(
+    public function GenerarHTMLOferta(
         int $Tipo_Oferta,
         string $Nombre_Operador_Oferta,
         string $Imagen_Operador_Oferta,

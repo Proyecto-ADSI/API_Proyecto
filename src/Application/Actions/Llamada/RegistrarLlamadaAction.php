@@ -6,10 +6,10 @@ namespace App\Application\Actions\Llamada;
 
 use App\Application\Actions\Cliente\RegistrarCliente;
 use App\Application\Actions\Configuracion\MetodosSistema;
-use App\Application\Actions\General\Correo_Pre_OfertaAction;
-use App\Application\Actions\General\HTMLPreOferta;
+use App\Application\Actions\General\Correo_OfertaAction;
+use App\Application\Actions\General\HTMLOferta;
 use App\Application\Actions\Notificaciones\RegistrarNotificaciones;
-use App\Application\Actions\General\PDF_Pre_OfertaAction;
+use App\Application\Actions\General\PDF_OfertaAction;
 use App\Domain\Atencion_Telefonica\AtencionTelefonica;
 use App\Domain\Cita\Cita;
 use App\Domain\DBL\DBL;
@@ -18,8 +18,8 @@ use App\Domain\Llamada\Llamada;
 use App\Domain\Llamada_Programada\Llamada_Programada;
 use App\Domain\Notificacion\Notificacion;
 use App\Domain\Plan_Corporativo\Plan_Corporativo;
-use App\Domain\Pre_Oferta\PreOferta;
-use App\Domain\Pre_Oferta\PreOferta_P;
+use App\Domain\Oferta\Oferta;
+use App\Domain\Oferta\Oferta_P;
 use Psr\Http\Message\ResponseInterface as Response;
 
 class RegistrarLlamadaAction extends LlamadaAction
@@ -161,32 +161,41 @@ class RegistrarLlamadaAction extends LlamadaAction
                 $Id_Llamada,
                 $campos->Medio_Envio,
                 $campos->Tiempo_Post_Llamada,
-                $campos->Id_Operador_Oferta,
-                NULL
+                $campos->Id_Operador_Oferta
             );
             $res = $this->Atencion_TelefonicaRepository->RegistrarAtencionTelefonica($AT);
             if (!is_numeric($res)) {
                 return $this->respondWithData(["ok" => false, "error" => $res]);
             }
             $Id_AT = $res;
-            $Pre_Oferta = new PreOferta(
+            $Oferta = new Oferta(
                 NULL,
                 $Id_AT,
                 NULL,
                 NULL,
-                $campos->Estado_Pre_Oferta,
                 $campos->Nombre_Cliente,
                 $campos->Mensaje_Superior,
-                $campos->Tipo_Oferta
+                $campos->Tipo_Oferta,
+                NULL,
+                NULL,
+                $campos->Estado_Oferta,
             );
-            $res = $this->Pre_Oferta_Repository->RegistrarPreOferta($Pre_Oferta);
+            $res = $this->Oferta_Repository->RegistrarOferta($Oferta);
             if (!is_numeric($res)) {
                 return $this->respondWithData(["ok" => false, "error" => $res]);
             }
-            $Id_Pre_Oferta = $res;
+            $Id_Oferta = $res;
+
+            // Registro de accion
+            $Mensaje = "Registro de oferta";
+            $res = $this->Oferta_Repository->RegistrarAccionOferta($Id_Usuario,$Id_Oferta,1,$Mensaje);
+            if ($res != true) {
+                return $this->respondWithData(["ok" => false, "error" => $res]);
+            }
+            
             // Se valida el tipo de oferta que se debe registrar
             if ($campos->Tipo_Oferta == 1) {
-                // PRE OFERTA ESTÁNDAR
+                //  OFERTA ESTÁNDAR
                 // 1) Registrar servicios móviles - propuestas
                 $arrayLineas = $campos->Oferta_Estandar_BD;
                 if (!empty($arrayLineas)) {
@@ -208,21 +217,21 @@ class RegistrarLlamadaAction extends LlamadaAction
                         // Registrar servicios móviles
                         $Id_Linea = $this->LineaRepository->RegistrarLinea($linea);
                         // Registrar propuestas
-                        $res = $this->Pre_Oferta_Repository->RegistrarPropuestas((int) $lineaItem->cantidadLineasOferta, $Id_Linea);
+                        $res = $this->Oferta_Repository->RegistrarPropuestas((int) $lineaItem->cantidadLineasOferta, $Id_Linea);
                         if (!is_numeric($res)) {
                             return $this->respondWithData(["ok" => false, "error" => $res]);
                         }
                         $Id_Propuesta = $res;
 
-                        // 2) Registrar pre oferta estandar
-                        $res = $this->Pre_Oferta_Repository->RegistrarPreOfertaEstandar($Id_Pre_Oferta, $Id_Propuesta);
+                        // 2) Registrar  oferta estandar
+                        $res = $this->Oferta_Repository->RegistrarOfertaEstandar($Id_Oferta, $Id_Propuesta);
                         if ($res !== true) {
                             return $this->respondWithData(["ok" => false, "error" => $res]);
                         }
                     }
                 }
             } else {
-                // PRE OFERTA PERSONALIZADA:
+                //  OFERTA PERSONALIZADA:
 
                 // 1) Registrar DBL OFERTADO
                 // 1.1) Registrar plan corporativo
@@ -285,13 +294,13 @@ class RegistrarLlamadaAction extends LlamadaAction
                 $Estado_DBL_Cliente = (int) $campos->Estado_DBL;
                 $respuesta = $this->DBLRepository->ListarDBL($Id_Cliente, $Estado_DBL_Cliente);
                 $Id_DBL = (int) $respuesta['Id_DBL'];
-                $Id_CorporativoAnterior = $this->Pre_Oferta_Repository->RegistrarDBLAnterior($Id_DBL);
-                $Id_CorporativoActual = $this->Pre_Oferta_Repository->RegistrarDBLActual($Id_DBL_Oferta);
-                // 1.5) Registrar Pre oferta personalizada
+                $Id_CorporativoAnterior = $this->Oferta_Repository->RegistrarDBLAnterior($Id_DBL);
+                $Id_CorporativoActual = $this->Oferta_Repository->RegistrarDBLActual($Id_DBL_Oferta);
+                // 1.5) Registrar  oferta personalizada
                 $Ajuste_Financiero =  $campos->Ajuste_Financiero;
-                $Pre_Oferta_P = new PreOferta_P(
+                $Oferta_P = new Oferta_P(
                     NULL,
-                    $Id_Pre_Oferta,
+                    $Id_Oferta,
                     $Id_CorporativoAnterior,
                     $Id_CorporativoActual,
                     $Ajuste_Financiero->Basico_Neto_Operador1,
@@ -305,7 +314,7 @@ class RegistrarLlamadaAction extends LlamadaAction
                     $Ajuste_Financiero->Valor_Mes_Promedio,
                     $Ajuste_Financiero->Ahorro_Mensual_Promedio
                 );
-                $respuesta = $this->Pre_Oferta_Repository->RegistrarPreOfertaPersonalizada($Pre_Oferta_P);
+                $respuesta = $this->Oferta_Repository->RegistrarOfertaPersonalizada($Oferta_P);
                 if ($respuesta !== true) {
                     return $this->respondWithData(["ok" => false, "error" => $respuesta]);
                 }
@@ -315,7 +324,7 @@ class RegistrarLlamadaAction extends LlamadaAction
             $arrayAclaraciones = $campos->Aclaraciones;
             if (!empty($arrayAclaraciones)) {
                 foreach ($arrayAclaraciones as $item) {
-                    $respuesta = $this->Pre_Oferta_Repository->RegistrarAclaraciones($Id_Pre_Oferta, $item);
+                    $respuesta = $this->Oferta_Repository->RegistrarAclaraciones($Id_Oferta, $item);
                     if ($respuesta !== true) {
                         return $this->respondWithData(["ok" => false, "error" => $respuesta]);
                     }
@@ -324,7 +333,7 @@ class RegistrarLlamadaAction extends LlamadaAction
             $arrayNotas = $campos->Notas;
             if (!empty($arrayNotas)) {
                 foreach ($arrayNotas as $item) {
-                    $respuesta = $this->Pre_Oferta_Repository->RegistrarNotas($Id_Pre_Oferta, $item);
+                    $respuesta = $this->Oferta_Repository->RegistrarNotas($Id_Oferta, $item);
                     if ($respuesta !== true) {
                         return $this->respondWithData(["ok" => false, "error" => $respuesta]);
                     }
@@ -342,7 +351,7 @@ class RegistrarLlamadaAction extends LlamadaAction
                 null,
                 $mensaje,
                 7,
-                $Id_Pre_Oferta
+                $Id_Oferta
             );
             // Roles a los que desea notificar.
             $roles = array(1, 2);
@@ -350,11 +359,11 @@ class RegistrarLlamadaAction extends LlamadaAction
 
 
 
-            $HTMLPreOferta = new HTMLPreOferta();
+            $HTMLOferta = new HTMLOferta();
             $html = "";
             if ($campos->Tipo_Oferta == 1) {
-                // Generar HTML Pre Oferta Estándar
-                $html = $HTMLPreOferta->GenerarHTMLPre_Oferta(
+                // Generar HTML  Oferta Estándar
+                $html = $HTMLOferta->GenerarHTMLOferta(
                     $campos->Tipo_Oferta,
                     $infoOperadorOferta['Nombre_Operador'],
                     $infoOperadorOferta['Imagen_Operador'],
@@ -372,8 +381,8 @@ class RegistrarLlamadaAction extends LlamadaAction
                     $campos->Nombre_Empleado
                 );
             } else {
-                // Generar HTML Pre Oferta Personalizada
-                $html = $HTMLPreOferta->GenerarHTMLPre_Oferta(
+                // Generar HTML  Oferta Personalizada
+                $html = $HTMLOferta->GenerarHTMLOferta(
                     $campos->Tipo_Oferta,
                     $infoOperadorOferta['Nombre_Operador'],
                     $infoOperadorOferta['Imagen_Operador'],
@@ -396,19 +405,21 @@ class RegistrarLlamadaAction extends LlamadaAction
             // 1 -> Correo
             // 2 -> WhatsApp
             // 3-> Ambos
-            $PDF_Pre_OfertaAction = new PDF_Pre_OfertaAction();
-            $Correo_Pre_Oferta = new Correo_Pre_OfertaAction();
+            $PDF_OfertaAction = new PDF_OfertaAction();
+            $Correo_Oferta = new Correo_OfertaAction();
             switch ($campos->Medio_Envio) {
                 case 1:
                     // Enviar correo
                     if ($campos->Tipo_Oferta == 1) {
-                        $respuesta = $Correo_Pre_Oferta->EnviarCorreoPreOferta(
+                        $respuesta = $Correo_Oferta->EnviarCorreoOferta(
                             $campos->Correo,
                             $campos->Nombre_Cliente,
                             $campos->Tipo_Oferta,
                             $infoOperadorOferta['Nombre_Operador'],
                             $infoOperadorOferta['Imagen_Operador'],
                             $infoOperadorOferta['Color'],
+                            $infoOperadorOferta['Correo_Operador'],
+                            $infoOperadorOferta['Contrasena_Operador'],
                             $infoOperadorCliente['Nombre_Operador'],
                             $infoOperadorCliente['Color'],
                             $campos->Oferta_Estandar_PDF,
@@ -421,7 +432,7 @@ class RegistrarLlamadaAction extends LlamadaAction
                             $campos->Nombre_Empleado
                         );
                     } else {
-                        $respuesta =  $Correo_Pre_Oferta->EnviarCorreoPreOferta(
+                        $respuesta =  $Correo_Oferta->EnviarCorreoOferta(
                             $campos->Correo,
                             $campos->Nombre_Cliente,
                             $campos->Tipo_Oferta,
@@ -430,6 +441,8 @@ class RegistrarLlamadaAction extends LlamadaAction
                             $infoOperadorOferta['Color'],
                             $infoOperadorCliente['Nombre_Operador'],
                             $infoOperadorCliente['Color'],
+                            $infoOperadorOferta['Correo_Operador'],
+                            $infoOperadorOferta['Contrasena_Operador'],
                             NULL,
                             $campos->Oferta_Personalizada_PDF,
                             $campos->Ajuste_Financiero,
@@ -448,7 +461,7 @@ class RegistrarLlamadaAction extends LlamadaAction
                     break;
                 case 2:
                     // Generar PDF
-                    $nombre_archivo = $PDF_Pre_OfertaAction->GenerarPDFPre_Oferta($html);
+                    $nombre_archivo = $PDF_OfertaAction->GenerarPDFOferta($html);
                     $info =  [
                         "archivo" => $nombre_archivo,
                         "celular" => $campos->Celular,
@@ -459,13 +472,15 @@ class RegistrarLlamadaAction extends LlamadaAction
                 case 3:
                     // Enviar correo
                     if ($campos->Tipo_Oferta == 1) {
-                        $respuesta = $Correo_Pre_Oferta->EnviarCorreoPreOferta(
+                        $respuesta = $Correo_Oferta->EnviarCorreoOferta(
                             $campos->Correo,
                             $campos->Nombre_Cliente,
                             $campos->Tipo_Oferta,
                             $infoOperadorOferta['Nombre_Operador'],
                             $infoOperadorOferta['Imagen_Operador'],
                             $infoOperadorOferta['Color'],
+                            $infoOperadorOferta['Correo_Operador'],
+                            $infoOperadorOferta['Contrasena_Operador'],
                             $infoOperadorCliente['Nombre_Operador'],
                             $infoOperadorCliente['Color'],
                             $campos->Oferta_Estandar_PDF,
@@ -478,13 +493,15 @@ class RegistrarLlamadaAction extends LlamadaAction
                             $campos->Nombre_Empleado
                         );
                     } else {
-                        $respuesta =  $Correo_Pre_Oferta->EnviarCorreoPreOferta(
+                        $respuesta =  $Correo_Oferta->EnviarCorreoOferta(
                             $campos->Correo,
                             $campos->Nombre_Cliente,
                             $campos->Tipo_Oferta,
                             $infoOperadorOferta['Nombre_Operador'],
                             $infoOperadorOferta['Imagen_Operador'],
                             $infoOperadorOferta['Color'],
+                            $infoOperadorOferta['Correo_Operador'],
+                            $infoOperadorOferta['Contrasena_Operador'],
                             $infoOperadorCliente['Nombre_Operador'],
                             $infoOperadorCliente['Color'],
                             NULL,
@@ -501,7 +518,7 @@ class RegistrarLlamadaAction extends LlamadaAction
                         return $this->respondWithData(["ok" => false, "error" => $respuesta]);
                     }
                     // Generar PDF
-                    $nombre_archivo = $PDF_Pre_OfertaAction->GenerarPDFPre_Oferta($html);
+                    $nombre_archivo = $PDF_OfertaAction->GenerarPDFOferta($html);
                     $info =  [
                         "archivo" => $nombre_archivo,
                         "celular" => $campos->Celular,

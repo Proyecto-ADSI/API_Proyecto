@@ -8,15 +8,17 @@ use Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
-class Correo_Pre_OfertaAction
+class Correo_OfertaAction
 {
-    public function EnviarCorreoPreOferta(
+    public function EnviarCorreoOferta(
         string $Email_Cliente,
         string $Nombre_Cliente,
         int $Tipo_Oferta,
         string $Nombre_Operador_Oferta,
         string $Imagen_Operador_Oferta,
         string $Color_Operador_Oferta,
+        string $Correo_Operador_Oferta,
+        string $Contrasena_Operador_Oferta,
         ?string $Nombre_Operador_Cliente,
         ?string $Color_Operador_Cliente,
         ?array $arrayServiciosOE,
@@ -443,161 +445,161 @@ class Correo_Pre_OfertaAction
         }
 
         $html = '
-        <table style="max-width:768px;color: #67757c; font-weight: 300; font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;" width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
-        <tbody>
-            <tr>
-                <td>
-                    <table style="max-width:670px;border:solid 1px #dcdcdc" width="100%" cellspacing="0" cellpadding="0"
-                        border="0" align="center">
-                        <tbody>
-                            <!-- Header -->
-                            <tr>
-                                <td style="background-image: url(http://localhost:8081/Images/Otras/HeaderCorreo.png);
-                                    background-size: cover; text-align:center">
-                                    <table style="height: 100px;float: right;" width="30%">
-                                        <tbody>
-                                            <tr>
-                                                <td style="max-width: 50%; min-width: 50%; padding-bottom: 25px;">
-                                                    <img src="http://localhost:8081/Images/Usuarios/' . $Imagen_Operador_Oferta . '"
-                                                        width="50" alt="" tabindex="0">
-                                                </td>
-                                                <td style="max-width: 50%;min-width: 50%;padding-bottom: 25px;color: ' . $Color_Operador_Oferta . ';text-align: left;font-size: 20px;font-weight: 1000;">
-                                                    ' . $Nombre_Operador_Oferta . '
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding:0px 10% 0px">
-                                    <table style="max-width:570px;font-size:15px;line-height:1.3;text-align:left"
-                                        width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
-                                        <tbody>
-                                            <tr>
-                                                <td style="padding:0px 0px 20px" width="100%">
-                                                    <p dir="ltr">Hola, ' . $Nombre_Cliente . '</p>
-                                                    <p dir="ltr">
-                                                        ' . $textoSuperior . '
-                                                    </p>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding:0px 2% 0px 2%">
-                                    <table width="100%">
-                                        <tbody>
-                                            ' . $contenidoDinamico . '
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 10px 5%" width="100%">
-                                    <div style="    border-radius: 80px;background-color: #a82d2d;color: #fff;padding: 20px 50px;margin-left: 5%;">
-                                        <h2 style="font-weight: bold;">Aclaraciones:</h2>
-                                        <ul>
-                                            ' . $aclaraciones . '
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr style="font-size:15px;">
-                                <td style="padding: 10px 10%" width="100%">
-                                    <h2 style="font-weight: bold;">Notas:</h2>
-                                    <ul>
-                                        ' . $notas . '
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr style="font-size:15px;">
-                                <td style="padding: 10px 10%" width="100%">
-                                    <p dir="ltr">
-                                        Antonio, en caso de que desee iniciar plan corporativo, los
-                                        documentos que se necesitan para continuar con el proceso son:
-                                    </p>
-                                    <ul>
-                                        <li dir="ltr">Cámara de comercio.</li>
-                                        <li dir="ltr">
-                                            Foto por lado y lado de la cédula del representante legal de
-                                            la empresa.
-                                        </li>
-                                        <li dir="ltr">
-                                            Un soporte de ingresos que puede ser solo uno de estas
-                                            opciones:
+            <table style="max-width:768px;color: #67757c; font-weight: 300; font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;" width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+                <tbody>
+                    <tr>
+                        <td>
+                            <table style="max-width:670px;border:solid 1px #dcdcdc" width="100%" cellspacing="0" cellpadding="0"
+                                border="0" align="center">
+                                <tbody>
+                                    <!-- Header -->
+                                    <tr>
+                                        <td style="background-image: url(http://localhost:8081/Images/Otras/HeaderCorreo.png);
+                                            background-size: cover; text-align:center">
+                                            <table style="height: 100px;float: right;" width="30%">
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="max-width: 50%; min-width: 50%; padding-bottom: 25px;">
+                                                            <img src="http://localhost:8081/Images/Usuarios/' . $Imagen_Operador_Oferta . '"
+                                                                width="50" alt="" tabindex="0">
+                                                        </td>
+                                                        <td style="max-width: 50%;min-width: 50%;padding-bottom: 25px;color: ' . $Color_Operador_Oferta . ';text-align: left;font-size: 20px;font-weight: 1000;">
+                                                            ' . $Nombre_Operador_Oferta . '
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:0px 10% 0px">
+                                            <table style="max-width:570px;font-size:15px;line-height:1.3;text-align:left"
+                                                width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="padding:0px 0px 20px" width="100%">
+                                                            <p dir="ltr">Hola, ' . $Nombre_Cliente . '</p>
+                                                            <p dir="ltr">
+                                                                ' . $textoSuperior . '
+                                                            </p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:0px 2% 0px 2%">
+                                            <table width="100%">
+                                                <tbody>
+                                                    ' . $contenidoDinamico . '
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px 5%" width="100%">
+                                            <div style="    border-radius: 80px;background-color: #a82d2d;color: #fff;padding: 20px 50px;margin-left: 5%;">
+                                                <h2 style="font-weight: bold;">Aclaraciones:</h2>
+                                                <ul>
+                                                    ' . $aclaraciones . '
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr style="font-size:15px;">
+                                        <td style="padding: 10px 10%" width="100%">
+                                            <h2 style="font-weight: bold;">Notas:</h2>
                                             <ul>
-                                                <li>Declaración de renta del año anterior</li>
-                                                <li>Extractos bancarios de los 2 últimos meses.</li>
-                                                <li>Factura del operador actual (solo si cuenta con plan
-                                                    corporativo)</li>
+                                                ' . $notas . '
                                             </ul>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr style="font-size:15px;">
-                                <td style="padding: 10px 10%" width="100%">
-                                    <p dir="ltr">
-                                        Puede enviar los documentos a este correo o si tiene dudas y
-                                        desea asesoría puede ingresar al botón de contactar vía WhatsApp
-                                    </p>
-                                    <table width="100%">
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <img src="http://localhost:8081/Images/Usuarios/' . $Imagen_Operador_Oferta . '"
-                                                        width="100">
-                                                </td>
-                                                <td style="line-height: 0.4;">
-                                                    <p dir="ltr">Ejecutivo comercial</p>
-                                                    <p dir="ltr">Nombre asesor</p>
-                                                    <p dir="ltr">WhatsApp: 3123445678</p>
-                                                </td>
-                                                <td>
-                                                    <a style="cursor: pointer;padding: 7px 12px;color: #fff;background: #be3434;text-decoration: none;border: 1px solid transparent;font-weight: 400;text-align: center;white-space: nowrap;vertical-align: middle;font-size: 1rem;line-height: 1.5;border-radius: .25rem;"
-                                                        href="#">
-                                                        Contactar
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr style="font-size:15px;">
-                                <td style=" padding: 10px;line-height: 0.4;">
-                                    <p dir="ltr">Cordialmente,</p>
-                                    <p dir="ltr">Ejecutivo comercial,</p>
-                                    <p dir="ltr">' . $Nombre_Remitente . '</p>
-                                </td>
-                            </tr>
-                            <!-- Footer -->
-                            <tr>
-                                <td>
-                                    <table
-                                        style="max-width:768px;font-family:Lucida Sans Unicode,Lucida Grande,sans-serif"
-                                        width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
-                                        <tbody>
-                                            <tr>
-                                                <td style="width:100%;max-width:251px;display:inline-block;">
-                                                    <img src="http://localhost:8081/Images/Otras/FooterCorreo.png"
-                                                        alt="Footer" style="max-width:251px;width:100%">
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    ';
+                                        </td>
+                                    </tr>
+                                    <tr style="font-size:15px;">
+                                        <td style="padding: 10px 10%" width="100%">
+                                            <p dir="ltr">
+                                                Antonio, en caso de que desee iniciar plan corporativo, los
+                                                documentos que se necesitan para continuar con el proceso son:
+                                            </p>
+                                            <ul>
+                                                <li dir="ltr">Cámara de comercio.</li>
+                                                <li dir="ltr">
+                                                    Foto por lado y lado de la cédula del representante legal de
+                                                    la empresa.
+                                                </li>
+                                                <li dir="ltr">
+                                                    Un soporte de ingresos que puede ser solo uno de estas
+                                                    opciones:
+                                                    <ul>
+                                                        <li>Declaración de renta del año anterior</li>
+                                                        <li>Extractos bancarios de los 2 últimos meses.</li>
+                                                        <li>Factura del operador actual (solo si cuenta con plan
+                                                            corporativo)</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr style="font-size:15px;">
+                                        <td style="padding: 10px 10%" width="100%">
+                                            <p dir="ltr">
+                                                Puede enviar los documentos a este correo o si tiene dudas y
+                                                desea asesoría puede ingresar al botón de contactar vía WhatsApp
+                                            </p>
+                                            <table width="100%">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <img src="http://localhost:8081/Images/Usuarios/' . $Imagen_Operador_Oferta . '"
+                                                                width="100">
+                                                        </td>
+                                                        <td style="line-height: 0.4;">
+                                                            <p dir="ltr">Ejecutivo comercial</p>
+                                                            <p dir="ltr">Nombre asesor</p>
+                                                            <p dir="ltr">WhatsApp: 3123445678</p>
+                                                        </td>
+                                                        <td>
+                                                            <a style="cursor: pointer;padding: 7px 12px;color: #fff;background: #be3434;text-decoration: none;border: 1px solid transparent;font-weight: 400;text-align: center;white-space: nowrap;vertical-align: middle;font-size: 1rem;line-height: 1.5;border-radius: .25rem;"
+                                                                href="#">
+                                                                Contactar
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr style="font-size:15px;">
+                                        <td style=" padding: 10px;line-height: 0.4;">
+                                            <p dir="ltr">Cordialmente,</p>
+                                            <p dir="ltr">Ejecutivo comercial,</p>
+                                            <p dir="ltr">' . $Nombre_Remitente . '</p>
+                                        </td>
+                                    </tr>
+                                    <!-- Footer -->
+                                    <tr>
+                                        <td>
+                                            <table
+                                                style="max-width:768px;font-family:Lucida Sans Unicode,Lucida Grande,sans-serif"
+                                                width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="width:100%;max-width:251px;display:inline-block;">
+                                                            <img src="http://localhost:8081/Images/Otras/FooterCorreo.png"
+                                                                alt="Footer" style="max-width:251px;width:100%">
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>    
+            </table>
+        ';
 
         // Enviar correo de validación email.
         $mail = new PHPMailer(true);
@@ -609,17 +611,17 @@ class Correo_Pre_OfertaAction
             $mail->isSMTP();                                            // Send using SMTP
             $mail->Host       = 'smtp.gmail.com';                       // Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-            $mail->Username   = 'proyecto.adsi2019@gmail.com';          // SMTP usuario
-            $mail->Password   = 'ADSI1824992';                          // SMTP contraseña
+            $mail->Username   = $Correo_Operador_Oferta;                // SMTP usuario
+            $mail->Password   = $Contrasena_Operador_Oferta;            // SMTP contraseña
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
             $mail->Port       = 587;                                    // TCP port to connect to
 
             //Correo 
-            $mail->setFrom('proyecto.adsi2019@gmail.com', 'Proyecto SENA');     //Correo que envía el mensaje
-            $mail->addAddress($Email_Cliente, $Nombre_Cliente);                 // Correo que recibe el mensaje
+            $mail->setFrom($Correo_Operador_Oferta, $Nombre_Operador_Oferta);       //Correo que envía el mensaje
+            $mail->addAddress($Email_Cliente, $Nombre_Cliente);                     // Correo que recibe el mensaje
 
             // Contenido
-            $mail->isHTML(true);                                                 // Set email format to HTML
+            $mail->isHTML(true);                                                    // Set email format to HTML
             $mail->Subject = 'Oferta corporativo';
             $mail->Body = $html;
 
@@ -629,7 +631,6 @@ class Correo_Pre_OfertaAction
                 return false;
             }
         } catch (Exception $e) {
-
             return ["ok" => false, "Error" => "No se pudo enviar el correo. Mailer Error: {$mail->ErrorInfo}"];
         }
     }

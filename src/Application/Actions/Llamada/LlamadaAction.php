@@ -25,7 +25,7 @@ use App\Domain\SubTipo\SubTipoRepository;
 use App\Domain\Operador\OperadorRepository;
 use App\Domain\Notificacion\NotificacionRepository;
 use App\Domain\Notificaciones_Usuario\Notificaciones_UsuarioRepository;
-use App\Domain\Pre_Oferta\PreOfertaRepository;
+use App\Domain\Oferta\OfertaRepository;
 use App\Domain\Usuario\UsuarioRepository;
 use Psr\Log\LoggerInterface;
 
@@ -49,7 +49,7 @@ abstract class LlamadaAction extends Action
     protected $NotificacionRepository;
     protected $Notificaciones_UsuarioRepository;
     protected $Atencion_TelefonicaRepository;
-    protected $Pre_Oferta_Repository;
+    protected $Oferta_Repository;
     protected $configuracionRepository;
     protected $UsuarioRepository;
     protected $AsignacionERepository;
@@ -76,7 +76,7 @@ abstract class LlamadaAction extends Action
         NotificacionRepository $NotificacionRepository,
         Notificaciones_UsuarioRepository $Notificaciones_UsuarioRepository,
         AtencionTelefonicaRepository $Atencion_TelefonicaRepository,
-        PreOfertaRepository $Pre_Oferta_Repository,
+        OfertaRepository $Oferta_Repository,
         ConfiguracionRepository $configuracionRepository,
         UsuarioRepository $UsuarioRepository,
         AsignacionERepository $AsignacionERepository,
@@ -101,7 +101,7 @@ abstract class LlamadaAction extends Action
         $this->NotificacionRepository = $NotificacionRepository;
         $this->Notificaciones_UsuarioRepository = $Notificaciones_UsuarioRepository;
         $this->Atencion_TelefonicaRepository = $Atencion_TelefonicaRepository;
-        $this->Pre_Oferta_Repository = $Pre_Oferta_Repository;
+        $this->Oferta_Repository = $Oferta_Repository;
         $this->configuracionRepository = $configuracionRepository;
         $this->UsuarioRepository = $UsuarioRepository;
         $this->AsignacionERepository = $AsignacionERepository;
