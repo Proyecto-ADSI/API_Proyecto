@@ -8,9 +8,9 @@ use Mpdf\Mpdf;
 
 use Mpdf\Config;
 
-class PDF_Pre_OfertaAction
+class PDF_OfertaAction
 {
-    public function GenerarPDFPre_Oferta($Html)
+    public function GenerarPDFOferta($Html)
     {
         $RutaPublic = $_SERVER['DOCUMENT_ROOT'];
         // $mpdf = new Mpdf();
@@ -41,7 +41,7 @@ class PDF_Pre_OfertaAction
         $Css2 =  file_get_contents($RutaCss2);
         $RutaCss3 = $RutaPublic . '\Recursos\plantillaCompleta.css';
         $Css3 =  file_get_contents($RutaCss3);
-        $RutaCss4 = $RutaPublic . '\Recursos\stylePDF_Pre_Oferta.css';
+        $RutaCss4 = $RutaPublic . '\Recursos\stylePDF_Oferta.css';
         $Css4 =  file_get_contents($RutaCss4);
 
         $mpdf->WriteHTML($Css1, 1);
@@ -55,11 +55,11 @@ class PDF_Pre_OfertaAction
         $NombreArchivo = sprintf('%s.%0.8s', $basename, $extension);
 
         //Ruta donde se va a guardar el archivo
-        $Ruta = $RutaPublic . '\Reportes\ReportePre_Oferta_' . $NombreArchivo;
+        $Ruta = $RutaPublic . '\Reportes\ReporteOferta_' . $NombreArchivo;
 
         $mpdf->Output($Ruta, 'F');
 
-        $NombreArchivoFinal = "ReportePre_Oferta_" . $NombreArchivo;
+        $NombreArchivoFinal = "ReporteOferta_" . $NombreArchivo;
 
         return $NombreArchivoFinal;
     }

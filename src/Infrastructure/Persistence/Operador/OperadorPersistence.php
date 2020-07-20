@@ -83,6 +83,19 @@ class OperadorPersistence implements OperadorRepository
         }
     }
 
+    public function ListarOperadoresFiltro(string $texto){
+        $sql = "SELECT Id_Operador, Nombre_Operador FROM operadores ";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->execute();
+            
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
     public function CambiarEstado(int $Id_Operador, int $Estado)
     {
         $sql = "UPDATE operadores SET Estado_Operador= ? WHERE Id_Operador = ?";

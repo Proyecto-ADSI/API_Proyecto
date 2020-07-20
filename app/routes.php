@@ -164,7 +164,8 @@ use App\Application\Actions\Llamada\PrecargarLlamada;
 use App\Application\Actions\Llamada\RegistrarLlamadaAction;
 //Novedad
 use App\Application\Actions\Novedades\RegistrarNovedadesAction;
-use App\Application\Actions\Pre_Oferta\ListarPre_OfertasAction;
+use App\Application\Actions\Oferta\ListarOfertasAction;
+use App\Application\Actions\Operador\ListarOperadoresFiltro;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -244,8 +245,8 @@ return function (App $app) {
         $group->get('', ListarAtencionTelAction::class);
     });
 
-    $app->group('/PreOfertas', function (Group $group) {
-        $group->get('', ListarPre_OfertasAction::class);
+    $app->group('/Ofertas', function (Group $group) {
+        $group->get('', ListarOfertasAction::class);
     });
 
 
@@ -344,6 +345,7 @@ return function (App $app) {
         $group->get('', ListarOperadorAction::class);
         $group->get('/Obtener/{Id_Operador}', ObtenerOperadorAction::class);
         $group->get('/Oferta', ListarOperadorOferta::class);
+        $group->get('/Filtro', ListarOperadoresFiltro::class);
         $group->put('', EditarOperadorAction::class);
         $group->patch('/{Id_Operador}/{Estado}', CambiarEstadoOperadorAction::class);
         $group->delete('/{Id_Operador}', EliminarOperadorAction::class);

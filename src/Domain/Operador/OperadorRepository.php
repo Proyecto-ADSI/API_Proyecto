@@ -15,6 +15,8 @@ interface OperadorRepository
 
     public function ListarOperadorOferta();
 
+    public function ListarOperadoresFiltro(string $texto);
+
     public function CambiarEstado(int $Id_Operador, int $Estado);
 
     public function ObtenerDatosOperador(int $Id_Operador);

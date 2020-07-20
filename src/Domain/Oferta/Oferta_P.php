@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Pre_Oferta;
+namespace App\Domain\Oferta;
 
 use JsonSerializable;
 
-class PreOferta_P implements JsonSerializable
+class Oferta_P implements JsonSerializable
 {
-    private $Id_POP;
+    private $Id_OP;
 
-    private $Id_Pre_Oferta;
+    private $Id_Oferta;
 
     private $Id_Corporativo_Anterior;
 
@@ -47,8 +47,8 @@ class PreOferta_P implements JsonSerializable
     }
 
     function __construct(
-        ?int $Id_POP,
-        int $Id_Pre_Oferta,
+        ?int $Id_OP,
+        int $Id_Oferta,
         int $Id_Corporativo_Anterior,
         int $Id_Corporativo_Actual,
         string $Basico_Neto_Operador1,
@@ -62,8 +62,8 @@ class PreOferta_P implements JsonSerializable
         string $Valor_Mes_Promedio,
         string $Ahorro_Mensual_Promedio
     ) {
-        $this->Id_POP = $Id_POP;
-        $this->Id_Pre_Oferta = $Id_Pre_Oferta;
+        $this->Id_OP = $Id_OP;
+        $this->Id_Oferta = $Id_Oferta;
         $this->Id_Corporativo_Anterior = $Id_Corporativo_Anterior;
         $this->Id_Corporativo_Actual = $Id_Corporativo_Actual;
         $this->Basico_Neto_Operador1 = $Basico_Neto_Operador1;
@@ -81,8 +81,8 @@ class PreOferta_P implements JsonSerializable
     public function jsonSerialize()
     {
         return [
-            "Id_POP" => $this->Id_POP,
-            "Id_Pre_Oferta" => $this->Id_Pre_Oferta,
+            "Id_OP" => $this->Id_OP,
+            "Id_Oferta" => $this->Id_Oferta,
             "Id_Corporativo_Anterior" => $this->Id_Corporativo_Anterior,
             "Id_Corporativo_Actual" => $this->Id_Corporativo_Actual,
             "Basico_Neto_Operador1" => $this->Basico_Neto_Operador1,

@@ -18,8 +18,6 @@ class AtencionTelefonica implements JsonSerializable
 
     private $Id_Operador;
 
-    private $Respuesta_Cliente;
-
     public function __get($attr)
     {
         return $this->$attr;
@@ -35,15 +33,13 @@ class AtencionTelefonica implements JsonSerializable
         int $Id_Llamada,
         int $Medio_Envio,
         string $Tiempo_Post_Llamada,
-        int $Id_Operador,
-        ?string $Respuesta_Cliente
+        int $Id_Operador
     ) {
         $this->Id_AT = $Id_AT;
         $this->Id_Llamada = $Id_Llamada;
         $this->Medio_Envio = $Medio_Envio;
         $this->Tiempo_Post_Llamada = $Tiempo_Post_Llamada;
         $this->Id_Operador = $Id_Operador;
-        $this->Respuesta_Cliente = $Respuesta_Cliente;
     }
 
     public function jsonSerialize()
@@ -54,7 +50,6 @@ class AtencionTelefonica implements JsonSerializable
             "Medio_Envio" => $this->Medio_Envio,
             "Tiempo_Post_Llamada" => $this->Tiempo_Post_Llamada,
             "Id_Operador" => $this->Id_Operador,
-            "Respuesta_Cliente" => $this->Respuesta_Cliente,
         ];
     }
 }
