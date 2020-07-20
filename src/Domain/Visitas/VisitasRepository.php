@@ -13,4 +13,6 @@ interface VisitasRepository {
 
     public function ListarOperadoresVisitas();
 
+    public function ListarVisitas_V2();
+
 }

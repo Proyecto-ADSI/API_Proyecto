@@ -163,6 +163,8 @@ use App\Application\Actions\Cliente\ObtenerEmpresasAsignadas;
 use App\Application\Actions\Llamada\PrecargarLlamada;
 use App\Application\Actions\Llamada\RegistrarLlamadaAction;
 use App\Application\Actions\Municipio\ListarMunicipiosFiltro;
+//Visitas
+use App\Application\Actions\Visitas\ListarVisitas_V2Action;
 //Novedad
 use App\Application\Actions\Novedades\RegistrarNovedadesAction;
 use App\Application\Actions\Oferta\ListarOfertasAction;
@@ -387,8 +389,10 @@ return function (App $app) {
         $group->patch('/Editar', EditarCitaAction::class);
     });
 
+    $app->group('/Visitas', function (Group $group) {
+        $group->get('', ListarVisitas_V2Action::class);
+    });
     
-
     $app->group('/Novedades', function (Group $group) {
         $group->post('', RegistrarNovedadesAction::class);
     });

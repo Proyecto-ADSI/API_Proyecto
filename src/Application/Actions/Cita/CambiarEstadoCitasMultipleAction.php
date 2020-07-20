@@ -30,16 +30,18 @@ class CambiarEstadoCitasMultipleAction extends CitaAction
         $this->PaisRepository,
         $this->LineaRepository,
         $this->CitaRepository,
-        $this->VisitasRepository
+        $this->VisitasRepository,
+        $this->ConfiguracionRepository
       );
       
       
       foreach($campos as $Cita){
 
         $Id = (int) $Cita->Id_Cita;
-        $Estado = $Cita->Estado;
+        $Estado = $Cita->Estado_Cita;
         $TipoVisita =(int)$Cita->TipoVisita;
         $Id_Asesor_Externo = (int)$Cita->Id_Asesor_Externoo;
+        $Id_Estado_Visita = (int)$Cita->Id_Estado_Visitaa;
 
         $datos = new Visitas(
            NULL,
@@ -47,6 +49,7 @@ class CambiarEstadoCitasMultipleAction extends CitaAction
            $Id_Asesor_Externo,
            $Id,
            NULL,
+           $Id_Estado_Visita
         );
 
         if (is_numeric($Id) && is_numeric($Estado) && is_numeric($TipoVisita) && is_numeric($Id_Asesor_Externo)) {
