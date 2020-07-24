@@ -167,6 +167,7 @@ use App\Application\Actions\Municipio\ListarMunicipiosFiltro;
 use App\Application\Actions\Visitas\ListarVisitas_V2Action;
 //Novedad
 use App\Application\Actions\Novedades\RegistrarNovedadesAction;
+use App\Application\Actions\Oferta\CambiarEstadoOferta;
 use App\Application\Actions\Oferta\ListarOfertasAction;
 use App\Application\Actions\Operador\ListarOperadoresFiltro;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -249,7 +250,8 @@ return function (App $app) {
     });
 
     $app->group('/Ofertas', function (Group $group) {
-        $group->get('', ListarOfertasAction::class);
+        $group->get('/{Id_Rol}', ListarOfertasAction::class);
+        $group->patch('', CambiarEstadoOferta::class);
     });
 
 

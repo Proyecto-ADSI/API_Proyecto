@@ -9,8 +9,14 @@ use Psr\Http\Message\ResponseInterface as Response;
 class ListarOfertasAction extends OfertaAction
 {
     protected function action(): Response
-    {
-        $infoOfertas = $this->OfertaRepository->ListarOfertas();
+    {   
+        $infoOfertas = [];
+        $Id_Rol = (int) $this->resolveArg("Id_Rol"); 
+        switch($Id_Rol){
+            case 1:
+                $infoOfertas = $this->OfertaRepository->ListarOfertas();
+            break;
+        }
         $arrayRespuesta = [];
         foreach ($infoOfertas as $item) {
             if ($item['Id_AT'] != null) {
