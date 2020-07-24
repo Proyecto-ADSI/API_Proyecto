@@ -75,12 +75,12 @@ class CitaPersistence implements CitaRepository
         $sql = "SELECT c.Id_Cita, c.Id_Llamada, c.Encargado_Cita, c.Representante_Legal, c.Fecha_Cita, 
         b.Id_Barrios_Veredas,b.Nombre_Barrio_Vereda, c.Lugar_Referencia,c.Id_Operador,c.Factibilidad,c.Id_Coordinador, c.Id_Estado_Cita,c.Direccion AS Direccion_Cita, esc.Estado_Cita, c.Ext_Tel_Contacto_Cita, -- CITAS
         l.Fecha_Llamada,l.Persona_Responde,l.Info_Habeas_Data,l.Id_Estado_Llamada,l.Observacion,esll.Estado_Llamada , -- LLAMADAS
-        d.Id_Cliente,d.NIT_CDV,d.Razon_Social,d.Telefono, 
+        d.Id_Cliente,IFNULL(d.NIT_CDV, 'N/A'),d.Razon_Social,d.Telefono, 
         s.SubTipo,b.Nombre_Barrio_Vereda,m.Nombre_Municipio, de.Nombre_Departamento, 
       
         o.Id_Operador,o.Nombre_Operador, o.Color 'Color_Operador',
         v.Id_Visita,v.Tipo_Visita,IFNULL(e.Nombre,'N/A')'Nombre_Asesor',
-        IFNULL(dV.Id_Datos_Visita,'N/A') 'Id_Datos_Visita',IFNULL(dV.Fecha_Visita,'N/A')'Fecha_Visita',IFNULL(dV.Tipo_Venta,'N/A')'Tipo_Venta',IFNULL(dV.Calificacion,'N/A')'Calificacion',IFNULL(v.Id_Estado_Visita,'N/A')'Estados_Visita',
+        IFNULL(dV.Id_Datos_Visita,'N/A') 'Id_Datos_Visita',IFNULL(dV.Fecha_Visita,'N/A')'Fecha_Visita',IFNULL(dV.Tipo_Venta,'N/A')'Tipo_Venta',IFNULL(dV.Calificacion,'N/A')'Calificacion', IFNULL(v.Id_Estado_Visita,'N/A')'Estados_Visita',
         IFNULL(Nv.Id_Novedad,'N/A')'Id_Novedad', IFNULL(Nv.Descripcion_Novedad,'N/A')'Descripcion_Novedad', IFNULL(Nv.Fecha_Novedad,'N/A')'Fecha_Novedad', IFNULL(Nv.Estado_Novedad,'N/A') 'Estado_Novedad'
         from citas c  
 
