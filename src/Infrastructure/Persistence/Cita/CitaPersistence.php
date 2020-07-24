@@ -75,7 +75,7 @@ class CitaPersistence implements CitaRepository
         $sql = "SELECT c.Id_Cita, c.Id_Llamada, c.Encargado_Cita, c.Representante_Legal, c.Fecha_Cita, 
         b.Id_Barrios_Veredas,b.Nombre_Barrio_Vereda, c.Lugar_Referencia,c.Id_Operador,c.Factibilidad,c.Id_Coordinador, c.Id_Estado_Cita,c.Direccion AS Direccion_Cita, esc.Estado_Cita, c.Ext_Tel_Contacto_Cita, -- CITAS
         l.Fecha_Llamada,l.Persona_Responde,l.Info_Habeas_Data,l.Id_Estado_Llamada,l.Observacion,esll.Estado_Llamada , -- LLAMADAS
-        d.Id_Cliente,IFNULL(d.NIT_CDV, 'N/A'),d.Razon_Social,d.Telefono, 
+        d.Id_Cliente,IFNULL(d.NIT_CDV, 'N/A')'NIT_CDV',d.Razon_Social,d.Telefono, 
         s.SubTipo,b.Nombre_Barrio_Vereda,m.Nombre_Municipio, de.Nombre_Departamento, 
       
         o.Id_Operador,o.Nombre_Operador, o.Color 'Color_Operador',
@@ -97,7 +97,7 @@ class CitaPersistence implements CitaRepository
         LEFT JOIN usuarios u ON (v.Id_Asesor = u.Id_Usuario)
         LEFT JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado)
         LEFT JOIN datos_visita dV ON(dV.Id_Datos_Visita = v.Id_Datos_Visita)
-        LEFT JOIN novedades Nv ON (Nv.Id_Cita = c.Id_Cita) GROUP BY v.Id_Cita";
+        LEFT JOIN novedades Nv ON (Nv.Id_Cita = c.Id_Cita) ";
 
         try {
             $stm = $this->db->prepare($sql);
