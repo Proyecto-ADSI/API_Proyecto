@@ -25,4 +25,6 @@ interface CitaRepository
 
     public function ListarHorasCitas(int $Id_Operador, string $Fecha);
 
+    public function FiltrarAsesoresEx(string $texto);
+
 }

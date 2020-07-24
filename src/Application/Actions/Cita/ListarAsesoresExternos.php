@@ -11,8 +11,21 @@ declare(strict_types=1);
    protected function action(): Response
    {
   
-      $AsesoresExternos = $this->CitaRepository->ListarAsesoresExternos();
+      $parametro = $this->request->getQueryParams();
+   
+      if ($parametro != NULL) {
+         
+         $AsesoresExternos = $this->CitaRepository->FiltrarAsesoresEx($parametro['palabra']);
 
-      return $this->respondWithData($AsesoresExternos);
+         return $this->respondWithData(["results" => $AsesoresExternos]);
+
+      } else {
+         
+         $AsesoresExternos = $this->CitaRepository->ListarAsesoresExternos();
+
+         
+         return $this->respondWithData(["results" => $AsesoresExternos]);
+
+      }
    }
   }

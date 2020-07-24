@@ -72,12 +72,13 @@ class CitaPersistence implements CitaRepository
 
     public function ListarCita()
     {
-        $sql = "SELECT c.Id_Cita, c.Id_Llamada, c.Encargado_Cita, c.Representante_Legal, c.Fecha_Cita, c.Id_Barrios_Veredas, c.Lugar_Referencia,c.Id_Operador,c.Factibilidad,c.Id_Coordinador, c.Id_Estado_Cita,c.Direccion AS Direccion_Cita, esc.Estado_Cita, -- CITAS
+        $sql = "SELECT c.Id_Cita, c.Id_Llamada, c.Encargado_Cita, c.Representante_Legal, c.Fecha_Cita, 
+        b.Id_Barrios_Veredas,b.Nombre_Barrio_Vereda, c.Lugar_Referencia,c.Id_Operador,c.Factibilidad,c.Id_Coordinador, c.Id_Estado_Cita,c.Direccion AS Direccion_Cita, esc.Estado_Cita, c.Ext_Tel_Contacto_Cita, -- CITAS
         l.Fecha_Llamada,l.Persona_Responde,l.Info_Habeas_Data,l.Id_Estado_Llamada,l.Observacion,esll.Estado_Llamada , -- LLAMADAS
         d.Id_Cliente,d.NIT_CDV,d.Razon_Social,d.Telefono, 
         s.SubTipo,b.Nombre_Barrio_Vereda,m.Nombre_Municipio, de.Nombre_Departamento, 
       
-        o.Nombre_Operador, o.Color 'Color_Operador',
+        o.Id_Operador,o.Nombre_Operador, o.Color 'Color_Operador',
         v.Id_Visita,v.Tipo_Visita,IFNULL(e.Nombre,'N/A')'Nombre_Asesor',
         IFNULL(dV.Id_Datos_Visita,'N/A') 'Id_Datos_Visita',IFNULL(dV.Fecha_Visita,'N/A')'Fecha_Visita',IFNULL(dV.Tipo_Venta,'N/A')'Tipo_Venta',IFNULL(dV.Calificacion,'N/A')'Calificacion',IFNULL(v.Id_Estado_Visita,'N/A')'Estados_Visita',
         IFNULL(Nv.Id_Novedad,'N/A')'Id_Novedad', IFNULL(Nv.Descripcion_Novedad,'N/A')'Descripcion_Novedad', IFNULL(Nv.Fecha_Novedad,'N/A')'Fecha_Novedad', IFNULL(Nv.Estado_Novedad,'N/A') 'Estado_Novedad'
@@ -96,7 +97,7 @@ class CitaPersistence implements CitaRepository
         LEFT JOIN usuarios u ON (v.Id_Asesor = u.Id_Usuario)
         LEFT JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado)
         LEFT JOIN datos_visita dV ON(dV.Id_Datos_Visita = v.Id_Datos_Visita)
-        LEFT JOIN novedades Nv ON (Nv.Id_Cita = c.Id_Cita)";
+        LEFT JOIN novedades Nv ON (Nv.Id_Cita = c.Id_Cita) GROUP BY v.Id_Cita";
 
         try {
             $stm = $this->db->prepare($sql);
@@ -202,7 +203,7 @@ class CitaPersistence implements CitaRepository
 
     public function ListarAsesoresExternos()
     {
-        $sql = "SELECT u.Id_Usuario,u.Usuario, r.Nombre 'Rol',e.Imagen,e.Email from usuarios u 
+        $sql = "SELECT u.Id_Usuario 'id' ,u.Usuario 'text', r.Nombre 'Rol',e.Imagen,e.Email from usuarios u 
         INNER JOIN roles r ON(u.Id_Rol = r.Id_Rol)
         INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado)
         WHERE r.Nombre = 'Asesor externo'";
@@ -263,6 +264,24 @@ class CitaPersistence implements CitaRepository
 
         } catch (\Exception $e) {
             $e->getMessage();
+        }
+    }
+
+    public function FiltrarAsesoresEx(string $texto)
+    {
+        $sql = "SELECT 'id' ,u.Usuario 'text', r.Nombre 'Rol',e.Imagen,e.Email from usuarios u 
+        INNER JOIN roles r ON(u.Id_Rol = r.Id_Rol)
+        INNER JOIN empleados e ON (u.Id_Empleado = e.Id_Empleado)
+        WHERE u.Usuario LIKE '%" . $texto . "%' AND r.Nombre LIKE 'Asesor_externo'";
+
+        try {
+
+            $stm = $this->db->prepare($sql);
+            $stm->execute();
+
+            return $stm->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return $e->getMessage();
         }
     }
 }
