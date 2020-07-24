@@ -87,7 +87,7 @@ class DBLPersistence implements DBLRepository
 
     public function ObtenerDBL(int $Id_DBL)
     {
-        $sql = "SELECT dbl.Id_DBL, dbl.Id_Cliente, dbl.Id_Operador, o.Nombre_Operador,  
+        $sql = "SELECT dbl.Id_DBL, dbl.Id_Cliente, dbl.Id_Operador, o.Nombre_Operador, o.Color,  
         IFNULL(dbl.Id_Plan_Corporativo,0) Id_Plan_Corporativo, dbl.Cantidad_Total_Lineas, 
         dbl.Valor_Total_Mensual, dbl.Id_Calificacion_Operador, IFNULL(c.Calificacion,'Sin calificar') Calificacion, 
         IFNULL(dbl.Razones,'Sin especificar') Razones, dbl.Id_Estado_DBL, e.Estado_DBL
@@ -135,7 +135,7 @@ class DBLPersistence implements DBLRepository
                 }
 
                 // Servicos Móviles
-                $sql = " SELECT d.Id_DBL, l.Id_Linea_Movil, IFNULL(l.Linea, '0') Linea, IFNULL(l.Minutos,'N/A') Minutos, 
+                $sql = " SELECT d.Id_DBL, l.Id_Linea_Movil, IFNULL(l.Linea, 'N/A') Linea, IFNULL(l.Minutos,'N/A') Minutos, 
                     IFNULL(l.Navegacion,'N/A') Navegacion, IFNULL(l.Mensajes,'N/A') Mensajes, IFNULL(l.Servicios_Ilimitados,',') Servicios_Ilimitados,
                     IFNULL(l.Minutos_LDI,',') Minutos_LDI, IFNULL(l.Cantidad_LDI,'N/A') Cantidad_LDI,
                     IFNULL(l.Servicios_Adicionales,',') Servicios_Adicionales, l.Cargo_Basico, l.Grupo 

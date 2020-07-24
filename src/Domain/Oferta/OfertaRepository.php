@@ -40,4 +40,6 @@ interface OfertaRepository
     public function RegistrarAccionOferta(int $Id_Usuario,int $Id_Oferta, int $Id_Estado_Oferta, string $Mensaje);
 
     public function ListarAccionesOferta(int $Id_Oferta);
+
+    public function CambiarEstadoOferta(int $Id_Oferta, int $Id_Estado);
 }

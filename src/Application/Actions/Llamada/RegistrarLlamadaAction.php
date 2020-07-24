@@ -187,7 +187,7 @@ class RegistrarLlamadaAction extends LlamadaAction
             $Id_Oferta = $res;
 
             // Registro de accion
-            $Mensaje = "Registro de oferta";
+            $Mensaje = "Se registra la oferta";
             $res = $this->Oferta_Repository->RegistrarAccionOferta($Id_Usuario,$Id_Oferta,1,$Mensaje);
             if ($res != true) {
                 return $this->respondWithData(["ok" => false, "error" => $res]);
@@ -439,10 +439,10 @@ class RegistrarLlamadaAction extends LlamadaAction
                             $infoOperadorOferta['Nombre_Operador'],
                             $infoOperadorOferta['Imagen_Operador'],
                             $infoOperadorOferta['Color'],
-                            $infoOperadorCliente['Nombre_Operador'],
-                            $infoOperadorCliente['Color'],
                             $infoOperadorOferta['Correo_Operador'],
                             $infoOperadorOferta['Contrasena_Operador'],
+                            $infoOperadorCliente['Nombre_Operador'],
+                            $infoOperadorCliente['Color'],
                             NULL,
                             $campos->Oferta_Personalizada_PDF,
                             $campos->Ajuste_Financiero,

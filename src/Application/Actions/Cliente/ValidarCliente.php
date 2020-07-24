@@ -18,7 +18,7 @@ class ValidarCliente extends ClienteAction
 
         if ($res) {
             // Validar si la petición viene de módulo llamada o de cliente.
-            if(isset($paramns['Id_Usuario'])){
+            if(isset($params['Id_Usuario'])){
                 $Id_Usuario = (int) $params['Id_Usuario'];
                 $Id_Cliente = (int) $res['Id_Cliente'];
                 $cliente = $this->ClienteRepository->ObtenerCliente($Id_Cliente);

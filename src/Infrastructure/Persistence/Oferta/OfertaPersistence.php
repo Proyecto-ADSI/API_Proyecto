@@ -273,21 +273,22 @@ class OfertaPersistence implements OfertaRepository
             $stm = $this->db->prepare($sql);
             $stm->bindParam(1, $Id_Oferta);
             $res = $stm->execute();
-            if($res){
+            if ($res) {
                 return $stm->fetch(PDO::FETCH_ASSOC);
-            }else{
-                return $stm->errorInfo(); 
+            } else {
+                return $stm->errorInfo();
             }
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
 
-    public function ObtenerAclaraciones(int $Id_Oferta){
+    public function ObtenerAclaraciones(int $Id_Oferta)
+    {
         $sql = "SELECT Aclaracion FROM aclaraciones WHERE Id_Oferta = ?";
         try {
             $stm = $this->db->prepare($sql);
-            $stm->bindParam(1,$Id_Oferta);
+            $stm->bindParam(1, $Id_Oferta);
             $stm->execute();
             return $stm->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
@@ -295,11 +296,12 @@ class OfertaPersistence implements OfertaRepository
         }
     }
 
-    public function ObtenerNotas(int $Id_Oferta){
+    public function ObtenerNotas(int $Id_Oferta)
+    {
         $sql = "SELECT Nota FROM Notas WHERE Id_Oferta = ?";
         try {
             $stm = $this->db->prepare($sql);
-            $stm->bindParam(1,$Id_Oferta);
+            $stm->bindParam(1, $Id_Oferta);
             $stm->execute();
             return $stm->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
@@ -307,7 +309,8 @@ class OfertaPersistence implements OfertaRepository
         }
     }
 
-    public function ObtenerInfoOfertaAT(int $Id_AT){
+    public function ObtenerInfoOfertaAT(int $Id_AT)
+    {
 
         $sql = "SELECT a.Id_AT, a.Medio_Envio, a.Tiempo_Post_Llamada, op.Id_Operador Id_Operador_O , op.Nombre_Operador Nombre_Operador_O,
         op.Color Color_O, d.Razon_Social, d.Telefono, d.Extension,
@@ -338,19 +341,20 @@ class OfertaPersistence implements OfertaRepository
 
         try {
             $stm = $this->db->prepare($sql);
-            $stm->bindParam(1,$Id_AT);
+            $stm->bindParam(1, $Id_AT);
             $res = $stm->execute();
-            if($res){
+            if ($res) {
                 return $stm->fetch(PDO::FETCH_ASSOC);
-            }else{
-                return $stm->errorInfo(); 
+            } else {
+                return $stm->errorInfo();
             }
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
 
-    public function ObtenerInfoOfertaVisita(int $Id_Visita){
+    public function ObtenerInfoOfertaVisita(int $Id_Visita)
+    {
 
         $sql = "SELECT a.Id_AT, a.Medio_Envio, a.Tiempo_Post_Llamada, o.Id_Operador, o.Nombre_Operador, o.Color,
         d.Razon_Social, d.Telefono, d.Extension,IFNULL(d.NIT_CDV,'N/A') NIT_CDV, 
@@ -381,19 +385,20 @@ class OfertaPersistence implements OfertaRepository
 
         try {
             $stm = $this->db->prepare($sql);
-            $stm->bindParam(1,$Id_Visita);
+            $stm->bindParam(1, $Id_Visita);
             $res = $stm->execute();
-            if($res){
+            if ($res) {
                 return $stm->fetch(PDO::FETCH_ASSOC);
-            }else{
-                return $stm->errorInfo(); 
+            } else {
+                return $stm->errorInfo();
             }
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
 
-    public function RegistrarAccionOferta(int $Id_Usuario,int $Id_Oferta, int $Id_Estado_Oferta, string $Mensaje){
+    public function RegistrarAccionOferta(int $Id_Usuario, int $Id_Oferta, int $Id_Estado_Oferta, string $Mensaje)
+    {
         $sql = "INSERT INTO acciones_oferta (Id_Usuario, Id_Oferta, Id_Estado_Oferta, Mensaje ) VALUES (?,?,?,?)";
 
         try {
@@ -414,7 +419,8 @@ class OfertaPersistence implements OfertaRepository
         }
     }
 
-    public function ListarAccionesOferta(int $Id_Oferta){
+    public function ListarAccionesOferta(int $Id_Oferta)
+    {
         $sql = "SELECT u.Id_Usuario, u.Usuario, em.Imagen, r.Nombre Rol, eo.Id_Estado_Oferta, eo.Estado_Oferta, ac.Mensaje,
         DATE_FORMAT(ac.Fecha_Accion,'%e/%b/%Y %h:%i %p') Fecha_Accion, UNIX_TIMESTAMP(ac.Fecha_Accion) Fecha_Filtro
         FROM acciones_oferta ac 
@@ -425,10 +431,24 @@ class OfertaPersistence implements OfertaRepository
         WHERE Id_Oferta = ?";
         try {
             $stm = $this->db->prepare($sql);
-            $stm->bindParam(1,$Id_Oferta);
+            $stm->bindParam(1, $Id_Oferta);
             $stm->execute();
             return $stm->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function CambiarEstadoOferta(int $Id_Oferta, int $Estado)
+    {
+        $sql = "UPDATE ofertas SET Id_Estado_Oferta = ? WHERE Id_Oferta = ?";
+
+        try {
+            $stm = $this->db->prepare($sql);
+            $stm->bindParam(1, $Estado);
+            $stm->bindParam(2, $Id_Oferta);
+            return $stm->execute();
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
