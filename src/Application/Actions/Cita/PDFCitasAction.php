@@ -7,7 +7,7 @@ declare(strict_types=1);
   use Psr\Http\Message\ResponseInterface as Response;
   use Mpdf\Mpdf;
 
-  class PDFCitasAction extends CitaAction
+  abstract class PDFCitasAction extends CitaAction
   {
    protected function action(): Response
    {
@@ -19,6 +19,8 @@ declare(strict_types=1);
    }
 
    public function GenerarPdf($campos){
+
+    $Informacion = $campos->InformacionPDF;
      
     $Html = "";
     //Ruta raiz (public)

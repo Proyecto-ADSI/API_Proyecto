@@ -28,4 +28,6 @@ interface DBLRepository
     public function EliminarDetalleLineas(int $Id_DBL);
 
     public function EliminarDetalleLineasMoviles(int $Id_DBL);
+
+    public function ObtenerDBLVI(int $Id_DBL);
 }

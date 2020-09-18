@@ -8,7 +8,7 @@ use App\Domain\Visitas\Visitas;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Application\Actions\Cita\PDFCitasAction;
 
-class CambiarEstadoCitasMultipleAction extends CitaAction
+class CambiarEstadoCitasMultipleAction extends PDFCitasAction
   {
    protected function action(): Response
    {  
@@ -17,22 +17,7 @@ class CambiarEstadoCitasMultipleAction extends CitaAction
       $DataEstados = null;
       $PdfCitaExterna = null;
 
-      $Pdf = new PDFCitasAction(
-        $this->logger,
-        $this->ClienteRepository,
-        $this->DBLRepository,
-        $this->Plan_CorporativoRepository,
-        $this->Doc_SoporteRepository,
-        $this->BarriosVeredasRepository,
-        $this->SubTipoRepository,
-        $this->MunicipioRepository,
-        $this->DepartamentoRepository,
-        $this->PaisRepository,
-        $this->LineaRepository,
-        $this->CitaRepository,
-        $this->VisitasRepository,
-        $this->ConfiguracionRepository
-      );
+
       
       
       foreach($campos as $Cita){
@@ -66,7 +51,7 @@ class CambiarEstadoCitasMultipleAction extends CitaAction
       
       if ($DataEstados && $AsignarExternas) {
 
-        $PdfCitaExterna = $Pdf->GenerarPdf($campos);
+        $PdfCitaExterna = $this->GenerarPdf($campos);
 
         return $this->respondWithData($PdfCitaExterna);
 

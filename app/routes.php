@@ -23,7 +23,8 @@ use App\Application\Actions\Usuario\CambiarEstadoUsuario;
 use App\Application\Actions\Usuario\EliminarUsuario;
 use App\Application\Actions\Usuario\CargarImagenUsuario;
 use App\Application\Actions\Usuario\ObtenerUsuarioRol;
-
+use App\Application\Actions\Usuario\CambiarContrasenaAction;
+use App\Application\Actions\Usuario\CambiarContrasenaPerfilAction;
 // Empleados
 use App\Application\Actions\Empleado\ListarEmpleados;
 use App\Application\Actions\Empleado\EmpleadoDisponible;
@@ -163,8 +164,13 @@ use App\Application\Actions\Cliente\ObtenerEmpresasAsignadas;
 use App\Application\Actions\Llamada\PrecargarLlamada;
 use App\Application\Actions\Llamada\RegistrarLlamadaAction;
 use App\Application\Actions\Municipio\ListarMunicipiosFiltro;
+use App\Application\Actions\Cita\EliminarPdfAction;
 //Visitas
 use App\Application\Actions\Visitas\ListarVisitas_V2Action;
+use App\Application\Actions\Visitas\ObtenerCliente_VisitasAction;
+use App\Application\Actions\Visitas\ListarEstadosAction;
+use App\Application\Actions\Visitas\RegistrarVisitaAction;
+use App\Application\Actions\Visitas\CambiarEstadoVisitasAction;
 //Novedad
 use App\Application\Actions\Novedades\RegistrarNovedadesAction;
 use App\Application\Actions\Oferta\CambiarEstadoOferta;
@@ -198,6 +204,7 @@ return function (App $app) {
 
     $app->group('/Usuarios', function (Group $group) {
         $group->get('', ListarUsuarios::class);
+        $group->get('/Password', CambiarContrasenaAction::class);
         $group->get('/{usuario}', ObtenerUsuario::class);
         $group->get('/ValidarUsuario/{usuario}', ValidarUsuario::class);
         $group->get('/EnviarCorreo/{usuario}', EnviarCorreo::class);
@@ -207,6 +214,7 @@ return function (App $app) {
         $group->post('/Login', LoginAction::class);
         $group->post('', UsuarioRegistro::class);
         $group->get('/ValidarToken/{token}', ValidarToken::class);
+        $group->patch('/Restablecer',CambiarContrasenaPerfilAction::class);
         $group->patch('', RestablecerContrasena::class);
         $group->put('', EditarUsuario::class);
         $group->delete('/{Id_Usuario_Eliminar}', EliminarUsuario::class);
@@ -382,6 +390,7 @@ return function (App $app) {
         $group->patch('/CambioEstado', CambiarEstadoCitasAction::class);
         $group->post('/Asignar/Internas', AsignarCitasInterAction::class);
         $group->post('/PDF', PDFCitasAction::class);
+        $group->post('/EliminarPDF', EliminarPdfAction::class);
         $group->get('/SinAsignar', ListarCitaSinAsignarAction::class);
         $group->get('/Asesores/Internos', ListarAsesoresInternosAction::class);
         $group->get('/Asesores/Externos', ListarAsesoresExternos::class);
@@ -389,10 +398,15 @@ return function (App $app) {
         $group->post('/Asignar', AsignarCitasAction::class);
         $group->get('/Visitas', ListarVisitasAction::class);
         $group->patch('/Editar', EditarCitaAction::class);
+
     });
 
     $app->group('/Visitas', function (Group $group) {
         $group->get('', ListarVisitas_V2Action::class);
+        $group->get('/Cliente',ObtenerCliente_VisitasAction::class);
+        $group->get('/Estados',ListarEstadosAction::class);
+        $group->post('/Registrar', RegistrarVisitaAction::class);
+        $group->patch('/CambioEstado', CambiarEstadoVisitasAction::class);
     });
     
     $app->group('/Novedades', function (Group $group) {

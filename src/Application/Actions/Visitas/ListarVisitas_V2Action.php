@@ -12,6 +12,7 @@ declare(strict_types=1);
    {
        $Visitas_V2 = $this->VisitasRepository->ListarVisitas_V2();
 
+       
        return $this->respondWithData($Visitas_V2);
    }
    

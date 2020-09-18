@@ -324,4 +324,85 @@ class DBLPersistence implements DBLRepository
             return $e->getMessage();
         }
     }
+
+    public function ObtenerDBLVI(int $Id_DBL)
+    {
+        $sql = "SELECT Id_DBL FROM datos_basicos_lineas WHERE Id_DBL = ?";
+
+        try {
+
+            $stm = $this->db->prepare($sql);
+            $stm->bindParam(1, $Id_DBL);
+            $stm->execute();
+
+            $error = $stm->errorCode();
+            if ($error === '00000') {
+                $Info_Cliente = $stm->fetch(PDO::FETCH_ASSOC);
+                // Servicos Fijos
+                $sql2 = " SELECT d.Id_DBL, l.Id_Linea_Fija, l.Pagina_Web, l.Correo_Electronico,
+                l.IP_Fija, l.Dominio, l.Telefonia, l.Television
+                FROM detalle_lineas d JOIN lineas_fijas l ON(d.Id_Linea_Fija = l.Id_Linea_Fija) 
+                WHERE d.Id_DBL = ?";
+
+                try {
+                    $stm = $this->db->prepare($sql2);
+                    $stm->bindValue(1, $Info_Cliente['Id_DBL']);
+                    $stm->execute();
+                    $error = $stm->errorCode();
+                    if ($error === '00000') {
+                        $Servicios_Fijos = $stm->fetch(PDO::FETCH_ASSOC);
+
+                        if (!empty($Servicios_Fijos)) {
+
+                            $arrayServiciosFijos = array(
+                                'Servicios_Fijos' => $Servicios_Fijos,
+                            );
+
+                            $Info_Cliente = array_merge($Info_Cliente, $arrayServiciosFijos);
+                        }
+                    } else {
+                        return $stm->errorInfo();
+                    }
+                } catch (\Exception $e) {
+                    return $e->getMessage();
+                }
+
+                // Servicos Móviles
+                $sql = " SELECT d.Id_DBL, COUNT(l.Id_Linea_Movil) 'Cantidad_Lineas', IFNULL(l.Linea, 'N/A') Linea, IFNULL(l.Minutos,'N/A') Minutos, 
+                IFNULL(l.Navegacion,'N/A') Navegacion, IFNULL(l.Mensajes,'N/A') Mensajes, IFNULL(l.Servicios_Ilimitados,',') Servicios_Ilimitados,
+                IFNULL(l.Minutos_LDI,',') Minutos_LDI, IFNULL(l.Cantidad_LDI,'N/A') Cantidad_LDI,
+                IFNULL(l.Servicios_Adicionales,',') Servicios_Adicionales, l.Cargo_Basico, l.Grupo 
+                FROM detalle_lineas d JOIN lineas_moviles l ON(d.Id_Linea_Movil = l.Id_Linea_Movil) 
+                WHERE d.Id_DBL = ? GROUP BY d.Id_DBL, l.Grupo";
+
+                try {
+                    $stm = $this->db->prepare($sql);
+                    $stm->bindValue(1, $Info_Cliente['Id_DBL']);
+                    $stm->execute();
+                    $error = $stm->errorCode();
+                    if ($error === '00000') {
+                        $Servicios_Moviles = $stm->fetchAll(PDO::FETCH_ASSOC);
+
+                        if (!empty($Servicios_Moviles)) {
+
+                            $arrayServiciosMoviles = array(
+                                'Servicios_Moviles' => $Servicios_Moviles,
+                            );
+
+                            $Info_Cliente = array_merge($Info_Cliente, $arrayServiciosMoviles);
+                        }
+                    } else {
+                        return $stm->errorInfo();
+                    }
+                } catch (\Exception $e) {
+                    return $e->getMessage();
+                }
+                return $Info_Cliente;
+            } else {
+                return $stm->errorInfo();
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }
