@@ -389,4 +389,5 @@ class UsuarioPersistence implements UsuarioRepository
             return $e->getMessage();
         }
     }
+
 }
