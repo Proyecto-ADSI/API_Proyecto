@@ -16,17 +16,20 @@ class RegistrarNotificaciones extends NotificacionesAction
         return $this->respondWithData(["ok" => true]);
     }
 
-    public function RegistrarNotificacion(Notificacion $notificacion, array $UsuariosAsignar)
+    public function RegistrarNotificacion(Notificacion $notificacion, array $rolesAsignar)
     {
+
+        // Registro notificación
         $r = false;
         $r = $this->NotificacionRepository->RegistrarNotificacion($notificacion);
         $infoNotificacion = $this->NotificacionRepository->ConsultarUltimaNotificacion();
         $IdNotificacion = (int) $infoNotificacion['Id_Notificacion'];
 
-        // Asignar notificación a usuarios
+        // Asignar notificación a estos usuarios
         $Usuarios = [];
 
-        foreach ($UsuariosAsignar as $rol) {
+        // Consultar usuarios según los roles que se deban notificar.
+        foreach ($rolesAsignar as $rol) {
             $res = $this->Notificaciones_UsuarioRepository->ConsultarIdUsuarios($rol);
 
             $Usuarios = array_merge($Usuarios, $res);
@@ -35,7 +38,7 @@ class RegistrarNotificaciones extends NotificacionesAction
         foreach ($Usuarios as $usuario) {
 
             $IdUsuario = (int) $usuario["Id_Usuario"];
-
+            // Se valida que solo se registre la notificación a un usuario diferente a quien la origina o registra.
             if ($IdUsuario != (int) $notificacion->Id_Usuario) {
                 $notificacionUsuario = new Notificaciones_Usuario(
                     NULL,
